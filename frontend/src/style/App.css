@@ -1,0 +1,11 @@
+@import url('./device-list.css');
+@import url('./my-file-list.css');
+
+.header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+

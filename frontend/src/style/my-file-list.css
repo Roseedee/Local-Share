@@ -1,0 +1,68 @@
+.my-file-list-container {
+    padding-top: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.my-file-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.file-item {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 150px;
+    gap: 5px;
+    position: relative;
+    transition: 1s;
+    
+    .del-btn {
+        display: none;
+    }
+}
+
+.file-item:hover {
+    .del-btn {
+        cursor: pointer;
+        width: 100%;
+        position: absolute;
+        top: 0px;
+        background-color: rgba(255, 0, 0, .5);
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        padding: 5px 0;
+        border-radius: 5px 5px 0 0;
+    }
+}
+
+.file-item img.image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.image-full-view {
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow: auto;
+    z-index: 999;
+}
+
+.image-full-view img {
+    height: 100%;
+}
