@@ -1,42 +1,52 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.device-list {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding-top: 50px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.device-item {
+  min-width: 120px;
+  max-width: 150px;
+  height: 200px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, .08);
+  border: 1px solid rgba(0, 0, 0, .08);
+  transition: .4s;
+
+
+  & img {
+    width: 50%;
   }
-  to {
-    transform: rotate(360deg);
+
+  & div {
+    flex-direction: column;
+    display: flex;
+    text-align: center;
+
+
+    h3 {
+      margin: 10px 0;
+    }
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+.device-item:hover {
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, .4);
+  transform: scale(1.01);
 }
