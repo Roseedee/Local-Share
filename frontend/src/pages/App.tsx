@@ -19,8 +19,13 @@ function App() {
 
   const [url, setUrl] = useState<string>("")
 
+  const [isFullView, setIsFullView] = useState<boolean>(false)
+  const [imgFull, setImgFull] = useState<string>("")
+
+
   useEffect(() => {
     setUrl("Can't connect API")
+    setImgFull(imgTest1)
   }, [])
 
   const handleDeviceItemClick = (id: number) => {
@@ -29,6 +34,13 @@ function App() {
 
   const handleDelImage = (id: number) => {
     alert(`Delete image ${id}`)
+    setIsFullView(false)
+    setImgFull("")
+  }
+
+  const handleImageClick = (name: string) => {
+    setImgFull(name)
+    setIsFullView(true)
   }
 
   return (
@@ -60,28 +72,28 @@ function App() {
       <div className="my-file-list-container">
         <h2>My File List</h2>
         <div className="my-file-list">
-          <div className="file-item">
+          <div className="file-item" onClick={() => handleImageClick(imgTest1)}>
             <div className="del-btn" onClick={() => handleDelImage(0)}>
               <img src={delIcon} alt="" />
             </div>
             <img className='image' src={imgTest1} alt="" />
             <span>{imgTest1.split('/')[3]}</span>
           </div>
-          <div className="file-item">
+          <div className="file-item" onClick={() => handleImageClick(imgTest2)}>
             <div className="del-btn" onClick={() => handleDelImage(1)}>
               <img src={delIcon} alt="" />
             </div>
             <img className='image' src={imgTest2} alt="" />
             <span>{imgTest2.split('/')[3]}</span>
           </div>
-          <div className="file-item">
+          <div className="file-item" onClick={() => handleImageClick(imgTest3)}>
             <div className="del-btn" onClick={() => handleDelImage(2)}>
               <img src={delIcon} alt="" />
             </div>
             <img className='image' src={imgTest3} alt="" />
             <span>{imgTest3.split('/')[3]}</span>
           </div>
-          <div className="file-item">
+          <div className="file-item" onClick={() => handleImageClick(imgTest4)}>
             <div className="del-btn" onClick={() => handleDelImage(3)}>
               <img src={delIcon} alt="" />
             </div>
@@ -90,9 +102,17 @@ function App() {
           </div>
         </div>
       </div>
-      <div className="image-full-view">
-        <img src={imgTest2} alt="" />
-      </div>
+
+      {
+        isFullView && (
+          <div className="image-full-view" onClick={() => setIsFullView(false)}>
+            <div className="close-btn" onClick={() => setIsFullView(false)}>
+              <img src={delIcon} alt="" />
+            </div>
+            <img src={imgFull} alt="" onClick={(e) => e.stopPropagation()} />
+          </div>
+        )
+      }
     </>
   )
 }
