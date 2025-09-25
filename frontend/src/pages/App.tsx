@@ -24,9 +24,11 @@ function App() {
 
 
   useEffect(() => {
-    setUrl("Can't connect API")
-    setImgFull(imgTest1)
-  }, [])
+    fetch("http://localhost:5000")
+      .then((res) => res.json())
+      .then((data) => setUrl("http://" + data.ip + ":" + window.location.port))
+      .catch((err) => console.error(err));
+  }, []);
 
   const handleDeviceItemClick = (id: number) => {
     navigate(`/fileview/${id}`)
