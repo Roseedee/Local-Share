@@ -12,8 +12,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
+        <Route path="/:id" element={<App />} />
         <Route path="/register/" element={<Register />} />
-        <Route path="/fileview/:id" element={<FileView/>} />
+        <Route path="/fileview/:id" element={<FileView />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,

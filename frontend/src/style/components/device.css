@@ -1,0 +1,36 @@
+.device {
+  height: 60px;
+  padding: 0 18px;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+.device.active {
+  background-color: #FDE9FF;
+}
+
+.device:hover {
+  background-color: #fef2ff;
+}
+
+.device img {
+  height: 40%;
+}
+
+.device .device-detail {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+
+  & span {
+    font-size: small;
+    font-style: italic;
+  }
+}
