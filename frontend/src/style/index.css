@@ -1,7 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 :root {
-  padding: 20px;
+  font-family: 'Inter', sans-serif;
+  font-family: 'Roboto', sans-serif; /* Clean, modern font for body text */
+  padding: 0px;
+  margin: 0px;
 }
 
-body {
-
+html, body, #root {
+  margin: 0px;
+  padding: 0px;
 }
+
+h1, h2, h3, h4, h5, h6, p {
+  font-family: 'Inter', sans-serif;
+  margin: 0px;
+  padding: 0px;
+}
+
+.tag {
+  color: rgb(109, 109, 109);
+}
+

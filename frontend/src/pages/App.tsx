@@ -4,15 +4,20 @@ import { useNavigate } from 'react-router-dom'
 
 import '../style/App.css'
 
-import FileItem from './Components/FileItem'
+// import FileItem from './Components/FileItem'
 
 import phoneIcon from '../assets/iphone.png'
 import computerIcon from '../assets/computer.png'
-// import delIcon from '../assets/close-white.png'
-import imgTest1 from '../assets/test1.jpg'
-import imgTest2 from '../assets/test2.jpg'
-import imgTest3 from '../assets/test3.jpg'
-import imgTest4 from '../assets/test4.jpg'
+
+import editIcon from '../assets/edit.png'
+import synsIcon from '../assets/sync.png'
+import fileUploadIcon from '../assets/up-loading.png'
+import selectIcon from '../assets/select.png'
+// // import delIcon from '../assets/close-white.png'
+// import imgTest1 from '../assets/test1.jpg'
+// import imgTest2 from '../assets/test2.jpg'
+// import imgTest3 from '../assets/test3.jpg'
+// import imgTest4 from '../assets/test4.jpg'
 
 
 function App() {
@@ -33,41 +38,62 @@ function App() {
   }
 
   return (
-    <>
-      <div className='header'>
-        <span>scan for join group</span>
-        <QRCodeSVG value={url} />
-        <h3>{url}</h3>
-      </div>
-      <div className="device-list-container">
-        <h2 style={{ textAlign: 'center' }}>Device List</h2>
-        <div className="device-list">
-          <div className="device-item" onClick={() => handleDeviceItemClick(1)}>
-            <img src={phoneIcon} alt="" />
-            <div className="device-detail">
-              <h3>Device Name</h3>
-              <span>IP: 192.168.1.1</span>
+      <div className='body'>
+        <div className="sidebar">
+          <div className="sidebar-header">
+            <span className='tag'>แสกนเพื่อเข้ากลุ่ม</span>
+            <QRCodeSVG value={url} />
+            <a href=""><h5>{url}</h5></a>
+          </div>
+          <div className="device-list">
+            <div className="device active">
+              <img src={computerIcon} alt="" />
+              <div className="device-detail">
+                <h5>My Computer</h5>
+                <span className='tag'>192.168.1.240</span>
+              </div>
+            </div>
+            <div className="device">
+              <img src={computerIcon} alt="" />
+              <div className="device-detail">
+                <h5>Temporary</h5>
+                <span className='tag'>192.168.1.240</span>
+              </div>
+            </div>
+            <hr/>
+            <div className="device">
+              <img src={computerIcon} alt="" />
+              <div className="device-detail">
+                <h5>Computer 1</h5>
+                <span className='tag'>192.168.1.159</span>
+              </div>
             </div>
           </div>
-          <div className="device-item" onClick={() => handleDeviceItemClick(2)}>
-            <img src={computerIcon} alt="" />
-            <div className="device-detail">
-              <h3>Device Name</h3>
-              <span>IP: 192.168.1.1</span>
+        </div>
+
+        <div className="content">
+          <div className="content-header">
+            <div className="computer-name">
+              <h4>My Computer{"(You)"}</h4>
+              <img src={editIcon} alt="" className='content-header-icon'/>
+            </div>
+            <div className='tools-group'>
+              <div className="tool-icon">
+                <img src={fileUploadIcon} alt="" className='content-header-icon'/>
+              </div>
+              <div className="tool-icon">
+                <img src={selectIcon} alt="" className='content-header-icon'/>
+              </div>
+              <div className="tool-icon">
+                <img src={synsIcon} alt="" className='content-header-icon'/>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div className="my-file-list-container">
-        <h2>My File List</h2>
-        <div className="my-file-list">
-          <FileItem src={imgTest1} />
-          <FileItem src={imgTest2} />
-          <FileItem src={imgTest3} />
-          <FileItem src={imgTest4} />
-        </div>
-      </div>
-    </>
+
+      
+
   )
 }
 

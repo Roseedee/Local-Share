@@ -1,11 +1,133 @@
 @import url('./device-list.css');
 @import url('./my-file-list.css');
 
-.header {
-  width: 100%;
+.body {
+  /* padding: 10px; */
+  display: flex;
+}
+
+.sidebar{
+  padding: 20px;
+  min-width: 300px;
+  height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  /* background-color: gray; */
+}
+
+.sidebar-header{
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 15px;
+}
+
+.device-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.device-list hr {
+  border: none;
+  border-top: 1px solid #ccc;
+  margin: 5px 0;
+}
+
+.device {
+  height: 60px;
+  padding: 0 15px;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+.device.active {
+  background-color: #e2e2e2;
+}
+
+.device:hover {
+  background-color: #f5f5f5;
+}
+
+.device img {
+  height: 50%;
+}
+
+.device .device-detail {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+
+  & span {
+    font-size: small;
+    font-style: italic;
+  }
+}
+
+.content {
+  flex-grow: 1;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.content-header {
+  height: 60px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background-color: #FDE9FF;
+}
+
+.computer-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
+.tools-group {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.tool-icon {
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 5px;
+  transition: 0.3s;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 10px;
+
+  & img {
+    transition: 0.3s;
+  }
+
+  &:hover {
+    background-color: #ffffff;
+    
+    img {
+      transform: scale(1.1);
+    }
+  } 
+}
+
+.content-header-icon {
+  height: 18px;
 }
 
