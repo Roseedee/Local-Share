@@ -33,8 +33,8 @@ function App() {
   const { id } = useParams<string>()
 
   const [serverUrl, setServerUrl] = useState<string>("")
-  const [myDevice, setMyDevice] = useState<DeviceModel>(() => loadMyDeviceInfo())
-  const [deviceSelected, setDeviceSelected] = useState<DeviceModel | null>(null)
+  const [myDevice, setMyDevice] = useState<DeviceModel>(loadMyDeviceInfo())
+  const [deviceSelected, setDeviceSelected] = useState<DeviceModel>(loadMyDeviceInfo())
 
   useEffect(() => {
     connectToAPI()
@@ -65,7 +65,7 @@ function App() {
   function loadMyDeviceInfo() {
     return {
       id: 3,
-      name: "My Computer",
+      name: "Local",
       ip: "192.168.1.240"
     }
   }
@@ -79,7 +79,7 @@ function App() {
           <a href=""><h5>{serverUrl}</h5></a>
         </div>
         <div className="device-list">
-          <Device item={myDevice} active={myDevice.id === Number(id) ? true : false}/>
+          <Device item={myDevice} active={myDevice.id === Number(id) || myDevice.id === deviceSelected.id ? true : false}/>
           <hr />
           {
             devices.map((device) => (
