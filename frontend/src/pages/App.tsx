@@ -34,29 +34,29 @@ function App() {
 
   const [serverUrl, setServerUrl] = useState<string>("")
   const [myDevice, setMyDevice] = useState<DeviceModel | null>(null)
-  const [deviceSelected, setDeviceSelected] = useState<DeviceModel | null>(myDevice)
+  const [deviceSelected, setDeviceSelected] = useState<DeviceModel | null>(null)
 
   useEffect(() => {
     if (calledRef.current) return;
     calledRef.current = true;
-    
+
     connectToAPI().then(() => {
       initMyDevice()
     })
 
   }, []);
 
-  // useEffect(() => {
-  //   // console.log("ID:", id);
-  //   if(myDevice?.id === id) {
-  //     setDeviceSelected(myDevice)
-  //   }else {
-  //     const device = devices.find((d) => d.id === id)
-  //     if (device) {
-  //       setDeviceSelected(device)
-  //     }
-  //   }
-  // }, [id]);
+  useEffect(() => {
+    // console.log("ID:", id);
+    if(myDevice?.id === id) {
+      setDeviceSelected(myDevice)
+    }else {
+      const device = devices.find((d) => d.id === id)
+      if (device) {
+        setDeviceSelected(device)
+      }
+    }
+  }, [id]);
   
   const connectToAPI = async () => {
     await fetch("http://localhost:5000", {
@@ -102,7 +102,7 @@ function App() {
         <div className="device-list">
           {
             myDevice && (
-              <Device item={myDevice} active={myDevice?.id === id || myDevice?.id === deviceSelected?.id ? true : false}/>
+              <Device item={myDevice} active={myDevice?.id === id || deviceSelected === null ? true : false}/>
             )
           }
           <hr />
@@ -117,7 +117,7 @@ function App() {
       <div className="content">
         <div className="content-header">
           <div className="computer-name">
-            <h4>{deviceSelected?.name}{myDevice?.id === id ? '(You)' : ''}</h4>
+            <h4>{deviceSelected === null ? myDevice?.name : deviceSelected?.name}{myDevice?.id === id ? '(You)' : ''}</h4>
             <img src={editIcon} alt="" className='content-header-icon' />
           </div>
           <div className='tools-group'>
