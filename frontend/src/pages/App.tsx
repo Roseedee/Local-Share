@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { QRCodeSVG } from "qrcode.react"
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -15,14 +15,12 @@ import Device from './Components/Device'
 //test data
 const devices: DeviceModel[] = [
   {
-    id: 1,
+    id: "1",
     name: "My Computer",
-    ip: "192.168.1.10"
   },
   {
-    id: 2,
+    id: "2",
     name: "Work Laptop",
-    ip: "192.168.1.5"
   }
 ]
 
@@ -32,28 +30,38 @@ function App() {
   const navigate = useNavigate()
   const { id } = useParams<string>()
 
+  const calledRef = useRef(false);
+
   const [serverUrl, setServerUrl] = useState<string>("")
-  const [myDevice, setMyDevice] = useState<DeviceModel>(loadMyDeviceInfo())
-  const [deviceSelected, setDeviceSelected] = useState<DeviceModel>(loadMyDeviceInfo())
+  const [myDevice, setMyDevice] = useState<DeviceModel | null>(null)
+  const [deviceSelected, setDeviceSelected] = useState<DeviceModel | null>(myDevice)
 
   useEffect(() => {
-    connectToAPI()
+    if (calledRef.current) return;
+    calledRef.current = true;
+    
+    connectToAPI().then(() => {
+      initMyDevice()
+    })
+
   }, []);
 
-  useEffect(() => {
-    console.log("ID:", id);
-    if(myDevice.id === Number(id)) {
-      setDeviceSelected(myDevice)
-    }else {
-      const device = devices.find((d) => d.id === Number(id))
-      if (device) {
-        setDeviceSelected(device)
-      }
-    }
-  }, [id]);
+  // useEffect(() => {
+  //   // console.log("ID:", id);
+  //   if(myDevice?.id === id) {
+  //     setDeviceSelected(myDevice)
+  //   }else {
+  //     const device = devices.find((d) => d.id === id)
+  //     if (device) {
+  //       setDeviceSelected(device)
+  //     }
+  //   }
+  // }, [id]);
   
-  const connectToAPI = () => {
-    fetch("http://localhost:5000")
+  const connectToAPI = async () => {
+    await fetch("http://localhost:5000", {
+      method: "POST",
+    })
       .then((res) => res.json())
       .then((data) => setServerUrl("http://" + data.ip + ":" + window.location.port))
       .catch((err) => {
@@ -62,12 +70,25 @@ function App() {
       });
   }
 
-  function loadMyDeviceInfo() {
-    return {
-      id: 3,
-      name: "Local",
-      ip: "192.168.1.240"
-    }
+  const initMyDevice = () => {
+    fetch("http://localhost:5000/init", {
+      method: "POST",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setMyDevice({
+          id: data.uuid,
+          name: "Local",
+        })
+        console.log("My Device ID:", data.uuid);
+      })
+      .catch((err) => {
+        console.error(err)
+        setMyDevice({
+          id: "can't connect",
+          name: "My Computer",
+        })
+      });
   }
 
   return (
@@ -79,11 +100,15 @@ function App() {
           <a href=""><h5>{serverUrl}</h5></a>
         </div>
         <div className="device-list">
-          <Device item={myDevice} active={myDevice.id === Number(id) || myDevice.id === deviceSelected.id ? true : false}/>
+          {
+            myDevice && (
+              <Device item={myDevice} active={myDevice?.id === id || myDevice?.id === deviceSelected?.id ? true : false}/>
+            )
+          }
           <hr />
           {
             devices.map((device) => (
-              <Device key={device.id} item={device} active={device.id === Number(id) ? true : false }/>
+              <Device key={device.id} item={device} active={device.id === id ? true : false }/>
             ))
           }
         </div>
@@ -92,7 +117,7 @@ function App() {
       <div className="content">
         <div className="content-header">
           <div className="computer-name">
-            <h4>{deviceSelected?.name}{myDevice?.id === Number(id) ? '(You)' : ''}</h4>
+            <h4>{deviceSelected?.name}{myDevice?.id === id ? '(You)' : ''}</h4>
             <img src={editIcon} alt="" className='content-header-icon' />
           </div>
           <div className='tools-group'>

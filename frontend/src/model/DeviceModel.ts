@@ -1,5 +1,4 @@
 export default interface DeviceModel {
-    id: number;
+    id: string;
     name: string;
-    ip: string;
 }
