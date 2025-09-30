@@ -35,13 +35,16 @@ function App() {
   const [serverUrl, setServerUrl] = useState<string>("")
   const [myDevice, setMyDevice] = useState<DeviceModel | null>(null)
   const [deviceSelected, setDeviceSelected] = useState<DeviceModel | null>(null)
+  const [devicesList, setDevicesList] = useState<DeviceModel[]>([])
 
   useEffect(() => {
     if (calledRef.current) return;
     calledRef.current = true;
 
     connectToAPI().then(() => {
-      initMyDevice()
+      initMyDevice().then(() => {
+        loadClients()
+      })
     })
 
   }, []);
@@ -70,12 +73,12 @@ function App() {
       });
   }
 
-  const initMyDevice = () => {
+  const initMyDevice = async () => {
 
-    const uuid = localStorage.getItem('device_uuid')
+    const uuid = await localStorage.getItem('device_uuid')
 
     if (!uuid) {
-      fetch("http://localhost:5000/init", {
+      await fetch("http://localhost:5000/init", {
         method: "POST",
       })
         .then((res) => res.json())
@@ -86,6 +89,7 @@ function App() {
           })
           console.log("New UUID:", data.uuid);
           localStorage.setItem('device_uuid', data.uuid)
+          verifyMyDevice({id: data.uuid, name: "My Computer"})
         })
         .catch((err) => {
           console.error(err)
@@ -94,14 +98,58 @@ function App() {
             name: "My Computer",
           })
         });
-    }else {
-      console.log("Existing UUID:", uuid);
-      setMyDevice({
-        id: uuid,
-        name: "My Computer",
-      })
-    }
 
+        return
+    }
+    console.log("Existing UUID:", uuid);
+    setMyDevice({
+      id: uuid,
+      name: "My Computer",
+    })
+
+  }
+
+  const verifyMyDevice = async (clientData: DeviceModel) => {
+    console.log("Verifying device:", clientData);
+    if (clientData) {
+      await fetch("http://localhost:5000/verify", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ uuid: clientData.id, name: clientData.name })
+      }).then((res) => res.json())
+        .then((data) => {
+          if (data.status === "ok") {
+            console.log("Device verified");
+          } else {
+            console.log("Device not verified");
+          }
+        })
+        .catch((err) => {
+          console.error(err)
+        });
+    }else {
+      console.log("My device is null");
+    }
+  }
+
+  const loadClients = async () => {
+    await fetch("http://localhost:5000/get-client", {
+      method: "POST",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setDevicesList(data.clients)
+        console.log(data.clients);
+      })
+      .catch((err) => {
+        console.error(err)
+      });
+  }
+
+  const handleDeleteUUID = () => {
+    localStorage.removeItem('device_uuid')
   }
 
   return (
@@ -120,10 +168,11 @@ function App() {
           }
           <hr />
           {
-            devices.map((device) => (
+            devicesList.map((device) => (
               <Device key={device.id} item={device} active={device.id === id ? true : false} />
             ))
           }
+          <button onClick={handleDeleteUUID}>Remove UUID</button>
         </div>
       </div>
 
