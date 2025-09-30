@@ -48,16 +48,16 @@ function App() {
 
   useEffect(() => {
     // console.log("ID:", id);
-    if(myDevice?.id === id) {
+    if (myDevice?.id === id) {
       setDeviceSelected(myDevice)
-    }else {
+    } else {
       const device = devices.find((d) => d.id === id)
       if (device) {
         setDeviceSelected(device)
       }
     }
   }, [id]);
-  
+
   const connectToAPI = async () => {
     await fetch("http://localhost:5000", {
       method: "POST",
@@ -71,24 +71,37 @@ function App() {
   }
 
   const initMyDevice = () => {
-    fetch("http://localhost:5000/init", {
-      method: "POST",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setMyDevice({
-          id: data.uuid,
-          name: "Local",
-        })
-        console.log("My Device ID:", data.uuid);
+
+    const uuid = localStorage.getItem('device_uuid')
+
+    if (!uuid) {
+      fetch("http://localhost:5000/init", {
+        method: "POST",
       })
-      .catch((err) => {
-        console.error(err)
-        setMyDevice({
-          id: "can't connect",
-          name: "My Computer",
+        .then((res) => res.json())
+        .then((data) => {
+          setMyDevice({
+            id: data.uuid,
+            name: "My Computer",
+          })
+          console.log("New UUID:", data.uuid);
+          localStorage.setItem('device_uuid', data.uuid)
         })
-      });
+        .catch((err) => {
+          console.error(err)
+          setMyDevice({
+            id: "can't connect",
+            name: "My Computer",
+          })
+        });
+    }else {
+      console.log("Existing UUID:", uuid);
+      setMyDevice({
+        id: uuid,
+        name: "My Computer",
+      })
+    }
+
   }
 
   return (
@@ -102,13 +115,13 @@ function App() {
         <div className="device-list">
           {
             myDevice && (
-              <Device item={myDevice} active={myDevice?.id === id || deviceSelected === null ? true : false}/>
+              <Device item={myDevice} active={myDevice?.id === id || deviceSelected === null ? true : false} />
             )
           }
           <hr />
           {
             devices.map((device) => (
-              <Device key={device.id} item={device} active={device.id === id ? true : false }/>
+              <Device key={device.id} item={device} active={device.id === id ? true : false} />
             ))
           }
         </div>
