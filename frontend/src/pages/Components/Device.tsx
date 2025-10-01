@@ -24,6 +24,9 @@ export default function Device({item, active = false}: Props) {
                 <h5>{item?.name}</h5>
                 <span className='tag'>{item?.id.split('-')[0]}</span>
             </div>
+            <div className="btn-verify">
+                <button>Verify</button>
+            </div>
         </div>
     )
 }
