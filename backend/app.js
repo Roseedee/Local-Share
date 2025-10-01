@@ -1,16 +1,10 @@
 const express = require('express')
 const cors = require('cors')
-
 const { v4: uuidv4 } = require('uuid');
+const { insertClient, loadClients } = require('./db/connect');
 
 const app = express();
 const port = 5000;
-
-
-
-let clients = [
-    { id: "de4929ed-d33b-419a-9628-b3bd014b5cdd", name: "My Computer"},
-]
 
 app.use(cors({
     origin: "http://localhost:8080"
@@ -38,12 +32,22 @@ app.post('/init', (req, res) => {
 app.post('/verify', (req, res) => {
     const { uuid, name } = req.body;
     console.log("verify id: ", uuid, "name: ", name)
-    clients.push({ id: uuid, name: name });
+    insertClient(uuid, name);
     res.json({ status: "ok" });
 })
 
-app.post('/get-client', (req, res) => {
-    res.json({ clients: clients });
+app.post('/get-client', async (req, res) => {
+    try {
+        const result = await loadClients();
+        const clients = result.map(client => ({
+            id: client.device_uuid,
+            name: client.device_name
+        }));
+        res.json({ clients: clients });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Failed to load clients" });
+    }
 })
 
 app.listen(port, () => {
