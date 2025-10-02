@@ -14,6 +14,11 @@ export default function Device({item, active = false}: Props) {
     const navigate = useNavigate()
 
     const handleClick = () => {
+        const uuid = localStorage.getItem("device_uuid")
+        if (item.id === uuid) {
+            navigate(`/`)
+            return
+        }
         navigate(`/${item.id}`)
     }
 

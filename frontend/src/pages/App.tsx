@@ -37,6 +37,7 @@ function App() {
 
   }, []);
 
+  // When id param change, update selected device
   useEffect(() => {
     // console.log("ID:", id);
     if (myDevice?.id === id) {
@@ -54,7 +55,7 @@ function App() {
       method: "POST",
     })
       .then((res) => res.json())
-      .then((data) => setServerUrl("http://" + data.ip + ":" + window.location.port))
+      .then((data) => setServerUrl("http://" + data.ip + ":" + window.location.port + "/init"))
       .catch((err) => {
         console.error(err)
         setServerUrl("Error connecting to server")
@@ -62,10 +63,10 @@ function App() {
   }
 
   const initMyDevice = async () => {
-    const uuid = await localStorage.getItem('device_uuid')
+    const uuid = localStorage.getItem('device_uuid')
 
     if(uuid) {
-      console.log("Found existing uuid:", uuid);
+      // console.log("Found existing uuid:", uuid);
       await initRest(uuid).then((data) => {
         // console.log("Device info:", data);
         console.log("Device info:", data.deviceInfo.role);
@@ -75,7 +76,7 @@ function App() {
         })
       })
     }else {
-      console.log("No existing uuid, generating new one");
+      // console.log("No existing uuid, generating new one");
       initRest("").then((data) => {
         localStorage.setItem('device_uuid', data.uuid)
         setMyDevice({
@@ -137,14 +138,14 @@ function App() {
         <div className="sidebar-header">
           <span className='tag'>แสกนเพื่อเข้ากลุ่ม</span>
           <QRCodeSVG value={serverUrl} />
-          <a href=""><h5>{serverUrl}</h5></a>
+          <a href={serverUrl}><h5>{serverUrl}</h5></a>
         </div>
         <div className="device-list">
           {
             myDevice && (
-              <Device item={myDevice} active={myDevice?.id === id || deviceSelected === null ? true : false} />
+              <Device item={myDevice} active={id === undefined ? true : false} />
             )
-          }
+          } 
           <hr />
           {
             devicesList.map((device) => (
@@ -158,7 +159,7 @@ function App() {
       <div className="content">
         <div className="content-header">
           <div className="computer-name">
-            <h4>{deviceSelected === null ? myDevice?.name : deviceSelected?.name}{myDevice?.id === id ? '(You)' : ''}</h4>
+            <h4>{deviceSelected === null ? myDevice?.name : deviceSelected?.name}{id === undefined ? '(You)' : ''}</h4>
             <img src={editIcon} alt="" className='content-header-icon' />
           </div>
           <div className='tools-group'>

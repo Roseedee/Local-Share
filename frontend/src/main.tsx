@@ -1,7 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from "react-router-dom"
+
 import App from './pages/App'
+import Init from './pages/Init'
 import Register from './pages/Register'
 import FileView from './pages/FileView'
 
@@ -13,6 +15,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/:id" element={<App />} />
+        <Route path="/init/" element={<Init />} />
         <Route path="/register/" element={<Register />} />
         <Route path="/fileview/:id" element={<FileView />} />
       </Routes>
