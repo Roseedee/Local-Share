@@ -6,8 +6,9 @@
 .sidebar{
   padding: 20px;
   min-width: 300px;
-  height: 100vh;
+  max-height: 100vh;
   box-sizing: border-box;
+  overflow: auto;
   display: flex;
   flex-direction: column;
   gap: 25px;

@@ -31,21 +31,36 @@ const insertClient = (uuid, name) => {
 
 const loadClients = async () => {
     connectToDatabase();
-    const query = 'SELECT * FROM clients';  
+    const query = 'SELECT * FROM clients';
     return new Promise((resolve, reject) => {
         db.execute(query, (err, results) => {
             if (err) {
                 console.error('Error loading clients:', err);
                 return reject(err);
-            }   
+            }
             // console.log('Clients loaded:', results);
             resolve(results);
         });
     });
 }
 
+const loadClient = (uuid) => {
+    connectToDatabase();
+    const query = 'SELECT * FROM clients WHERE device_uuid = ?';
+    return new Promise((resolve, reject) => {
+        db.execute(query, [uuid], (err, results) => {
+            if (err) {
+                console.error('Error loading client:', err);
+                return reject(err);
+            }
+            // console.log('Client loaded:', results);
+            resolve(results[0]);
+        });
+    });
+}
+
 module.exports = {
     db,
-    insertClient, loadClients
+    insertClient, loadClients, loadClient
 };
 

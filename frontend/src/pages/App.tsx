@@ -5,25 +5,13 @@ import { useNavigate, useParams } from 'react-router-dom'
 import '../style/App.css'
 
 import DeviceModel from '../model/DeviceModel'
+import { initRest } from '../rest/rest'
 
 import editIcon from '../assets/edit.png'
 import synsIcon from '../assets/sync.png'
 import fileUploadIcon from '../assets/up-loading.png'
 import selectIcon from '../assets/select.png'
 import Device from './Components/Device'
-
-//test data
-const devices: DeviceModel[] = [
-  {
-    id: "1",
-    name: "My Computer",
-  },
-  {
-    id: "2",
-    name: "Work Laptop",
-  }
-]
-
 
 function App() {
 
@@ -54,7 +42,7 @@ function App() {
     if (myDevice?.id === id) {
       setDeviceSelected(myDevice)
     } else {
-      const device = devices.find((d) => d.id === id)
+      const device = devicesList.find((d) => d.id === id)
       if (device) {
         setDeviceSelected(device)
       }
@@ -62,7 +50,7 @@ function App() {
   }, [id]);
 
   const connectToAPI = async () => {
-    await fetch("http://localhost:5000", {
+    await fetch("http://localhost:5000/connection", {
       method: "POST",
     })
       .then((res) => res.json())
@@ -74,38 +62,29 @@ function App() {
   }
 
   const initMyDevice = async () => {
-
     const uuid = await localStorage.getItem('device_uuid')
 
-    if (!uuid) {
-      await fetch("http://localhost:5000/init", {
-        method: "POST",
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setMyDevice({
-            id: data.uuid,
-            name: "My Computer",
-          })
-          console.log("New UUID:", data.uuid);
-          localStorage.setItem('device_uuid', data.uuid)
-          verifyMyDevice({id: data.uuid, name: "My Computer"})
+    if(uuid) {
+      console.log("Found existing uuid:", uuid);
+      await initRest(uuid).then((data) => {
+        // console.log("Device info:", data);
+        console.log("Device info:", data.deviceInfo.role);
+        setMyDevice({
+          id: data.deviceInfo.device_uuid,
+          name: data.deviceInfo.device_name
         })
-        .catch((err) => {
-          console.error(err)
-          setMyDevice({
-            id: "can't connect",
-            name: "My Computer",
-          })
-        });
-
-        return
+      })
+    }else {
+      console.log("No existing uuid, generating new one");
+      initRest("").then((data) => {
+        localStorage.setItem('device_uuid', data.uuid)
+        setMyDevice({
+          id: data.uuid,
+          name: "Temp Name"
+        })
+        verifyMyDevice({id: data.uuid, name: "Temp Name"})
+      })
     }
-    console.log("Existing UUID:", uuid);
-    setMyDevice({
-      id: uuid,
-      name: "My Computer",
-    })
 
   }
 
@@ -129,7 +108,7 @@ function App() {
         .catch((err) => {
           console.error(err)
         });
-    }else {
+    } else {
       console.log("My device is null");
     }
   }

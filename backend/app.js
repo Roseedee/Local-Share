@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const { v4: uuidv4 } = require('uuid');
-const { insertClient, loadClients } = require('./db/connect');
+const { insertClient, loadClients, loadClient } = require('./db/connect');
 
 const app = express();
 const port = 5000;
@@ -17,16 +17,26 @@ app.get('/', (req, res) => {
     res.send('Hello From API')
 });
 
-app.post('/', (req, res) => {
+app.post('/connection', (req, res) => {
     console.log("Connected")
     const ip = "192.168.1.240"
     res.json({ ip: ip });
 });
 
 app.post('/init', (req, res) => {
+    //return device info if exist
+    //if not or not found in database return new uuid
+    const { uuid } = req.body;
+    if (uuid) {
+        console.log("Already have uuid: ", uuid)
+        loadClient(uuid).then(client => {
+            res.json({ deviceInfo: client});
+        })
+        return;
+    }
     console.log("gen uuid")
-    const uuid = uuidv4();
-    res.json({ uuid: uuid });
+    const uuid_new = uuidv4();
+    res.json({ uuid: uuid_new });
 });
 
 app.post('/verify', (req, res) => {

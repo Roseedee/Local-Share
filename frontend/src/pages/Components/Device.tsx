@@ -23,6 +23,7 @@ export default function Device({item, active = false}: Props) {
             <div className="device-detail">
                 <h5>{item?.name}</h5>
                 <span className='tag'>{item?.id.split('-')[0]}</span>
+                {/* <span className='tag'>{item?.id}</span> */}
             </div>
             <div className="btn-verify">
                 <button>Verify</button>
