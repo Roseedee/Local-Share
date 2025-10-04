@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
-    res.send('Hello From API')
+    res.send({status: 'ok'})
 });
 
 app.post('/connection', (req, res) => {
@@ -44,15 +44,22 @@ app.post('/init', (req, res) => {
 });
 
 
-let c_uuid = 0
+let cgen_uuid = 0
 app.post('/generate-uuid', (req, res) => {
-    c_uuid++
-    console.log('generate new uuid: ', c_uuid)
+    cgen_uuid++
+    console.log('generate new uuid: ', cgen_uuid)
     const new_uuid = uuidv4();
     res.json({ uuid: new_uuid })
 })
 
 app.post('/verify', (req, res) => {
+    const { uuid, name } = req.body;
+    console.log("verify id: ", uuid, "name: ", name)
+    insertClient(uuid, name);
+    res.json({ status: "ok" });
+})
+
+app.post('/verify-uuid', (req, res) => {
     const { uuid, name } = req.body;
     console.log("verify id: ", uuid, "name: ", name)
     insertClient(uuid, name);
