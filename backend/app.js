@@ -7,8 +7,12 @@ const app = express();
 const port = 5000;
 
 app.use(cors({
-    origin: "http://localhost:8080"
+    origin: [
+        "http://localhost:8080",
+        "http://192.168.1.240:8080/init"
+    ]
 }))
+
 app.set('trust proxy', true);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -38,6 +42,15 @@ app.post('/init', (req, res) => {
     const uuid_new = uuidv4();
     res.json({ uuid: uuid_new });
 });
+
+
+let c_uuid = 0
+app.post('/generate-uuid', (req, res) => {
+    c_uuid++
+    console.log('generate new uuid: ', c_uuid)
+    const new_uuid = uuidv4();
+    res.json({ uuid: new_uuid })
+})
 
 app.post('/verify', (req, res) => {
     const { uuid, name } = req.body;

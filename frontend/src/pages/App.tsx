@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import '../style/App.css'
 
 import DeviceModel from '../model/DeviceModel'
-import { initRest } from '../rest/rest'
+import rest from '../rest/rest'
 
 import editIcon from '../assets/edit.png'
 import synsIcon from '../assets/sync.png'
@@ -67,7 +67,7 @@ function App() {
 
     if(uuid) {
       // console.log("Found existing uuid:", uuid);
-      await initRest(uuid).then((data) => {
+      rest.initRest(uuid).then((data) => {
         // console.log("Device info:", data);
         console.log("Device info:", data.deviceInfo.role);
         setMyDevice({
@@ -77,7 +77,7 @@ function App() {
       })
     }else {
       // console.log("No existing uuid, generating new one");
-      initRest("").then((data) => {
+      rest.initRest("").then((data) => {
         localStorage.setItem('device_uuid', data.uuid)
         setMyDevice({
           id: data.uuid,
@@ -129,6 +129,7 @@ function App() {
   }
 
   const handleDeleteUUID = () => {
+    console.log('remove uuid')
     localStorage.removeItem('device_uuid')
   }
 
@@ -138,7 +139,7 @@ function App() {
         <div className="sidebar-header">
           <span className='tag'>แสกนเพื่อเข้ากลุ่ม</span>
           <QRCodeSVG value={serverUrl} />
-          <a href={serverUrl}><h5>{serverUrl}</h5></a>
+          <h5>{serverUrl}</h5>
         </div>
         <div className="device-list">
           {
