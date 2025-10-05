@@ -25,6 +25,8 @@ export default function Init() {
                 setUuid(data.uuid)
             });
             return;
+        }else {
+            navigator('/')
         }
     }, [])
 
@@ -36,11 +38,10 @@ export default function Init() {
                 return;
             }else if(data.status === 'bad') {
                 window.alert('Device verification failed, Try again!!')
-                // console.log('Device verification failed : ', err)
             }
-        }).catch((err) => {
+        }).catch(() => {
             window.alert('Device verification failed, Try again!!')
-            console.log('Device verification failed : ', err)
+            // console.log('Device verification failed : ', err)
         })
     }
 
@@ -50,11 +51,11 @@ export default function Init() {
                 <div className="init-container">
                     <div className="input-group">
                         <div className="uuid-container row-container">
-                            <h3>UUID*</h3>
+                            <h3>UUID</h3>
                             <input type="text" name="" id="" value={uuid?.split("-")[0] + "..."} disabled required />
                         </div>
                         <div className="name-container row-container">
-                            <h3>Device Name*</h3>
+                            <h3>Device Name</h3>
                             <input type="text" id="" placeholder='Enter computer name' value={name} onChange={(e) => setName(e.target.value)} required />
                         </div>
                     </div>

@@ -15,10 +15,12 @@ import Device from './Components/Device'
 
 function App() {
 
-  const navigate = useNavigate()
+  const navigator = useNavigate()
   const { id } = useParams<string>()
 
   const calledRef = useRef(false);
+
+  const local_uuid = localStorage.getItem("device_uuid") || ""
 
   const [serverUrl, setServerUrl] = useState<string>("")
   const [myDevice, setMyDevice] = useState<DeviceModel | null>(null)
@@ -29,13 +31,43 @@ function App() {
     if (calledRef.current) return;
     calledRef.current = true;
 
-    connectToAPI().then(() => {
-      initMyDevice().then(() => {
-        loadClients()
-      })
-    })
+    if (local_uuid === "") {
+      navigator("/init")
+      return;
+    }
+
+    loadData()
 
   }, []);
+
+  const loadData = async () => {
+    rest.ping().then((data) => {
+      if (data.status === 'ok') {
+        rest.getConnection().then((data) => {
+          setServerUrl(data.url)
+          // console.log(data.url)
+        })
+        rest.getAllClient(local_uuid).then((data) => {
+          setDevicesList(data.clients)
+          // console.log(data.clients)
+        })
+      }
+    })
+  }
+
+  useEffect(() => {
+    if (devicesList) {
+      const temp_myDevice = devicesList.find((item) => item.id === local_uuid);
+      const index_myUuid = devicesList.findIndex(item => item.id === local_uuid);
+      if (index_myUuid !== -1) {
+        devicesList.splice(index_myUuid, 1); // ลบออกจาก array เดิม
+      }
+      // console.log(temp_myDevice)
+      if (temp_myDevice) setMyDevice(temp_myDevice);
+    }
+  }, [devicesList])
+
+
 
   // When id param change, update selected device
   useEffect(() => {
@@ -49,84 +81,6 @@ function App() {
       }
     }
   }, [id]);
-
-  const connectToAPI = async () => {
-    await fetch("http://localhost:5000/connection", {
-      method: "POST",
-    })
-      .then((res) => res.json())
-      .then((data) => setServerUrl("http://" + data.ip + ":" + window.location.port + "/init"))
-      .catch((err) => {
-        console.error(err)
-        setServerUrl("Error connecting to server")
-      });
-  }
-
-  const initMyDevice = async () => {
-    const uuid = localStorage.getItem('device_uuid')
-
-    if(uuid) {
-      // console.log("Found existing uuid:", uuid);
-      rest.initRest(uuid).then((data) => {
-        // console.log("Device info:", data);
-        console.log("Device info:", data.deviceInfo.role);
-        setMyDevice({
-          id: data.deviceInfo.device_uuid,
-          name: data.deviceInfo.device_name
-        })
-      })
-    }else {
-      // console.log("No existing uuid, generating new one");
-      rest.initRest("").then((data) => {
-        localStorage.setItem('device_uuid', data.uuid)
-        setMyDevice({
-          id: data.uuid,
-          name: "Temp Name"
-        })
-        verifyMyDevice({id: data.uuid, name: "Temp Name"})
-      })
-    }
-
-  }
-
-  const verifyMyDevice = async (clientData: DeviceModel) => {
-    console.log("Verifying device:", clientData);
-    if (clientData) {
-      await fetch("http://localhost:5000/verify", {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ uuid: clientData.id, name: clientData.name })
-      }).then((res) => res.json())
-        .then((data) => {
-          if (data.status === "ok") {
-            console.log("Device verified");
-          } else {
-            console.log("Device not verified");
-          }
-        })
-        .catch((err) => {
-          console.error(err)
-        });
-    } else {
-      console.log("My device is null");
-    }
-  }
-
-  const loadClients = async () => {
-    await fetch("http://localhost:5000/get-client", {
-      method: "POST",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setDevicesList(data.clients)
-        console.log(data.clients);
-      })
-      .catch((err) => {
-        console.error(err)
-      });
-  }
 
   const handleDeleteUUID = () => {
     console.log('remove uuid')
@@ -146,11 +100,11 @@ function App() {
             myDevice && (
               <Device item={myDevice} active={id === undefined ? true : false} />
             )
-          } 
+          }
           <hr />
           {
-            devicesList.map((device) => (
-              <Device key={device.id} item={device} active={device.id === id ? true : false} />
+            devicesList.map((device, i) => (
+              <Device key={i} item={device} active={device.id === id ? true : false} />
             ))
           }
         </div>

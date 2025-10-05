@@ -36,6 +36,16 @@ export default class Rest {
             body: JSON.stringify({ uuid, name })
         }).then((res) => res.json())
     }
+
+    static async getAllClient(uuid: string) {
+        return await fetch(this.apiHost + "get-client", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({uuid})
+        }).then((res) => res.json())
+    }
 }
 
 

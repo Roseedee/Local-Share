@@ -22,9 +22,9 @@ app.get('/', (req, res) => {
 });
 
 app.post('/connection', (req, res) => {
-    console.log("Connected")
-    const ip = "192.168.1.240"
-    res.json({ ip: ip });
+    console.log("Get Connection")
+    const init_path = "http://192.168.1.240/init"
+    res.json({ url: init_path });
 });
 
 app.post('/init', (req, res) => {
@@ -71,6 +71,8 @@ app.post('/verify-uuid', (req, res) => {
 })
 
 app.post('/get-client', async (req, res) => {
+    const { uuid } = req.body
+    console.log("Get All Client by : " + uuid)
     try {
         const result = await loadClients();
         const clients = result.map(client => ({
