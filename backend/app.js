@@ -61,6 +61,10 @@ app.post('/verify', (req, res) => {
 
 app.post('/verify-uuid', (req, res) => {
     const { uuid, name } = req.body;
+    if( uuid === "" || name === "") {
+        res.json({status: 'bad'})
+        return;
+    }
     console.log("verify id: ", uuid, "name: ", name)
     insertClient(uuid, name);
     res.json({ status: "ok" });

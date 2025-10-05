@@ -34,6 +34,9 @@
   width: 100%;
   height: 70px;
   background-color: #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .device-list hr {

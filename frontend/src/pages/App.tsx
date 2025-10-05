@@ -153,6 +153,8 @@ function App() {
               <Device key={device.id} item={device} active={device.id === id ? true : false} />
             ))
           }
+        </div>
+        <div className="sidebar-bottom">
           <button onClick={handleDeleteUUID}>Remove UUID</button>
         </div>
       </div>
