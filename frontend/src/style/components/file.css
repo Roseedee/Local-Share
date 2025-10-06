@@ -1,0 +1,45 @@
+.file-list {
+    flex-grow: 1;
+    max-height: calc(100vh - 120px);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    overflow: auto;
+}
+
+.file-item {
+    width: 120px;
+    max-width: 150px;
+    height: 150px;
+    max-height: 220px;
+    background-color: #F9F9F9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+    gap: 5px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.12);
+    transition: 0.3s;
+
+    &:hover {
+        background-color: #fbe4fd;
+        box-shadow: none;
+    }
+}
+
+.file-item img {
+    width: 100%;
+    height: 90%;
+    object-fit: cover;
+    border-radius: 3px;
+}
+
+.file-item h6 {
+    max-width: 100%;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}

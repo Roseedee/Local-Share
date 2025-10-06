@@ -3,6 +3,7 @@ import { QRCodeSVG } from "qrcode.react"
 import { useNavigate, useParams } from 'react-router-dom'
 
 import '../style/App.css'
+import '../style/components/file.css'
 
 import DeviceModel from '../model/DeviceModel'
 import rest from '../rest/rest'
@@ -11,6 +12,8 @@ import editIcon from '../assets/edit.png'
 import synsIcon from '../assets/sync.png'
 import fileUploadIcon from '../assets/up-loading.png'
 import selectIcon from '../assets/select.png'
+import imgTest from '../assets/test1.jpg'
+
 import Device from './Components/Device'
 
 function App() {
@@ -132,8 +135,202 @@ function App() {
           </div>
         </div>
         <div className="content-body">
-          <div className="file-not-found">
+          {/* <div className="file-not-found">
             <h2 className='water-mark'>ลากไฟล์มาวางเพื่ออัพโหลด หรือ กดเพื่ออัพโหลดไฟล์</h2>
+          </div> */}
+          <div className="file-list">
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file namasdfasdfasdfasdfasdfasdfase</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
+            <div className="file-item">
+              <img src={imgTest} alt="" />
+              <h6>file name</h6>
+            </div>
           </div>
         </div>
       </div>
