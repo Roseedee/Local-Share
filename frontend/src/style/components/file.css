@@ -17,11 +17,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 5px;
     gap: 5px;
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.12);
-    transition: 0.3s;
+    padding: 5px;
+    transition: 0.2s;
 
     &:hover {
         background-color: #fbe4fd;
