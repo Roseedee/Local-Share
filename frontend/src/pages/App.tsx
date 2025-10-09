@@ -148,6 +148,42 @@ function App() {
             <File file={{id: "0", name: "Test", path: imgTest, size: 10}}/>
             <File file={{id: "0", name: "Test", path: imgTest, size: 10}} isUpload progressNow={50}/>
             <File file={{id: "0", name: "Test", path: imgTest, size: 10}}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}} isUpload progressNow={100}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}} isUpload progressNow={50}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}} isUpload progressNow={50}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}} isUpload progressNow={100}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}} isUpload progressNow={50}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}} isUpload progressNow={50}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}} isUpload progressNow={100}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}} isUpload progressNow={50}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}} isUpload progressNow={50}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}} isUpload progressNow={100}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}} isUpload progressNow={50}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}} isUpload progressNow={50}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}} isUpload progressNow={100}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}} isUpload progressNow={50}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}} isUpload progressNow={50}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}} isUpload progressNow={100}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}} isUpload progressNow={50}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}} isUpload progressNow={50}/>
+            <File file={{id: "0", name: "Test", path: imgTest, size: 10}}/>
           </div>
         </div>
       </div>
