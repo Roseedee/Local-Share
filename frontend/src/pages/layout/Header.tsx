@@ -9,19 +9,23 @@ import selectIcon from '../../assets/select.png'
 import { useParams } from 'react-router-dom'
 
 
+type Props = {
+    myDevice: DeviceModel
+}
 
-export default function Header() {
+
+export default function Header({myDevice}: Props) {
 
     const { id } = useParams<string>()
 
     const [deviceSelected, setDeviceSelected] = useState<DeviceModel>()
 
     useEffect(() => {
-        console.log(deviceSelected)
+        // console.log(deviceSelected)
         setDeviceSelected(() => {
             return {
-                id: localStorage.getItem('device_selected_uuid') || '',
-                name: localStorage.getItem('device_selected_name') || ''
+                id: localStorage.getItem('device_selected_uuid') || "",
+                name: localStorage.getItem('device_selected_name') || ""
             }
         })
     }, [id])
@@ -29,8 +33,8 @@ export default function Header() {
     return (
         <div className="content-header">
             <div className="computer-name">
-                {/* <h4>{deviceSelected === null ? myDevice?.name : deviceSelected?.name}{id === undefined ? '(You)' : ''}</h4> */}
-                <h4>{deviceSelected?.name}</h4>
+                <h4>{deviceSelected === null ? myDevice?.name : deviceSelected?.name}{id === undefined ? '(You)' : ''}</h4>
+                {/* <h4>{deviceSelected?.name}</h4> */}
                 <img src={editIcon} alt="" className='content-header-icon' />
             </div>
             <div className='tools-group'>

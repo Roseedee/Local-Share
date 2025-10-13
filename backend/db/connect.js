@@ -17,6 +17,19 @@ const connectToDatabase = () => {
     });
 }
 
+const auth = (uuid) => {
+    connectToDatabase();
+    const query = 'SELECT * FROM clients WHERE device_uuid=?';
+    return new Promise((resolve, reject) => {
+        db.execute(query, [uuid], (err, results) => {
+            if(err) {
+                console.error('Error auth : ', err);
+            }
+            resolve(results)
+        })
+    })
+}
+
 const insertClient = (uuid, name) => {
     connectToDatabase();
     const query = 'INSERT INTO clients (device_uuid, device_name) VALUES (?, ?)';
@@ -44,23 +57,8 @@ const loadClients = async () => {
     });
 }
 
-const loadClient = (uuid) => {
-    connectToDatabase();
-    const query = 'SELECT * FROM clients WHERE device_uuid = ?';
-    return new Promise((resolve, reject) => {
-        db.execute(query, [uuid], (err, results) => {
-            if (err) {
-                console.error('Error loading client:', err);
-                return reject(err);
-            }
-            // console.log('Client loaded:', results);
-            resolve(results[0]);
-        });
-    });
-}
-
 module.exports = {
     db,
-    insertClient, loadClients, loadClient
+    auth, insertClient, loadClients
 };
 

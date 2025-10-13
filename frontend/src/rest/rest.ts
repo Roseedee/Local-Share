@@ -13,12 +13,14 @@ export default class Rest {
         }).then((res) => res.json())
     }
 
-    static async initRest(uuid: string) {
-        // console.log("Init REST with uuid:", uuid);
-        return await fetch(this.apiHost + "init", {
+    static async auth(uuid: string) {
+        return await fetch(this.apiHost + "auth", {
             method: "POST",
-            body: JSON.stringify({ uuid })
-        }).then((res) => res.json());
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({uuid})
+        }).then((res) => res.json())
     }
 
     static async generateNewUUID() {

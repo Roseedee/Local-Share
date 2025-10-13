@@ -11,16 +11,18 @@ import '../../style/layout.css'
 
 type Props = {
     local_uuid: string
+    myDevice: DeviceModel
+    devicesList: DeviceModel[]
 }
 
-export default function SideBar({ local_uuid }: Props) {
+export default function SideBar({ local_uuid, myDevice, devicesList }: Props) {
     const { id } = useParams<string>()
     const calledRef = useRef(false);
 
     const [serverPath, setServerPath] = useState<string>("can't connect to server")
-    const [myDevice, setMyDevice] = useState<DeviceModel | null>(null)
-    const [deviceSelected, setDeviceSelected] = useState<DeviceModel | null>(null)
-    const [devicesList, setDevicesList] = useState<DeviceModel[]>([])
+    // const [myDevice, setMyDevice] = useState<DeviceModel | null>(null)
+    // const [deviceSelected, setDeviceSelected] = useState<DeviceModel | null>(null)
+    // const [devicesList, setDevicesList] = useState<DeviceModel[]>([])
 
     useEffect(() => {
         if (calledRef.current) return;
@@ -37,10 +39,13 @@ export default function SideBar({ local_uuid }: Props) {
                     setServerPath(data.url)
                     // console.log(data.url)
                 })
-                rest.getAllClient(local_uuid).then((data) => {
-                    setDevicesList(data.clients)
-                    // console.log(data.clients)
-                })
+                // rest.auth(local_uuid).then((data) => {
+                //     setMyDevice(data)
+                // })
+                // rest.getAllClient(local_uuid).then((data) => {
+                //     setDevicesList(data.clients)
+                //     // console.log(data.clients)
+                // })
             }
         })
     }
@@ -53,25 +58,25 @@ export default function SideBar({ local_uuid }: Props) {
                 devicesList.splice(index_myUuid, 1); // ลบออกจาก array เดิม
             }
             // console.log(temp_myDevice)
-            if (temp_myDevice) setMyDevice(temp_myDevice);
+            // if (temp_myDevice) setMyDevice(temp_myDevice);
         }
     }, [devicesList])
 
     useEffect(() => {
         // console.log("ID:", id);
-        if (myDevice?.id === id) {
-            setDeviceSelected(myDevice)
-            localStorage.setItem("device_selected_uuid", "")
-            localStorage.setItem("device_selected_name", "")
+        if (id === "" || id === undefined) {
+            localStorage.setItem("device_selected_uuid", myDevice.id)
+            localStorage.setItem("device_selected_name", myDevice.name)
         } else {
             const device = devicesList.find((d) => d.id === id)
             if (device) {
-                setDeviceSelected(device)
                 localStorage.setItem("device_selected_uuid", device.id)
                 localStorage.setItem("device_selected_name", device.name)
             }
         }
     }, [id]);
+
+    
 
     const handleDeleteUUID = () => {
         console.log('remove uuid')
