@@ -4,9 +4,6 @@ import '../style/App.css'
 import '../style/components/file.css'
 
 import Layout from './layout/Layout'
-
-
-
 import File from './Components/File'
 
 import imgTest from './../assets/test1.jpg'
@@ -25,7 +22,6 @@ function App() {
 
   return (
     <Layout>
-      <div className="content-body">
         {/* <div className="file-not-found">
             <h2 className='water-mark'>ลากไฟล์มาวางเพื่ออัพโหลด หรือ กดเพื่ออัพโหลดไฟล์</h2>
           </div> */}
@@ -74,7 +70,6 @@ function App() {
           <File file={{ id: "0", name: "Test", path: imgTest, size: 10 }} isUpload progressNow={50} />
           <File file={{ id: "0", name: "Test", path: imgTest, size: 10 }} />
         </div>
-      </div>
     </Layout>
 
   )

@@ -31,7 +31,9 @@ export default function Layout({ children }: Props) {
             <SideBar local_uuid={local_uuid}/>
             <div className="content">
                 <Header />
-                {children}
+                <div className="content-body">
+                    {children}
+                </div>
             </div>
         </div>
     )
