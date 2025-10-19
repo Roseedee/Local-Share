@@ -4,7 +4,8 @@ const { v4: uuidv4 } = require('uuid');
 const { auth, insertClient, loadClients } = require('./db/connect');
 const path = require('path')
 const fs = require('fs')
-const multer = require('multer')
+const multer = require('multer');
+const { error } = require('console');
 
 const app = express();
 const port = 5000;
@@ -58,7 +59,7 @@ app.get('/', (req, res) => {
 
 app.post('/connection', (req, res) => {
     console.log("Get Connection")
-    const init_path = "http://192.168.1.240/init"
+    const init_path = "http://192.168.1.240:8080/init"
     res.json({ url: init_path });
 });
 
@@ -67,8 +68,15 @@ app.post('/auth', async (req, res) => {
     console.log("Authentication with : ", uuid)
     try {
         const result = await auth(uuid);
-        // console.log(result[0])
-        res.json({id: result[0].device_uuid, name: result[0].device_name})
+        // console.log(result)
+        if(result) {
+            res.json({
+                id: result[0].device_uuid,
+                name: result[0].device_name
+            });
+        }else {
+            res.status(404).json({error: "Device Not Found"})
+        }
     }catch(error) {
         console.error(error);
         res.status(500).json({ error: "Failed to authentication" });

@@ -14,13 +14,24 @@ export default class Rest {
     }
 
     static async auth(uuid: string) {
-        return await fetch(this.apiHost + "auth", {
+
+        const response = await fetch(this.apiHost + "auth", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({uuid})
-        }).then((res) => res.json())
+            body: JSON.stringify({ uuid })
+        })
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw {
+                status: response.status,
+                message: errorData.error || 'Request failed'
+            };
+        }
+
+        return await response.json();
     }
 
     static async generateNewUUID() {
@@ -45,7 +56,7 @@ export default class Rest {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({uuid})
+            body: JSON.stringify({ uuid })
         }).then((res) => res.json())
     }
 }

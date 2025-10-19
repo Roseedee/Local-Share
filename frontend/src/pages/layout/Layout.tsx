@@ -38,9 +38,11 @@ export default function Layout({ children }: Props) {
     const loadData = async () => {
         rest.auth(local_uuid).then((data) => {
             setMyDevice(data)
-        })
-        rest.getAllClient(local_uuid).then((data) => {
-            setAllDevice(data.clients)
+            rest.getAllClient(local_uuid).then((data) => {
+                setAllDevice(data.clients)
+            })
+        }).catch((err: any) => {
+            console.error("Auth Failed: ", err.status, err.message)
         })
     }
 
@@ -49,13 +51,13 @@ export default function Layout({ children }: Props) {
     return (
         <div className="body">
             {
-                myDevice && allDevice && (
+                (
                     <SideBar local_uuid={local_uuid} myDevice={myDevice} devicesList={allDevice}/>
                 )
             }
             <div className="content">
                 {
-                    myDevice && (
+                    (
                         <Header myDevice={myDevice}/>
                     )
                 }

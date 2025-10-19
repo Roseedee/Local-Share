@@ -11,8 +11,8 @@ import '../../style/layout.css'
 
 type Props = {
     local_uuid: string
-    myDevice: DeviceModel
-    devicesList: DeviceModel[]
+    myDevice: DeviceModel | undefined
+    devicesList: DeviceModel[] | undefined
 }
 
 export default function SideBar({ local_uuid, myDevice, devicesList }: Props) {
@@ -52,7 +52,7 @@ export default function SideBar({ local_uuid, myDevice, devicesList }: Props) {
 
     useEffect(() => {
         if (devicesList) {
-            const temp_myDevice = devicesList.find((item) => item.id === local_uuid);
+            // const temp_myDevice = devicesList.find((item) => item.id === local_uuid);
             const index_myUuid = devicesList.findIndex(item => item.id === local_uuid);
             if (index_myUuid !== -1) {
                 devicesList.splice(index_myUuid, 1); // ลบออกจาก array เดิม
@@ -64,14 +64,16 @@ export default function SideBar({ local_uuid, myDevice, devicesList }: Props) {
 
     useEffect(() => {
         // console.log("ID:", id);
-        if (id === "" || id === undefined) {
-            localStorage.setItem("device_selected_uuid", myDevice.id)
-            localStorage.setItem("device_selected_name", myDevice.name)
-        } else {
-            const device = devicesList.find((d) => d.id === id)
-            if (device) {
-                localStorage.setItem("device_selected_uuid", device.id)
-                localStorage.setItem("device_selected_name", device.name)
+        if(myDevice && devicesList) {
+            if (id === "" || id === undefined) {
+                localStorage.setItem("device_selected_uuid", myDevice.id)
+                localStorage.setItem("device_selected_name", myDevice.name)
+            } else {
+                const device = devicesList.find((d) => d.id === id)
+                if (device) {
+                    localStorage.setItem("device_selected_uuid", device.id)
+                    localStorage.setItem("device_selected_name", device.name)
+                }
             }
         }
     }, [id]);
@@ -98,7 +100,7 @@ export default function SideBar({ local_uuid, myDevice, devicesList }: Props) {
                 }
                 <hr />
                 {
-                    devicesList.map((device, i) => (
+                    devicesList &&devicesList.map((device, i) => (
                         <Device key={i} item={device} active={device.id === id ? true : false} />
                     ))
                 }

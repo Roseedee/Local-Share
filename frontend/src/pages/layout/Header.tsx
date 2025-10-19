@@ -10,7 +10,7 @@ import { useParams } from 'react-router-dom'
 
 
 type Props = {
-    myDevice: DeviceModel
+    myDevice: DeviceModel | undefined
 }
 
 

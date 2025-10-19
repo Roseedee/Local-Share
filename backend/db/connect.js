@@ -25,6 +25,10 @@ const auth = (uuid) => {
             if(err) {
                 console.error('Error auth : ', err);
             }
+            if (!results || results.length === 0) {
+                console.log("No Client Found")
+                return resolve(null); // or resolve([]) if you prefer empty array
+            }
             resolve(results)
         })
     })
