@@ -16,8 +16,6 @@ function App() {
   useEffect(() => {
     if (calledRef.current) return;
     calledRef.current = true;
-
-
   }, []);
 
   return (

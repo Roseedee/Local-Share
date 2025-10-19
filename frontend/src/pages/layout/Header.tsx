@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
 import DeviceModel from '../../model/DeviceModel'
 
@@ -19,6 +19,7 @@ export default function Header({myDevice}: Props) {
     const { id } = useParams<string>()
 
     const [deviceSelected, setDeviceSelected] = useState<DeviceModel>()
+    const fileUploadRef = useRef<HTMLInputElement | null>(null)
 
     useEffect(() => {
         // console.log(deviceSelected)
@@ -30,6 +31,10 @@ export default function Header({myDevice}: Props) {
         })
     }, [id])
 
+    const handleClickUpload = () => {
+        fileUploadRef.current?.click()
+    };  
+
     return (
         <div className="content-header">
             <div className="computer-name">
@@ -38,7 +43,8 @@ export default function Header({myDevice}: Props) {
                 <img src={editIcon} alt="" className='content-header-icon' />
             </div>
             <div className='tools-group'>
-                <div className="tool-icon">
+                <div className="tool-icon" onClick={handleClickUpload}>
+                    <input type="file" name="" className='hide' ref={fileUploadRef} />
                     <img src={fileUploadIcon} alt="" className='content-header-icon' />
                 </div>
                 <div className="tool-icon">
