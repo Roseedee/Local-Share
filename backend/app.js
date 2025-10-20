@@ -120,28 +120,37 @@ app.post('/get-client', async (req, res) => {
     }
 });
 
-app.post('/upload', upload.single("file"), (req, res) => {
+app.post('/upload', upload.array("files", 10), (req, res) => {
 
     const clientId = req.body.clientId || "unknown";
 
-    if (!req.file) {
-        return res.status(400).json({ message: "No file uploaded" });
+    // if (!req.file) {
+    //     return res.status(400).json({ message: "No file uploaded" });
+    // }
+
+    // console.log(`📥 File received from client: ${clientId}`);
+    // console.log(`📄 Original name: ${req.file.originalname}`);
+    // console.log(`💾 Saved as: ${req.file.filename}`);
+    
+    if (!req.files || req.files.length === 0) {
+        return res.status(400).json({ message: "No files uploaded" });
     }
 
-    console.log(`📥 File received from client: ${clientId}`);
-    console.log(`📄 Original name: ${req.file.originalname}`);
-    console.log(`💾 Saved as: ${req.file.filename}`);
+    console.log(`📥 Files received from client: ${clientId}`);
+    req.files.forEach((file, index) => {
+        console.log(`📄 [${index + 1}] ${file.originalname} -> ${file.filename}`);
+    });
 
     res.json({
         status: "ok",
         message: "Upload successful",
         clientId,
-        file: {
-            originalName: req.file.originalname,
-            savedName: req.file.filename,
-            size: req.file.size,
-            type: req.file.mimetype
-        }
+        files: req.files.map(file => ({
+            originalName: file.originalname,
+            savedName: file.filename,
+            size: file.size,
+            type: file.mimetype
+        }))
     });
 });
 

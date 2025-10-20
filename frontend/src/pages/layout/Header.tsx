@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, ChangeEvent } from 'react'
 
 import DeviceModel from '../../model/DeviceModel'
 
@@ -14,12 +14,14 @@ type Props = {
 }
 
 
-export default function Header({myDevice}: Props) {
+export default function Header({ myDevice }: Props) {
 
     const { id } = useParams<string>()
 
     const [deviceSelected, setDeviceSelected] = useState<DeviceModel>()
+
     const fileUploadRef = useRef<HTMLInputElement | null>(null)
+    const [files, setFiles] = useState<FileList | null>()
 
     useEffect(() => {
         // console.log(deviceSelected)
@@ -33,7 +35,47 @@ export default function Header({myDevice}: Props) {
 
     const handleClickUpload = () => {
         fileUploadRef.current?.click()
-    };  
+    };
+
+    const handleFileInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            setFiles(e.target.files)
+        }
+    }
+
+    const handleClickStartUploadFiles = async () => {
+        if (!files) {
+            alert("Please Select files first!")
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("clientId", "1234")
+
+        Array.from(files).forEach((file) => {
+            formData.append("files", file)
+        })
+
+        try {
+            const response = await fetch("http://localhost:5000/upload", {
+                method: "POST",
+                body: formData
+            });
+
+            if (!response.ok) throw new Error("Upload Failed");
+
+            const data = await response.json();
+            console.log("Upload Success: ", data)
+        } catch (error) {
+            console.error("❌ Upload error:", error);
+            alert("Upload failed!");
+        }
+
+    }
+
+    // useEffect(() => {
+    //     console.log(files)
+    // }, [files])
 
     return (
         <div className="content-header">
@@ -44,8 +86,12 @@ export default function Header({myDevice}: Props) {
             </div>
             <div className='tools-group'>
                 <div className="tool-icon" onClick={handleClickUpload}>
-                    <input type="file" name="" className='hide' ref={fileUploadRef} />
+                    <input type="file" multiple name="" className='hide' ref={fileUploadRef} onChange={handleFileInputChange} />
                     <img src={fileUploadIcon} alt="" className='content-header-icon' />
+                </div>
+                <div className="tool-icon" onClick={handleClickStartUploadFiles}>
+                    {/* <img src={fileUploadIcon} alt="" className='content-header-icon' /> */}
+                    <span>start</span>
                 </div>
                 <div className="tool-icon">
                     <img src={selectIcon} alt="" className='content-header-icon' />
