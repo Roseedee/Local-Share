@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import "../../style/components/Device.css"
+import "../style/components/Device.css"
 
-import DeviceModel from '../../model/DeviceModel';
+import DeviceModel from '../model/DeviceModel';
 
-import computerIcon from '../../assets/computer.png';
+import computerIcon from '../assets/computer.png';
 
 interface Props {
     item: DeviceModel;

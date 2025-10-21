@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { SharedProvider } from './contexts/SharedContext'
 
 import App from './pages/App'
 import Init from './pages/Init'
@@ -11,14 +12,16 @@ import "./style/index.css"
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/:id" element={<App />} />
-        <Route path="/init/" element={<Init />} />
-        <Route path="/register/" element={<Register />} />
-        <Route path="/fileview/:id" element={<FileView />} />
-      </Routes>
-    </BrowserRouter>
+    <SharedProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route path="/:id" element={<App />} />
+          <Route path="/init/" element={<Init />} />
+          <Route path="/register/" element={<Register />} />
+          <Route path="/fileview/:id" element={<FileView />} />
+        </Routes>
+      </BrowserRouter>
+    </SharedProvider>
   </React.StrictMode>,
 )

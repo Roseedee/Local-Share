@@ -1,12 +1,12 @@
 import { useEffect, useState, useRef, ChangeEvent } from 'react'
-import { useShared } from '../SharedContext'
+import { useShared } from '../contexts/SharedContext'
 
-import DeviceModel from '../../model/DeviceModel'
+import DeviceModel from '../model/DeviceModel'
 
-import editIcon from '../../assets/edit.png'
-import synsIcon from '../../assets/sync.png'
-import fileUploadIcon from '../../assets/up-loading.png'
-import selectIcon from '../../assets/select.png'
+import editIcon from '../assets/edit.png'
+import synsIcon from '../assets/sync.png'
+import fileUploadIcon from '../assets/up-loading.png'
+import selectIcon from '../assets/select.png'
 import { useParams } from 'react-router-dom'
 
 

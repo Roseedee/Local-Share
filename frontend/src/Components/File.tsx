@@ -1,8 +1,8 @@
 import { useState } from 'react'
 
-import '../../style/components/file.css'
+import '../style/components/file.css'
 
-import FileModel from '../../model/FileModel'
+import FileModel from '../model/FileModel'
 import { useEffect } from 'react'
 
 interface Props {

@@ -1,6 +1,6 @@
-import { useShared } from './SharedContext'
+import { useShared } from '../contexts/SharedContext'
 
-import File from './Components/File'
+import File from '../Components/File'
 import '../style/components/file.css'
 
 import imgTest from './../assets/test1.jpg'

@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-import '../../style/layout.css'
+import '../style/layout.css'
 
-import rest from '../../rest/rest'
+import rest from '../rest/rest'
 
 import SideBar from "./SideBar"
 import Header from "./Header"
-import DeviceModel from "../../model/DeviceModel"
+import DeviceModel from "../model/DeviceModel"
 
 type Props = {
     children: React.ReactNode;
@@ -46,19 +46,19 @@ export default function Layout({ children }: Props) {
         })
     }
 
-    
+
 
     return (
         <div className="body">
             {
                 (
-                    <SideBar local_uuid={local_uuid} myDevice={myDevice} devicesList={allDevice}/>
+                    <SideBar local_uuid={local_uuid} myDevice={myDevice} devicesList={allDevice} />
                 )
             }
             <div className="content">
                 {
                     (
-                        <Header myDevice={myDevice}/>
+                        <Header myDevice={myDevice} />
                     )
                 }
                 <div className="content-body">
