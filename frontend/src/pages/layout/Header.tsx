@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef, ChangeEvent } from 'react'
+import { useShared } from '../SharedContext'
 
 import DeviceModel from '../../model/DeviceModel'
 
@@ -73,9 +74,17 @@ export default function Header({ myDevice }: Props) {
 
     }
 
+    const {text, setText} = useShared();
+
     // useEffect(() => {
     //     console.log(files)
     // }, [files])
+
+    const inputChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setText(e.target.value)
+    } 
+
+    
 
     return (
         <div className="content-header">
@@ -85,6 +94,7 @@ export default function Header({ myDevice }: Props) {
                 <img src={editIcon} alt="" className='content-header-icon' />
             </div>
             <div className='tools-group'>
+                <input type="text" onChange={inputChange} value={text}/>
                 <div className="tool-icon" onClick={handleClickUpload}>
                     <input type="file" multiple name="" className='hide' ref={fileUploadRef} onChange={handleFileInputChange} />
                     <img src={fileUploadIcon} alt="" className='content-header-icon' />

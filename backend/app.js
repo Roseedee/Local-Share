@@ -123,14 +123,6 @@ app.post('/get-client', async (req, res) => {
 app.post('/upload', upload.array("files", 10), (req, res) => {
 
     const clientId = req.body.clientId || "unknown";
-
-    // if (!req.file) {
-    //     return res.status(400).json({ message: "No file uploaded" });
-    // }
-
-    // console.log(`📥 File received from client: ${clientId}`);
-    // console.log(`📄 Original name: ${req.file.originalname}`);
-    // console.log(`💾 Saved as: ${req.file.filename}`);
     
     if (!req.files || req.files.length === 0) {
         return res.status(400).json({ message: "No files uploaded" });
