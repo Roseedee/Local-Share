@@ -58,7 +58,7 @@ export default function Layout({ children }: Props) {
             <div className="content">
                 {
                     (
-                        <Header myDevice={myDevice} />
+                        <Header />
                     )
                 }
                 <div className="content-body">

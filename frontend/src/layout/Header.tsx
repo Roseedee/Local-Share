@@ -1,7 +1,5 @@
-import { useEffect, useState, useRef, ChangeEvent } from 'react'
+import { useState, useRef, ChangeEvent } from 'react'
 import { useShared } from '../contexts/SharedContext'
-
-import DeviceModel from '../model/DeviceModel'
 
 import editIcon from '../assets/edit.png'
 import synsIcon from '../assets/sync.png'
@@ -9,30 +7,17 @@ import fileUploadIcon from '../assets/up-loading.png'
 import selectIcon from '../assets/select.png'
 import { useParams } from 'react-router-dom'
 
-
-type Props = {
-    myDevice: DeviceModel | undefined
-}
-
-
-export default function Header({ myDevice }: Props) {
+export default function Header() {
 
     const { id } = useParams<string>()
+    const {text, setText, myDevice} = useShared();
 
-    const [deviceSelected, setDeviceSelected] = useState<DeviceModel>()
+
+    // const [deviceSelected, setDeviceSelected] = useState<DeviceModel>()
+    const {deviceSelected} = useShared();
 
     const fileUploadRef = useRef<HTMLInputElement | null>(null)
     const [files, setFiles] = useState<FileList | null>()
-
-    useEffect(() => {
-        // console.log(deviceSelected)
-        setDeviceSelected(() => {
-            return {
-                id: localStorage.getItem('device_selected_uuid') || "",
-                name: localStorage.getItem('device_selected_name') || ""
-            }
-        })
-    }, [id])
 
     const handleClickUpload = () => {
         fileUploadRef.current?.click()
@@ -74,22 +59,14 @@ export default function Header({ myDevice }: Props) {
 
     }
 
-    const {text, setText} = useShared();
-
-    // useEffect(() => {
-    //     console.log(files)
-    // }, [files])
-
     const inputChange = (e: ChangeEvent<HTMLInputElement>) => {
         setText(e.target.value)
     } 
 
-    
-
     return (
         <div className="content-header">
             <div className="computer-name">
-                <h4>{deviceSelected === null ? myDevice?.name : deviceSelected?.name}{id === undefined ? '(You)' : ''}</h4>
+                <h4>{deviceSelected.id === "" ? myDevice.name : deviceSelected?.name}{id === undefined ? '(You)' : ''}</h4>
                 {/* <h4>{deviceSelected?.name}</h4> */}
                 <img src={editIcon} alt="" className='content-header-icon' />
             </div>

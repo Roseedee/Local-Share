@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react"
 import { QRCodeSVG } from "qrcode.react"
 import { useParams } from "react-router-dom"
+import { useShared } from "../contexts/SharedContext"
 
 import rest from '../rest/rest'
 import DeviceModel from '../model/DeviceModel'
@@ -20,6 +21,8 @@ export default function SideBar({ local_uuid, myDevice, devicesList }: Props) {
     const calledRef = useRef(false);
 
     const [serverPath, setServerPath] = useState<string>("can't connect to server")
+
+    const { setDeviceSelected } = useShared();
     // const [myDevice, setMyDevice] = useState<DeviceModel | null>(null)
     // const [deviceSelected, setDeviceSelected] = useState<DeviceModel | null>(null)
     // const [devicesList, setDevicesList] = useState<DeviceModel[]>([])
@@ -64,21 +67,23 @@ export default function SideBar({ local_uuid, myDevice, devicesList }: Props) {
 
     useEffect(() => {
         // console.log("ID:", id);
-        if(myDevice && devicesList) {
+        if (myDevice && devicesList) {
             if (id === "" || id === undefined) {
-                localStorage.setItem("device_selected_uuid", myDevice.id)
-                localStorage.setItem("device_selected_name", myDevice.name)
+                setDeviceSelected(myDevice)
+                // localStorage.setItem("device_selected_uuid", myDevice.id)
+                // localStorage.setItem("device_selected_name", myDevice.name)
             } else {
                 const device = devicesList.find((d) => d.id === id)
                 if (device) {
-                    localStorage.setItem("device_selected_uuid", device.id)
-                    localStorage.setItem("device_selected_name", device.name)
+                    setDeviceSelected(device)
+                    // localStorage.setItem("device_selected_uuid", device.id)
+                    // localStorage.setItem("device_selected_name", device.name)
                 }
             }
         }
     }, [id]);
 
-    
+
 
     const handleDeleteUUID = () => {
         console.log('remove uuid')
@@ -100,7 +105,7 @@ export default function SideBar({ local_uuid, myDevice, devicesList }: Props) {
                 }
                 <hr />
                 {
-                    devicesList &&devicesList.map((device, i) => (
+                    devicesList && devicesList.map((device, i) => (
                         <Device key={i} item={device} active={device.id === id ? true : false} />
                     ))
                 }
