@@ -12,19 +12,17 @@ import '../style/layout.css'
 
 type Props = {
     local_uuid: string
-    devicesList: DeviceModel[] | undefined
 }
 
-export default function SideBar({ local_uuid, devicesList }: Props) {
+export default function SideBar({ local_uuid }: Props) {
     const { id } = useParams<string>()
     const calledRef = useRef(false);
 
     const [serverPath, setServerPath] = useState<string>("can't connect to server")
 
     const { myDevice, setDeviceSelected } = useShared();
-    // const [myDevice, setMyDevice] = useState<DeviceModel | null>(null)
-    // const [deviceSelected, setDeviceSelected] = useState<DeviceModel | null>(null)
-    // const [devicesList, setDevicesList] = useState<DeviceModel[]>([])
+    
+    const [devicesList, setDevicesList] = useState<DeviceModel[]>([])
 
     useEffect(() => {
         if (calledRef.current) return;
@@ -39,28 +37,20 @@ export default function SideBar({ local_uuid, devicesList }: Props) {
             if (data.status === 'ok') {
                 rest.getConnection().then((data) => {
                     setServerPath(data.url)
-                    // console.log(data.url)
                 })
-                // rest.auth(local_uuid).then((data) => {
-                //     setMyDevice(data)
-                // })
-                // rest.getAllClient(local_uuid).then((data) => {
-                //     setDevicesList(data.clients)
-                //     // console.log(data.clients)
-                // })
+                rest.getAllClient(local_uuid).then((data) => {
+                    setDevicesList(data.clients)
+                })
             }
         })
     }
 
     useEffect(() => {
         if (devicesList) {
-            // const temp_myDevice = devicesList.find((item) => item.id === local_uuid);
             const index_myUuid = devicesList.findIndex(item => item.id === local_uuid);
             if (index_myUuid !== -1) {
                 devicesList.splice(index_myUuid, 1); // ลบออกจาก array เดิม
             }
-            // console.log(temp_myDevice)
-            // if (temp_myDevice) setMyDevice(temp_myDevice);
         }
     }, [devicesList])
 
