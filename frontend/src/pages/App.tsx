@@ -19,7 +19,7 @@ function App() {
   const navigator = useNavigate()
   const calledRef = useRef(false);
 
-  const { setMyDevice, setDeviceSelected } = useShared();
+  const { setMyDevice, setDeviceSelected, fileListWaitUpload } = useShared();
 
   const local_uuid = localStorage.getItem("device_uuid") || ""
   // const [myDevice, setMyDevice] = useState<DeviceModel>()
@@ -47,10 +47,6 @@ function App() {
   const loadData = async () => {
     rest.auth(local_uuid).then((data) => {
       setMyDevice(data)
-      // localStorage.setItem("device_uuid", data.id)
-      // rest.getAllClient(local_uuid).then((data) => {
-      //   setAllDevice(data.clients)
-      // })
     }).catch((err: any) => {
       console.error("Auth Failed: ", err.status, err.message)
     })
@@ -59,33 +55,38 @@ function App() {
   return (
     <Layout>
       <FileList />
-      <div className="list-files-wait-upload">
-        <div className="header-list-files">
-          <h5>10 รายการ</h5>
-          <p className='upload-status success'>สำเร็จ 0</p>
-          <p className='upload-status failed'>ล้มเหลว 0</p>
-        </div>
-        <div className="list-files">
-          {
-            Array.from({ length: 10 }).map((_, i) => (
-              <div className='item-file' key={i}>
-                <img src={imgTest} alt="" />
-                <div className='file-details'>
-                  <h5>asdfasdfasdfasasasdfasdfasdfasdfasdfasdfasdfasdfasdfasddf</h5>
-                  <span className='tag'>12MP</span>
-                </div>
-                <div className="btn-cancel">
-                  <img src={iconClose} alt="" />
-                </div>
-              </div>
-            ))
-          }
-        </div>
-        <div className="list-files-btn-group">
-          <div className="btn-list-files btn-confirm-upload"><img src={iconUpload} alt="" /><span>Confirm</span></div>
-          <div className="btn-list-files btn-cancel-all"><img src={iconCloseWhite} alt="" /></div>
-        </div>
-      </div>
+      {
+        fileListWaitUpload && (
+
+          <div className="list-files-wait-upload">
+            <div className="header-list-files">
+              <h5>10 รายการ</h5>
+              <p className='upload-status success'>สำเร็จ 0</p>
+              <p className='upload-status failed'>ล้มเหลว 0</p>
+            </div>
+            <div className="list-files">
+              {
+                Array.from(fileListWaitUpload).map((file, i) => (
+                  <div className='item-file' key={i}>
+                    <img src={imgTest} alt="" />
+                    <div className='file-details'>
+                      <h5>{file.name}</h5>
+                      <span className='tag'>{Math.round(file.size / 1024)} KB</span>
+                    </div>
+                    <div className="btn-cancel">
+                      <img src={iconClose} alt="Cancel upload" />
+                    </div>
+                  </div>
+                ))
+              }
+            </div>
+            <div className="list-files-btn-group">
+              <div className="btn-list-files btn-confirm-upload"><img src={iconUpload} alt="" /><span>Confirm</span></div>
+              <div className="btn-list-files btn-cancel-all"><img src={iconCloseWhite} alt="" /></div>
+            </div>
+          </div>
+        )
+      }
     </Layout>
   )
 }

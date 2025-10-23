@@ -26,7 +26,7 @@
 }
 
 p.upload-status {
-    padding: 3px 8px; 
+    padding: 3px 8px;
     border-radius: 10px;
     font-size: 10px;
 }
@@ -69,7 +69,7 @@ p.upload-status.failed {
     justify-content: center;
     gap: 10px;
     transition: 0.3s;
-    
+
     &:hover {
         background-color: rgb(61, 151, 61);
     }
@@ -101,7 +101,7 @@ p.upload-status.failed {
 .item-file {
     box-sizing: border-box;
     display: flex;
-    flex-direction: row;    
+    flex-direction: row;
     width: 100%;
     height: 50px;
     /* background-color: antiquewhite; */
@@ -126,11 +126,17 @@ p.upload-status.failed {
 
 .item-file .file-details {
     height: 100%;
-    overflow-x: hidden;
-    /* flex-grow: 1; */
+    width: 170px;
     display: flex;
     flex-direction: column;
-    /* gap: 5px; */
+
+    h5 {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: block;
+        width: 100%;
+    }
 }
 
 .item-file .file-details span {
@@ -141,7 +147,7 @@ p.upload-status.failed {
 .item-file .btn-cancel {
     box-sizing: border-box;
     width: 24px;
-    height: 24px;   
+    height: 24px;
     background-color: rgb(226, 226, 226);
     border-radius: 50%;
     display: flex;
@@ -157,10 +163,8 @@ p.upload-status.failed {
     }
 }
 
-.item-file .btn-cancel img {
-    /* min-width: 80%;
-    height: 80%; */
-    /* object-fit: fill; */
-}
-
-
+/* .item-file .btn-cancel img {
+    min-width: 80%;
+    height: 80%;
+    object-fit: fill;
+} */

@@ -14,10 +14,10 @@ export default function Header() {
 
 
     // const [deviceSelected, setDeviceSelected] = useState<DeviceModel>()
-    const {deviceSelected} = useShared();
+    const {deviceSelected, fileListWaitUpload, setFileListWaitUpload} = useShared();
 
     const fileUploadRef = useRef<HTMLInputElement | null>(null)
-    const [files, setFiles] = useState<FileList | null>()
+    // const [files, setFiles] = useState<FileList | null>()
 
     const handleClickUpload = () => {
         fileUploadRef.current?.click()
@@ -25,12 +25,12 @@ export default function Header() {
 
     const handleFileInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
-            setFiles(e.target.files)
+            setFileListWaitUpload(e.target.files)
         }
     }
 
     const handleClickStartUploadFiles = async () => {
-        if (!files) {
+        if (!fileListWaitUpload) {
             alert("Please Select files first!")
             return;
         }
@@ -38,7 +38,7 @@ export default function Header() {
         const formData = new FormData();
         formData.append("clientId", "1234")
 
-        Array.from(files).forEach((file) => {
+        Array.from(fileListWaitUpload).forEach((file) => {
             formData.append("files", file)
         })
 

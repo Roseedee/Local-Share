@@ -1,8 +1,10 @@
-import React, {createContext, useState, useContext} from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 
 import DeviceModel from "../model/DeviceModel";
 
 interface SharedContextType {
+    fileListWaitUpload: FileList | null | undefined;
+    setFileListWaitUpload: (value: FileList | null | undefined) => void;
 
     myDevice: DeviceModel;
     setMyDevice: (value: DeviceModel) => void;
@@ -18,21 +20,35 @@ interface SharedProviderProds {
 }
 
 export function SharedProvider({ children }: SharedProviderProds) {
-    const [myDevice, setMyDevice] = useState<DeviceModel>({id: "", name: ""})
-    const [deviceSelected, setDeviceSelected] = useState<DeviceModel>({id: "", name: ""})
+
+    const devMode = false;
+
+    const [myDevice, setMyDevice] = useState<DeviceModel>({ id: "", name: "" })
+    const [deviceSelected, setDeviceSelected] = useState<DeviceModel>({ id: "", name: "" })
+    const [fileListWaitUpload, setFileListWaitUpload] = useState<FileList | null>()
+
+    if(devMode) {
+
+        useEffect(() => {
+            console.log(fileListWaitUpload)
+        }, [fileListWaitUpload])
+
+    }
+
 
     return (
         <SharedContext.Provider value={{
             myDevice, setMyDevice,
             deviceSelected, setDeviceSelected,
-            }}>
-            { children }
+            fileListWaitUpload, setFileListWaitUpload
+        }}>
+            {children}
         </SharedContext.Provider>
     )
 }
 
 export function useShared() {
     const context = useContext(SharedContext)
-    if(!context) throw new Error("useShared must be used inside SharedProvider");
+    if (!context) throw new Error("useShared must be used inside SharedProvider");
     return context
 }
