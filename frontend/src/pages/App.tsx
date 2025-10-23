@@ -1,4 +1,4 @@
-import { useEffect, useRef} from 'react'
+import { useEffect, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useShared } from '../contexts/SharedContext'
 
@@ -6,7 +6,11 @@ import '../style/App.css'
 
 import Layout from '../layout/Layout'
 import FileList from './FileLise'
-// import DeviceModel from '../model/DeviceModel'
+
+import imgTest from '../assets/test1.jpg'
+import iconClose from '../assets/close.png'
+import iconCloseWhite from '../assets/close-white.png'
+import iconUpload from '../assets/up-loading.png'
 
 import rest from '../rest/rest'
 
@@ -14,8 +18,8 @@ function App() {
   const { id } = useParams<string>()
   const navigator = useNavigate()
   const calledRef = useRef(false);
-  
-  const {setMyDevice, setDeviceSelected} = useShared();
+
+  const { setMyDevice, setDeviceSelected } = useShared();
 
   const local_uuid = localStorage.getItem("device_uuid") || ""
   // const [myDevice, setMyDevice] = useState<DeviceModel>()
@@ -29,7 +33,7 @@ function App() {
       return;
     }
 
-    if(id) {
+    if (id) {
       // console.log(id)
       setDeviceSelected({
         id: localStorage.getItem("device_selected_uuid") || "",
@@ -54,7 +58,34 @@ function App() {
 
   return (
     <Layout>
-      <FileList></FileList>
+      <FileList />
+      <div className="list-files-wait-upload">
+        <div className="header-list-files">
+          <h5>10 รายการ</h5>
+          <p className='upload-status success'>สำเร็จ 0</p>
+          <p className='upload-status failed'>ล้มเหลว 0</p>
+        </div>
+        <div className="list-files">
+          {
+            Array.from({ length: 10 }).map((_, i) => (
+              <div className='item-file' key={i}>
+                <img src={imgTest} alt="" />
+                <div className='file-details'>
+                  <h5>asdfasdfasdfasasasdfasdfasdfasdfasdfasdfasdfasdfasdfasddf</h5>
+                  <span className='tag'>12MP</span>
+                </div>
+                <div className="btn-cancel">
+                  <img src={iconClose} alt="" />
+                </div>
+              </div>
+            ))
+          }
+        </div>
+        <div className="list-files-btn-group">
+          <div className="btn-list-files btn-confirm-upload"><img src={iconUpload} alt="" /><span>Confirm</span></div>
+          <div className="btn-list-files btn-cancel-all"><img src={iconCloseWhite} alt="" /></div>
+        </div>
+      </div>
     </Layout>
   )
 }

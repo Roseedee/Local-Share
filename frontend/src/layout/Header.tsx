@@ -10,7 +10,7 @@ import { useParams } from 'react-router-dom'
 export default function Header() {
 
     const { id } = useParams<string>()
-    const {text, setText, myDevice} = useShared();
+    const { myDevice } = useShared();
 
 
     // const [deviceSelected, setDeviceSelected] = useState<DeviceModel>()
@@ -59,10 +59,6 @@ export default function Header() {
 
     }
 
-    const inputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setText(e.target.value)
-    } 
-
     return (
         <div className="content-header">
             <div className="computer-name">
@@ -71,7 +67,6 @@ export default function Header() {
                 <img src={editIcon} alt="" className='content-header-icon' />
             </div>
             <div className='tools-group'>
-                <input type="text" onChange={inputChange} value={text}/>
                 <div className="tool-icon" onClick={handleClickUpload}>
                     <input type="file" multiple name="" className='hide' ref={fileUploadRef} onChange={handleFileInputChange} />
                     <img src={fileUploadIcon} alt="" className='content-header-icon' />
