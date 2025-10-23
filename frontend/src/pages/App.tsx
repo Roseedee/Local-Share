@@ -1,5 +1,5 @@
 import { useEffect, useRef} from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useShared } from '../contexts/SharedContext'
 
 import '../style/App.css'
@@ -11,9 +11,11 @@ import FileList from './FileLise'
 import rest from '../rest/rest'
 
 function App() {
+  const { id } = useParams<string>()
   const navigator = useNavigate()
   const calledRef = useRef(false);
-  const {setMyDevice} = useShared();
+  
+  const {setMyDevice, setDeviceSelected} = useShared();
 
   const local_uuid = localStorage.getItem("device_uuid") || ""
   // const [myDevice, setMyDevice] = useState<DeviceModel>()
@@ -25,6 +27,14 @@ function App() {
     if (local_uuid === "") {
       navigator("/init")
       return;
+    }
+
+    if(id) {
+      // console.log(id)
+      setDeviceSelected({
+        id: localStorage.getItem("device_selected_uuid") || "",
+        name: localStorage.getItem("device_selected_name") || ""
+      })
     }
 
     loadData();

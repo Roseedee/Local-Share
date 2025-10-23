@@ -52,7 +52,7 @@ export default function Layout({ children }: Props) {
         <div className="body">
             {
                 (
-                    <SideBar local_uuid={local_uuid} myDevice={myDevice} devicesList={allDevice} />
+                    <SideBar local_uuid={local_uuid} devicesList={allDevice} />
                 )
             }
             <div className="content">

@@ -12,17 +12,16 @@ import '../style/layout.css'
 
 type Props = {
     local_uuid: string
-    myDevice: DeviceModel | undefined
     devicesList: DeviceModel[] | undefined
 }
 
-export default function SideBar({ local_uuid, myDevice, devicesList }: Props) {
+export default function SideBar({ local_uuid, devicesList }: Props) {
     const { id } = useParams<string>()
     const calledRef = useRef(false);
 
     const [serverPath, setServerPath] = useState<string>("can't connect to server")
 
-    const { setDeviceSelected } = useShared();
+    const { myDevice, setDeviceSelected } = useShared();
     // const [myDevice, setMyDevice] = useState<DeviceModel | null>(null)
     // const [deviceSelected, setDeviceSelected] = useState<DeviceModel | null>(null)
     // const [devicesList, setDevicesList] = useState<DeviceModel[]>([])
@@ -70,14 +69,14 @@ export default function SideBar({ local_uuid, myDevice, devicesList }: Props) {
         if (myDevice && devicesList) {
             if (id === "" || id === undefined) {
                 setDeviceSelected(myDevice)
-                // localStorage.setItem("device_selected_uuid", myDevice.id)
-                // localStorage.setItem("device_selected_name", myDevice.name)
+                localStorage.setItem("device_selected_uuid", myDevice.id)
+                localStorage.setItem("device_selected_name", myDevice.name)
             } else {
                 const device = devicesList.find((d) => d.id === id)
                 if (device) {
                     setDeviceSelected(device)
-                    // localStorage.setItem("device_selected_uuid", device.id)
-                    // localStorage.setItem("device_selected_name", device.name)
+                    localStorage.setItem("device_selected_uuid", device.id)
+                    localStorage.setItem("device_selected_name", device.name)
                 }
             }
         }
