@@ -1,31 +1,36 @@
 import { useShared } from '../contexts/SharedContext'
 import rest from '../rest/rest'
 
+import axios from 'axios'
+
 import '../style/components/PopUpFilesWaitUpload.css'
 
 import imgTest from '../assets/file.png'
 import iconClose from '../assets/close.png'
 import iconCloseWhite from '../assets/close-white.png'
 import iconUpload from '../assets/up-loading.png'
+import { useState } from 'react'
 
 export default function PopUpFilesWaitUpload() {
 
     const { myDevice, deviceSelected, fileListWaitUpload, setFileListWaitUpload } = useShared();
 
+    const [fileProgressList, setFileProgressList] = useState<number[]>([]);
+
     const handleCancelUploadAllFiles = () => {
-        if(confirm("Are you sure cancel all files!")) {
+        if (confirm("Are you sure cancel all files!")) {
             setFileListWaitUpload(null)
         }
     }
 
     const handleCancelSomeFile = (removeIndex: number) => {
-        if(!fileListWaitUpload) return;
+        if (!fileListWaitUpload) return;
 
         const filesArray = Array.from(fileListWaitUpload);
 
         const newFilesArray = filesArray.filter((_, i) => i !== removeIndex);
 
-        if(newFilesArray.length === 0) {
+        if (newFilesArray.length === 0) {
             setFileListWaitUpload(null)
             return;
         }
@@ -42,23 +47,50 @@ export default function PopUpFilesWaitUpload() {
             return;
         }
 
-        const formData = new FormData();
-        formData.append("uploadByID", myDevice.id)
-        if(deviceSelected && deviceSelected.id !== myDevice.id) {
-            formData.append('uploadToID', deviceSelected.id)
+        // const formData = new FormData();
+        // formData.append("uploadByID", myDevice.id)
+        // if (deviceSelected && deviceSelected.id !== myDevice.id) {
+        //     formData.append('uploadToID', deviceSelected.id)
+        // }
+
+        // Array.from(fileListWaitUpload).forEach((file) => {
+        //     formData.append("files", file)
+        // })
+
+        // rest.uploadFiles(formData).then((data) => {
+        //     console.log(data)
+        //     setFileListWaitUpload(null)
+        // }).catch((err: any) => {
+        //     console.error("upload file failed : ", err.status, err.message)
+        //     alert("Upload file failed!")
+        // })
+
+        const files = Array.from(fileListWaitUpload)
+
+        setFileProgressList(files.map(() => 0));
+
+        for (let i = 0; i < files.length; i++) {
+            const formData = new FormData();
+            formData.append("files", files[i]);
+
+            await axios.post("http://localhost:5000/upload", formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+                onUploadProgress: (progressEvent) => {
+                    const loaded = progressEvent.loaded ?? 0;
+                    const total = progressEvent.total ?? loaded ?? 1;
+                    const percent = Math.round((loaded * 100) / total);
+                    setFileProgressList(prev => {
+                        const newProgress = [...prev];
+                        newProgress[i] = percent;
+                        return newProgress;
+                    });
+                },
+            }).then((data) => {
+                console.log(data)
+                // setFileListWaitUpload(null)
+            });
+
         }
-
-        Array.from(fileListWaitUpload).forEach((file) => {
-            formData.append("files", file)
-        })
-
-        rest.uploadFiles(formData).then((data) => {
-            console.log(data)
-            setFileListWaitUpload(null)
-        }).catch((err: any) => {
-            console.error("upload file failed : ", err.status, err.message)
-            alert("Upload file failed!")
-        })
     }
 
     return (
@@ -80,7 +112,7 @@ export default function PopUpFilesWaitUpload() {
                             <div className="btn-cancel" onClick={() => handleCancelSomeFile(i)}>
                                 <img src={iconClose} alt="Cancel upload" />
                             </div>
-                            <div className="upload-progress" style={{width: (i + 1) * 10 + "%"}}></div>
+                            <div className="upload-progress" style={{ width: `${fileProgressList[i] || 0}%` }}></div>
                         </div>
                     ))
                 }
