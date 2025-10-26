@@ -70,6 +70,24 @@ export default class Rest {
             body: JSON.stringify({ uuid })
         }).then((res) => res.json())
     }
+
+    static async uploadFiles(form: FormData) {
+        this.log("Upload Files")
+        const response = await fetch(this.apiHost + "upload", {
+            method: "POST",
+            body: form
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw {
+                status: response.status,
+                message: errorData.error || 'Request failed'
+            };
+        }
+
+        return await response.json()
+    }
 }
 
 

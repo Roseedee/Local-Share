@@ -1,4 +1,5 @@
 import { useShared } from '../contexts/SharedContext'
+import rest from '../rest/rest'
 
 import '../style/components/PopUpFilesWaitUpload.css'
 
@@ -51,34 +52,25 @@ export default function PopUpFilesWaitUpload() {
             formData.append("files", file)
         })
 
-        try {
-            const response = await fetch("http://localhost:5000/upload", {
-                method: "POST",
-                body: formData
-            });
-
-            if (!response.ok) throw new Error("Upload Failed");
-
-            const data = await response.json();
-            console.log("Upload Success: ", data)
-
+        rest.uploadFiles(formData).then((data) => {
+            console.log(data)
             setFileListWaitUpload(null)
-        } catch (error) {
-            console.error("❌ Upload error:", error);
-            alert("Upload failed!");
-        }
+        }).catch((err: any) => {
+            console.error("upload file failed : ", err.status, err.message)
+            alert("Upload file failed!")
+        })
     }
 
-    return fileListWaitUpload && (
+    return (
         <div className="list-files-wait-upload">
             <div className="header-list-files">
-                <h5>10 รายการ</h5>
+                <h5>{fileListWaitUpload === null || fileListWaitUpload === undefined ? 0 : fileListWaitUpload?.length} รายการ</h5>
                 <p className='upload-status success'>สำเร็จ 0</p>
                 <p className='upload-status failed'>ล้มเหลว 0</p>
             </div>
             <div className="list-files">
                 {
-                    Array.from(fileListWaitUpload).map((file, i) => (
+                    fileListWaitUpload && Array.from(fileListWaitUpload).map((file, i) => (
                         <div className='item-file' key={i}>
                             <img src={imgTest} alt="" />
                             <div className='file-details'>

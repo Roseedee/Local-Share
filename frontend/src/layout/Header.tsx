@@ -1,4 +1,4 @@
-import { useState, useRef, ChangeEvent } from 'react'
+import { useRef, ChangeEvent } from 'react'
 import { useShared } from '../contexts/SharedContext'
 
 import editIcon from '../assets/edit.png'
@@ -14,7 +14,7 @@ export default function Header() {
 
 
     // const [deviceSelected, setDeviceSelected] = useState<DeviceModel>()
-    const {deviceSelected, fileListWaitUpload, setFileListWaitUpload} = useShared();
+    const {deviceSelected, setFileListWaitUpload} = useShared();
 
     const fileUploadRef = useRef<HTMLInputElement | null>(null)
     // const [files, setFiles] = useState<FileList | null>()
@@ -29,36 +29,6 @@ export default function Header() {
         }
     }
 
-    const handleClickStartUploadFiles = async () => {
-        if (!fileListWaitUpload) {
-            alert("Please Select files first!")
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append("clientId", "1234")
-
-        Array.from(fileListWaitUpload).forEach((file) => {
-            formData.append("files", file)
-        })
-
-        try {
-            const response = await fetch("http://localhost:5000/upload", {
-                method: "POST",
-                body: formData
-            });
-
-            if (!response.ok) throw new Error("Upload Failed");
-
-            const data = await response.json();
-            console.log("Upload Success: ", data)
-        } catch (error) {
-            console.error("❌ Upload error:", error);
-            alert("Upload failed!");
-        }
-
-    }
-
     return (
         <div className="content-header">
             <div className="computer-name">
@@ -70,10 +40,6 @@ export default function Header() {
                 <div className="tool-icon" onClick={handleClickUpload}>
                     <input type="file" multiple name="" className='hide' ref={fileUploadRef} onChange={handleFileInputChange} />
                     <img src={fileUploadIcon} alt="" className='content-header-icon' />
-                </div>
-                <div className="tool-icon" onClick={handleClickStartUploadFiles}>
-                    {/* <img src={fileUploadIcon} alt="" className='content-header-icon' /> */}
-                    <span>start</span>
                 </div>
                 <div className="tool-icon">
                     <img src={selectIcon} alt="" className='content-header-icon' />
