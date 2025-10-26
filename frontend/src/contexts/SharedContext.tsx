@@ -9,8 +9,8 @@ interface SharedContextType {
     myDevice: DeviceModel;
     setMyDevice: (value: DeviceModel) => void;
 
-    deviceSelected: DeviceModel;
-    setDeviceSelected: (value: DeviceModel) => void;
+    deviceSelected: DeviceModel | null;
+    setDeviceSelected: (value: DeviceModel | null) => void;
 }
 
 const SharedContext = createContext<SharedContextType | undefined>(undefined)
@@ -21,16 +21,16 @@ interface SharedProviderProds {
 
 export function SharedProvider({ children }: SharedProviderProds) {
 
-    const devMode = false;
+    const devMode = true;
 
     const [myDevice, setMyDevice] = useState<DeviceModel>({ id: "", name: "" })
-    const [deviceSelected, setDeviceSelected] = useState<DeviceModel>({ id: "", name: "" })
+    const [deviceSelected, setDeviceSelected] = useState<DeviceModel | null>({ id: "", name: "" })
     const [fileListWaitUpload, setFileListWaitUpload] = useState<FileList | null>()
 
     if(devMode) {
 
         useEffect(() => {
-            console.log(fileListWaitUpload)
+            console.log("File Wait Upload : " , fileListWaitUpload)
         }, [fileListWaitUpload])
 
     }

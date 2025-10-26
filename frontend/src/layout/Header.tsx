@@ -62,7 +62,7 @@ export default function Header() {
     return (
         <div className="content-header">
             <div className="computer-name">
-                <h4>{deviceSelected.id === "" ? myDevice.name : deviceSelected?.name}{id === undefined ? '(You)' : ''}</h4>
+                <h4>{deviceSelected?.id === "" ? myDevice.name : deviceSelected?.name}{id === undefined ? '(You)' : ''}</h4>
                 {/* <h4>{deviceSelected?.name}</h4> */}
                 <img src={editIcon} alt="" className='content-header-icon' />
             </div>

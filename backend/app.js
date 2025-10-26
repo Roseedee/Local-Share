@@ -122,13 +122,14 @@ app.post('/get-client', async (req, res) => {
 
 app.post('/upload', upload.array("files", 10), (req, res) => {
 
-    const clientId = req.body.clientId || "unknown";
+    const uploadByID = req.body.uploadByID || "";
+    const uploadToID = req.body.uploadToID || "";
     
     if (!req.files || req.files.length === 0) {
         return res.status(400).json({ message: "No files uploaded" });
     }
 
-    console.log(`📥 Files received from client: ${clientId}`);
+    console.log(`📥 Files received from client: ${uploadByID}`);
     req.files.forEach((file, index) => {
         console.log(`📄 [${index + 1}] ${file.originalname} -> ${file.filename}`);
     });
@@ -136,7 +137,8 @@ app.post('/upload', upload.array("files", 10), (req, res) => {
     res.json({
         status: "ok",
         message: "Upload successful",
-        clientId,
+        uploadByID,
+        uploadToID,
         files: req.files.map(file => ({
             originalName: file.originalname,
             savedName: file.filename,

@@ -9,7 +9,65 @@ import iconUpload from '../assets/up-loading.png'
 
 export default function PopUpFilesWaitUpload() {
 
-    const { fileListWaitUpload } = useShared();
+    const { myDevice, deviceSelected, fileListWaitUpload, setFileListWaitUpload } = useShared();
+
+    const handleCancelUploadAllFiles = () => {
+        if(confirm("Are you sure cancel all files!")) {
+            setFileListWaitUpload(null)
+        }
+    }
+
+    const handleCancelSomeFile = (removeIndex: number) => {
+        if(!fileListWaitUpload) return;
+
+        const filesArray = Array.from(fileListWaitUpload);
+
+        const newFilesArray = filesArray.filter((_, i) => i !== removeIndex);
+
+        if(newFilesArray.length === 0) {
+            setFileListWaitUpload(null)
+            return;
+        }
+
+        const dataTransfer = new DataTransfer();
+        newFilesArray.forEach(file => dataTransfer.items.add(file))
+
+        setFileListWaitUpload(dataTransfer.files)
+    }
+
+    const handleConfirmUploadFiles = async () => {
+        if (!fileListWaitUpload) {
+            alert("Please Select files first!")
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("uploadByID", myDevice.id)
+        if(deviceSelected && deviceSelected.id !== myDevice.id) {
+            formData.append('uploadToID', deviceSelected.id)
+        }
+
+        Array.from(fileListWaitUpload).forEach((file) => {
+            formData.append("files", file)
+        })
+
+        try {
+            const response = await fetch("http://localhost:5000/upload", {
+                method: "POST",
+                body: formData
+            });
+
+            if (!response.ok) throw new Error("Upload Failed");
+
+            const data = await response.json();
+            console.log("Upload Success: ", data)
+
+            setFileListWaitUpload(null)
+        } catch (error) {
+            console.error("❌ Upload error:", error);
+            alert("Upload failed!");
+        }
+    }
 
     return fileListWaitUpload && (
         <div className="list-files-wait-upload">
@@ -27,7 +85,7 @@ export default function PopUpFilesWaitUpload() {
                                 <h5>{file.name}</h5>
                                 <span className='tag'>{Math.round(file.size / 1024)} KB</span>
                             </div>
-                            <div className="btn-cancel">
+                            <div className="btn-cancel" onClick={() => handleCancelSomeFile(i)}>
                                 <img src={iconClose} alt="Cancel upload" />
                             </div>
                             <div className="upload-progress" style={{width: (i + 1) * 10 + "%"}}></div>
@@ -36,8 +94,8 @@ export default function PopUpFilesWaitUpload() {
                 }
             </div>
             <div className="list-files-btn-group">
-                <div className="btn-list-files btn-confirm-upload"><img src={iconUpload} alt="" /><span>Confirm</span></div>
-                <div className="btn-list-files btn-cancel-all"><img src={iconCloseWhite} alt="" /></div>
+                <div className="btn-list-files btn-confirm-upload" onClick={handleConfirmUploadFiles}><img src={iconUpload} alt="" /><span>Confirm</span></div>
+                <div className="btn-list-files btn-cancel-all" onClick={handleCancelUploadAllFiles}><img src={iconCloseWhite} alt="" /></div>
             </div>
         </div>
     )
