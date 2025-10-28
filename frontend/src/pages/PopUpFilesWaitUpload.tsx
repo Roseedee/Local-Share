@@ -9,13 +9,19 @@ import imgTest from '../assets/file.png'
 import iconClose from '../assets/close.png'
 import iconCloseWhite from '../assets/close-white.png'
 import iconUpload from '../assets/up-loading.png'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function PopUpFilesWaitUpload() {
 
     const { myDevice, deviceSelected, fileListWaitUpload, setFileListWaitUpload } = useShared();
 
-    const [fileProgressList, setFileProgressList] = useState<number[]>([]);
+    interface FileProgressType {
+        name: string;
+        size: number;
+        progress: number;
+    }
+
+    const [fileProgressList, setFileProgressList] = useState<FileProgressType[]>([]);
 
     const handleCancelUploadAllFiles = () => {
         if (confirm("Are you sure cancel all files!")) {
@@ -40,6 +46,11 @@ export default function PopUpFilesWaitUpload() {
 
         setFileListWaitUpload(dataTransfer.files)
     }
+
+    useEffect(() => {
+        const files = Array.from(fileListWaitUpload || []);
+        setFileProgressList(files.map((file) => {return { name: file.name, size: file.size, progress: 0 }}));
+    }, [fileListWaitUpload]);
 
     const handleConfirmUploadFiles = async () => {
         if (!fileListWaitUpload) {
@@ -67,8 +78,6 @@ export default function PopUpFilesWaitUpload() {
 
         const files = Array.from(fileListWaitUpload)
 
-        setFileProgressList(files.map(() => 0));
-
         for (let i = 0; i < files.length; i++) {
             const formData = new FormData();
             formData.append("files", files[i]);
@@ -81,7 +90,7 @@ export default function PopUpFilesWaitUpload() {
                     const percent = Math.round((loaded * 100) / total);
                     setFileProgressList(prev => {
                         const newProgress = [...prev];
-                        newProgress[i] = percent;
+                        newProgress[i].progress = percent;
                         return newProgress;
                     });
                 },
@@ -102,7 +111,7 @@ export default function PopUpFilesWaitUpload() {
             </div>
             <div className="list-files">
                 {
-                    fileListWaitUpload && Array.from(fileListWaitUpload).map((file, i) => (
+                    fileListWaitUpload && Array.from(fileProgressList).map((file, i) => (
                         <div className='item-file' key={i}>
                             <img src={imgTest} alt="" />
                             <div className='file-details'>
@@ -112,7 +121,7 @@ export default function PopUpFilesWaitUpload() {
                             <div className="btn-cancel" onClick={() => handleCancelSomeFile(i)}>
                                 <img src={iconClose} alt="Cancel upload" />
                             </div>
-                            <div className="upload-progress" style={{ width: `${fileProgressList[i] || 0}%` }}></div>
+                            <div className="upload-progress" style={{ width: `${file.progress || 0}%` }}></div>
                         </div>
                     ))
                 }
