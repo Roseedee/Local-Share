@@ -61,8 +61,27 @@ const loadClients = async () => {
     });
 }
 
+const insertFiles = (fileOrgName, fileNewName, fileSize, fileType, uploadByID, uploadToID) => {
+
+    uploadToID = uploadToID === "" ? null : uploadToID;
+
+    connectToDatabase();
+    const query = 'INSERT INTO files (file_org_name, file_new_name, file_size, file_type, client_uuid_source, client_uuid_target) VALUES (?, ?, ?, ?, ?, ?)';
+    return new Promise((resolve, reject) => {
+        db.execute(query, [fileOrgName, fileNewName, fileSize, fileType, uploadByID, uploadToID], (err, results) => {
+            if (err) {
+                console.error('Error inserting file:', err);
+                return reject(err);
+            }
+            console.log('File inserted with ID:', results.insertId);
+            resolve(results);
+        });
+    });
+}
+
 module.exports = {
     db,
-    auth, insertClient, loadClients
+    auth, insertClient, loadClients, 
+    insertFiles
 };
 

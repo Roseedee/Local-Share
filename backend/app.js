@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const { v4: uuidv4 } = require('uuid');
-const { auth, insertClient, loadClients } = require('./db/connect');
+const { auth, insertClient, loadClients, insertFiles } = require('./db/connect');
 const path = require('path')
 const fs = require('fs')
 const multer = require('multer');
@@ -24,7 +24,8 @@ const storage = multer.diskStorage({
         cb(null, uploadDir);
     },
     filename: (req, file, cb) => {
-        const uniqueName = `${Date.now()}-${file.originalname}`;
+        const ext = file.originalname.split('.').pop();
+        const uniqueName = `${uuidv4()}.${ext}`;
         cb(null, uniqueName);
     }
 });
@@ -133,6 +134,21 @@ app.post('/upload', upload.array("files", 10), (req, res) => {
     req.files.forEach((file, index) => {
         console.log(`📄 [${index + 1}] ${file.originalname} -> ${file.filename}`);
     });
+
+    req.files.forEach((file) => {
+        insertFiles(
+            file.originalname,
+            file.filename,
+            file.size,
+            file.mimetype,
+            uploadByID,
+            uploadToID
+        ).catch((error) => {
+            console.error('Error inserting file record:', error);
+            res.status(500).json({ error: "Failed file to record" });
+        }); 
+    });
+
 
     res.json({
         status: "ok",
