@@ -35,7 +35,6 @@ export function SharedProvider({ children }: SharedProviderProds) {
 
     }
 
-
     return (
         <SharedContext.Provider value={{
             myDevice, setMyDevice,

@@ -19,7 +19,7 @@ const connectToDatabase = () => {
 
 const auth = (uuid) => {
     connectToDatabase();
-    const query = 'SELECT * FROM clients WHERE device_uuid=?';
+    const query = 'SELECT * FROM clients WHERE client_uuid=?';
     return new Promise((resolve, reject) => {
         db.execute(query, [uuid], (err, results) => {
             if(err) {
@@ -36,7 +36,7 @@ const auth = (uuid) => {
 
 const insertClient = (uuid, name) => {
     connectToDatabase();
-    const query = 'INSERT INTO clients (device_uuid, device_name) VALUES (?, ?)';
+    const query = 'INSERT INTO clients (client_uuid, client_name) VALUES (?, ?)';
     db.execute(query, [uuid, name], (err, results) => {
         if (err) {
             console.error('Error inserting client:', err);

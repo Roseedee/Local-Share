@@ -73,8 +73,8 @@ app.post('/auth', async (req, res) => {
         if(result) {
             res.json({
                 client_id: result[0].client_id,
-                id: result[0].device_uuid,
-                name: result[0].device_name
+                id: result[0].client_uuid,
+                name: result[0].client_name
             });
         }else {
             res.status(404).json({error: "Device Not Found"})
@@ -113,8 +113,8 @@ app.post('/get-client', async (req, res) => {
         const result = await loadClients();
         const clients = result.map(client => ({
             client_id: client.client_id,
-            id: client.device_uuid,
-            name: client.device_name
+            id: client.client_uuid,
+            name: client.client_name
         }));
         res.json({ clients: clients });
     } catch (error) {
