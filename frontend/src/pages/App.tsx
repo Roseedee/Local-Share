@@ -32,6 +32,7 @@ function App() {
     if (id) {
       // console.log(id)
       setDeviceSelected({
+        client_id: localStorage.getItem("device_selected_client_id") || "",
         id: localStorage.getItem("device_selected_uuid") || "",
         name: localStorage.getItem("device_selected_name") || ""
       })

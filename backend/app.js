@@ -72,6 +72,7 @@ app.post('/auth', async (req, res) => {
         // console.log(result)
         if(result) {
             res.json({
+                client_id: result[0].client_id,
                 id: result[0].device_uuid,
                 name: result[0].device_name
             });
@@ -111,6 +112,7 @@ app.post('/get-client', async (req, res) => {
     try {
         const result = await loadClients();
         const clients = result.map(client => ({
+            client_id: client.client_id,
             id: client.device_uuid,
             name: client.device_name
         }));

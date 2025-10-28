@@ -63,7 +63,7 @@ const loadClients = async () => {
 
 const insertFiles = (fileOrgName, fileNewName, fileSize, fileType, uploadByID, uploadToID) => {
 
-    uploadToID = uploadToID === "" ? null : uploadToID;
+    uploadToID = uploadToID === "" ? uploadByID : uploadToID;
 
     connectToDatabase();
     const query = 'INSERT INTO files (file_org_name, file_new_name, file_size, file_type, client_uuid_source, client_uuid_target) VALUES (?, ?, ?, ?, ?, ?)';

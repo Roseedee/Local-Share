@@ -23,8 +23,8 @@ export function SharedProvider({ children }: SharedProviderProds) {
 
     const devMode = true;
 
-    const [myDevice, setMyDevice] = useState<DeviceModel>({ id: "", name: "" })
-    const [deviceSelected, setDeviceSelected] = useState<DeviceModel | null>({ id: "", name: "" })
+    const [myDevice, setMyDevice] = useState<DeviceModel>({client_id: "", id: "", name: "" })
+    const [deviceSelected, setDeviceSelected] = useState<DeviceModel | null>({client_id: "", id: "", name: "" })
     const [fileListWaitUpload, setFileListWaitUpload] = useState<FileList | null>()
 
     if(devMode) {

@@ -59,12 +59,14 @@ export default function SideBar({ local_uuid }: Props) {
         if (myDevice && devicesList) {
             if (id === "" || id === undefined) {
                 setDeviceSelected(myDevice)
+                localStorage.setItem("device_selected_client_id", myDevice.client_id)
                 localStorage.setItem("device_selected_uuid", myDevice.id)
                 localStorage.setItem("device_selected_name", myDevice.name)
             } else {
                 const device = devicesList.find((d) => d.id === id)
                 if (device) {
                     setDeviceSelected(device)
+                    localStorage.setItem("device_selected_client_id", device.client_id)
                     localStorage.setItem("device_selected_uuid", device.id)
                     localStorage.setItem("device_selected_name", device.name)
                 }

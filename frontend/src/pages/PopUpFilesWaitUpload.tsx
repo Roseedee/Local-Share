@@ -81,9 +81,9 @@ export default function PopUpFilesWaitUpload() {
         for (let i = 0; i < files.length; i++) {
             const formData = new FormData();
 
-            formData.append("uploadByID", myDevice.id)
+            formData.append("uploadByID", myDevice.client_id)
             if (deviceSelected && deviceSelected.id !== myDevice.id) {
-                formData.append('uploadToID', deviceSelected.id)
+                formData.append('uploadToID', deviceSelected.client_id)
             }
 
             formData.append("files", files[i]);
