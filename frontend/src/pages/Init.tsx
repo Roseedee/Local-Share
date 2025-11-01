@@ -21,7 +21,6 @@ export default function Init() {
         if (uuid === '') {
             // console.log('generate new UUID')
             rest.generateNewUUID().then((data) => {
-                localStorage.setItem('device_uuid', data.uuid)
                 setUuid(data.uuid)
             });
             return;
@@ -29,11 +28,15 @@ export default function Init() {
             navigator('/')
         }
     }, [])
-
+    
     const handleClickConfirm = () => {
         console.log('click confirm')
         rest.verifyUUID(uuid, name).then((data) => {
             if(data.status === 'ok') {
+                // console.log('client id: ', data.client_id)
+                localStorage.setItem('device_id', data.client_id)
+                localStorage.setItem('device_uuid', uuid)
+                localStorage.setItem('device_name', name)
                 navigator('/')
                 return;
             }else if(data.status === 'bad') {

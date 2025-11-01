@@ -60,14 +60,14 @@ export default class Rest {
         }).then((res) => res.json())
     }
 
-    static async getAllClient(uuid: string) {
+    static async getAllClient(client_id: string) {
         this.log("Get All Client")
         return await fetch(this.apiHost + "get-client", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ uuid })
+            body: JSON.stringify({ client_id })
         }).then((res) => res.json())
     }
 

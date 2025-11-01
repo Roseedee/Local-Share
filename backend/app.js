@@ -94,23 +94,30 @@ app.post('/generate-uuid', (req, res) => {
     res.json({ uuid: new_uuid })
 })
 
-app.post('/verify-uuid', (req, res) => {
+app.post('/verify-uuid', async (req, res) => {
     const { uuid, name } = req.body;
     if (uuid === "" || name === "") {
         res.json({ status: 'bad' })
         return;
     }
-    console.log("verify id: ", uuid, "name: ", name)
-    insertClient(uuid, name);
-    res.json({ status: "ok" });
+
+    try {
+        const id = await insertClient(uuid, name);
+        console.log('Returned ID:', id);
+        res.json({ status: "ok", client_id: id });
+    } catch (err) {
+        console.error('Insert failed:', err);
+    }
+    // const insertId = await insertClient(uuid, name);
+    // console.log("verify id: ", uuid, "name: ", name)
 })
 
 
 app.post('/get-client', async (req, res) => {
-    const { uuid } = req.body
-    console.log("Get All Client by : " + uuid)
+    const { client_id } = req.body
+    console.log("Get All Client by : " + client_id)
     try {
-        const result = await loadClients();
+        const result = await loadClients(client_id);
         const clients = result.map(client => ({
             client_id: client.client_id,
             id: client.client_uuid,

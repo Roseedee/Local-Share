@@ -34,21 +34,25 @@ const auth = (uuid) => {
     })
 }
 
-const insertClient = (uuid, name) => {
+const insertClient = async (uuid, name) => {
     connectToDatabase();
     const query = 'INSERT INTO clients (client_uuid, client_name) VALUES (?, ?)';
-    db.execute(query, [uuid, name], (err, results) => {
-        if (err) {
-            console.error('Error inserting client:', err);
-            return false;
-        }
-        // console.log('Client inserted with ID:', results.insertId);
-    });
+    
+    return new Promise((resolve, reject) => {
+        db.execute(query, [uuid, name], (err, results) => {
+            if (err) {
+                console.error('Error inserting client:', err);
+                return false;
+            }
+            // console.log('Client inserted with ID:', results.insertId);
+            resolve(results.insertId);
+        });
+    })
 }
 
-const loadClients = async () => {
+const loadClients = async (client_id) => {
     connectToDatabase();
-    const query = 'SELECT * FROM clients';
+    const query = 'SELECT * FROM clients Where client_id != ' + db.escape(client_id);
     return new Promise((resolve, reject) => {
         db.execute(query, (err, results) => {
             if (err) {

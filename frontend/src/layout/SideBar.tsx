@@ -17,6 +17,7 @@ type Props = {
 export default function SideBar({ local_uuid }: Props) {
     const { id } = useParams<string>()
     const calledRef = useRef(false);
+    const local_id = localStorage.getItem("device_id") || ""
 
     const [serverPath, setServerPath] = useState<string>("can't connect to server")
 
@@ -38,7 +39,7 @@ export default function SideBar({ local_uuid }: Props) {
                 rest.getConnection().then((data) => {
                     setServerPath(data.url)
                 })
-                rest.getAllClient(local_uuid).then((data) => {
+                rest.getAllClient(local_id).then((data) => {
                     setDevicesList(data.clients)
                 })
             }
