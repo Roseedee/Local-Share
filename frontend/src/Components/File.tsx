@@ -18,6 +18,33 @@ export default function File({ file, isUpload = false, progressNow = 0 }: Props)
         setProgress(progressNow)
     }, [])
 
+    function fileCategory(fileType: string): string {
+        if (!fileType) return "other";
+
+        if (fileType.startsWith("image/")) return "image";
+        if (fileType.startsWith("video/")) return "video";
+        if (fileType.startsWith("audio/")) return "sound";
+
+        const documentTypes = [
+            "application/pdf",
+            "application/msword",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "application/vnd.ms-excel",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "application/vnd.ms-powerpoint",
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+            "text/plain",
+            "text/html",
+            "application/json",
+            "text/csv"
+        ];
+
+        if (documentTypes.includes(fileType)) return "document";
+
+        return "other";
+    }
+
+
     return (
         <>
             <div className="file-item" key={file.id}>
@@ -31,7 +58,16 @@ export default function File({ file, isUpload = false, progressNow = 0 }: Props)
                         </div>
                     ) : (<></>)
                 }
-                <img className='file-icon' src={file.path} alt="" />
+                {
+                    fileCategory(file.type) === "image" ? (
+                        <img className='file-icon' src={file.path} alt="" />
+
+                    ) : (
+                        <img className='file-icon' src={""} alt="Can't preview this file" />
+
+                    )
+
+                }
                 <h6>{file.name}</h6>
             </div>
         </>

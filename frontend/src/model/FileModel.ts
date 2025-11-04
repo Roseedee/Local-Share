@@ -3,4 +3,5 @@ export default interface FileModel {
     name: string;
     path: string;
     size: number;
+    type: string;
 }

@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
+import React, { createContext, useState, useContext, useEffect, use } from "react";
 
 import DeviceModel from "../model/DeviceModel";
 
@@ -32,7 +32,6 @@ export function SharedProvider({ children }: SharedProviderProds) {
         useEffect(() => {
             console.log("File Wait Upload : " , fileListWaitUpload)
         }, [fileListWaitUpload])
-
     }
 
     return (

@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const { v4: uuidv4 } = require('uuid');
-const { auth, insertClient, loadClients, insertFiles } = require('./db/connect');
+const { auth, insertClient, loadClients, insertFiles, loadFiles } = require('./db/connect');
 const path = require('path')
 const fs = require('fs')
 const multer = require('multer');
@@ -15,6 +15,8 @@ app.use(cors())
 app.set('trust proxy', true);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// app.use('/files', express.static(path.join(__dirname, 'uploads')));
 
 const uploadDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
@@ -171,6 +173,36 @@ app.post('/upload', upload.array("files", 10), (req, res) => {
             type: file.mimetype
         }))
     });
+});
+
+app.get('/files/:filename', (req, res) => {
+    const filePath = path.join(__dirname, 'uploads', req.params.filename);
+    res.sendFile(filePath);
+});
+
+app.post('/files',async (req, res) => {
+    const { token } = req.body;
+
+    console.log("Load Files for : " + token)
+
+    try {
+        const result = await loadFiles(token);
+        const files = result.map(file => ({
+            file_id: file.file_id,
+            file_path: file.file_new_name,
+            file_org_name: file.file_org_name,
+            file_size: file.file_size,
+            file_type: file.file_type,
+            client_uuid_source: file.client_uuid_source,
+            client_uuid_target: file.client_uuid_target,
+            upload_time: file.create_at
+        }));
+        console.log("Files Loaded: ", files.length)
+        res.json({ results: files });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Failed to load Files" });
+    }
 });
 
 app.listen(port, () => {

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useShared } from '../contexts/SharedContext'
 
@@ -16,6 +16,7 @@ function App() {
   const calledRef = useRef(false);
 
   const { setMyDevice, setDeviceSelected } = useShared();
+  const [ isLoading, setIsLoading ] = useState(true);
 
   const local_uuid = localStorage.getItem("device_uuid") || ""
   // const [myDevice, setMyDevice] = useState<DeviceModel>()
@@ -44,13 +45,19 @@ function App() {
   const loadData = async () => {
     rest.auth(local_uuid).then((data) => {
       setMyDevice(data)
+      // setIsLoading(false);
     }).catch((err: any) => {
       console.error("Auth Failed: ", err.status, err.message)
+    }).finally(() => {
+      setIsLoading(false);
     })
   }
 
   return (
     <Layout>
+      {
+        isLoading ? <div>Loading...</div> : null
+      }
       <FileList />
       <PopUpFilesWaitUpload/>
     </Layout>

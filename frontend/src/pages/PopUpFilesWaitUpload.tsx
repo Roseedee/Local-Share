@@ -50,6 +50,9 @@ export default function PopUpFilesWaitUpload() {
     useEffect(() => {
         const files = Array.from(fileListWaitUpload || []);
         setFileProgressList(files.map((file) => {return { name: file.name, size: file.size, progress: 0 }}));
+        // if(fileProgressList.length > 0) {
+        //     setFileProgressList((prevItems) => [...prevItems, ...files.map((file) => {return { name: file.name, size: file.size, progress: 0 }})]);
+        // }
     }, [fileListWaitUpload]);
 
     const handleConfirmUploadFiles = async () => {
