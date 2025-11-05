@@ -13,7 +13,7 @@ export default function FileList() {
 
   const local_id = localStorage.getItem("device_id") || ""
   const selected_id = localStorage.getItem("device_selected_client_id") || ""  
-  const { myDevice, deviceSelected } = useShared();
+  const { myDevice, deviceSelected, fileListWaitUpload } = useShared();
   const [files, setFiles] = useState<any[]>([]);
 
   useEffect(() => {
@@ -21,10 +21,7 @@ export default function FileList() {
     // calledRef.current = true;
 
     loadFiles();
-  }, [myDevice, deviceSelected]);
-
-
-
+  }, [myDevice, deviceSelected, fileListWaitUpload]);
 
   const loadFiles = async () => {
     const response = await fetch('http://localhost:5000/files', {

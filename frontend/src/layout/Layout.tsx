@@ -11,7 +11,7 @@ type Props = {
 }
 
 export default function Layout({ children }: Props) {
-    const navigator = useNavigate()
+    // const navigator = useNavigate()
     const calledRef = useRef(false);
 
     const local_uuid = localStorage.getItem("device_uuid") || ""

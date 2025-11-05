@@ -105,10 +105,10 @@ export default function PopUpFilesWaitUpload() {
                 },
             }).then((data) => {
                 console.log(data)
-                // setFileListWaitUpload(null)
             });
-
+            
         }
+        setFileListWaitUpload(null)
     }
 
     return (
@@ -120,7 +120,7 @@ export default function PopUpFilesWaitUpload() {
             </div>
             <div className="list-files">
                 {
-                    fileListWaitUpload && Array.from(fileProgressList).map((file, i) => (
+                    fileProgressList && Array.from(fileProgressList).map((file, i) => (
                         <div className='item-file' key={i}>
                             <img src={imgTest} alt="" />
                             <div className='file-details'>

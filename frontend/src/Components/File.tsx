@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import '../style/components/file.css'
 
 import FileModel from '../model/FileModel'
-import { useEffect } from 'react'
+
+import videoIcon from '../assets/video.png'
 
 interface Props {
     file: FileModel
@@ -58,16 +59,17 @@ export default function File({ file, isUpload = false, progressNow = 0 }: Props)
                         </div>
                     ) : (<></>)
                 }
-                {
-                    fileCategory(file.type) === "image" ? (
-                        <img className='file-icon' src={file.path} alt="" />
+                <div className="file-icon-container">
+                    {
+                        fileCategory(file.type) === "image" ? (
+                            <img className='file-icon' src={file.path} alt={file.name} />
 
-                    ) : (
-                        <img className='file-icon' src={""} alt="Can't preview this file" />
+                        ) : (
+                            <img className='video-file-icon' src={videoIcon} alt="Can't preview this file" />
+                        )
 
-                    )
-
-                }
+                    }
+                </div>
                 <h6>{file.name}</h6>
             </div>
         </>
