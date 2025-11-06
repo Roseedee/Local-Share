@@ -5,6 +5,9 @@ import '../style/components/file.css'
 import FileModel from '../model/FileModel'
 
 import videoIcon from '../assets/video.png'
+import soundIcon from '../assets/sound.png'
+import documentIcon from '../assets/document.png'
+import otherIcon from '../assets/other.png'
 
 interface Props {
     file: FileModel
@@ -20,11 +23,11 @@ export default function File({ file, isUpload = false, progressNow = 0 }: Props)
     }, [])
 
     function fileCategory(fileType: string): string {
-        if (!fileType) return "other";
+        if (!fileType) return otherIcon;
 
         if (fileType.startsWith("image/")) return "image";
-        if (fileType.startsWith("video/")) return "video";
-        if (fileType.startsWith("audio/")) return "sound";
+        if (fileType.startsWith("video/")) return videoIcon;
+        if (fileType.startsWith("audio/")) return soundIcon;
 
         const documentTypes = [
             "application/pdf",
@@ -40,9 +43,9 @@ export default function File({ file, isUpload = false, progressNow = 0 }: Props)
             "text/csv"
         ];
 
-        if (documentTypes.includes(fileType)) return "document";
+        if (documentTypes.includes(fileType)) return documentIcon;
 
-        return "other";
+        return otherIcon;
     }
 
 
@@ -62,10 +65,10 @@ export default function File({ file, isUpload = false, progressNow = 0 }: Props)
                 <div className="file-icon-container">
                     {
                         fileCategory(file.type) === "image" ? (
-                            <img className='file-icon' src={file.path} alt={file.name} />
+                            <img className='image-icon' src={file.path} alt={file.name} />
 
                         ) : (
-                            <img className='video-file-icon' src={videoIcon} alt="Can't preview this file" />
+                            <img className='other-file-icon' src={fileCategory(file.type)} alt="Can't preview this file" />
                         )
 
                     }
