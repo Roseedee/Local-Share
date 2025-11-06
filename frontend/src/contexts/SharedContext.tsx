@@ -1,10 +1,14 @@
 import React, { createContext, useState, useContext, useEffect, use } from "react";
 
 import DeviceModel from "../model/DeviceModel";
+import FileUploadHistoryModel from "../model/FileUploadHistoryModel";
 
 interface SharedContextType {
     fileListWaitUpload: FileList | null | undefined;
     setFileListWaitUpload: (value: FileList | null | undefined) => void;
+
+    uploadFilesHistory: FileUploadHistoryModel[];
+    setUploadFilesHistory: React.Dispatch<React.SetStateAction<FileUploadHistoryModel[]>>;
 
     myDevice: DeviceModel;
     setMyDevice: (value: DeviceModel) => void;
@@ -23,14 +27,16 @@ export function SharedProvider({ children }: SharedProviderProds) {
 
     const devMode = true;
 
-    const [myDevice, setMyDevice] = useState<DeviceModel>({client_id: "", id: "", name: "" })
-    const [deviceSelected, setDeviceSelected] = useState<DeviceModel | null>({client_id: "", id: "", name: "" })
-    const [fileListWaitUpload, setFileListWaitUpload] = useState<FileList | null>()
+    const [myDevice, setMyDevice] = useState<DeviceModel>({ client_id: "", id: "", name: "" })
+    const [deviceSelected, setDeviceSelected] = useState<DeviceModel | null>({ client_id: "", id: "", name: "" })
 
-    if(devMode) {
+    const [fileListWaitUpload, setFileListWaitUpload] = useState<FileList | null>()
+    const [uploadFilesHistory, setUploadFilesHistory] = useState<FileUploadHistoryModel[]>([])
+
+    if (devMode) {
 
         useEffect(() => {
-            console.log("File Wait Upload : " , fileListWaitUpload)
+            console.log("File Wait Upload : ", fileListWaitUpload)
         }, [fileListWaitUpload])
     }
 
@@ -38,7 +44,8 @@ export function SharedProvider({ children }: SharedProviderProds) {
         <SharedContext.Provider value={{
             myDevice, setMyDevice,
             deviceSelected, setDeviceSelected,
-            fileListWaitUpload, setFileListWaitUpload
+            fileListWaitUpload, setFileListWaitUpload,
+            uploadFilesHistory, setUploadFilesHistory
         }}>
             {children}
         </SharedContext.Provider>

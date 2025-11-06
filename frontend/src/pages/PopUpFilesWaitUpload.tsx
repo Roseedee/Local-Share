@@ -10,10 +10,11 @@ import iconClose from '../assets/close.png'
 import iconCloseWhite from '../assets/close-white.png'
 import iconUpload from '../assets/up-loading.png'
 import { useEffect, useState } from 'react'
+import FileUploadHistoryModel from '../model/FileUploadHistoryModel'
 
 export default function PopUpFilesWaitUpload() {
 
-    const { myDevice, deviceSelected, fileListWaitUpload, setFileListWaitUpload } = useShared();
+    const { myDevice, deviceSelected, fileListWaitUpload, setFileListWaitUpload, uploadFilesHistory, setUploadFilesHistory } = useShared();
 
     interface FileProgressType {
         name: string;
@@ -24,8 +25,9 @@ export default function PopUpFilesWaitUpload() {
     const [fileProgressList, setFileProgressList] = useState<FileProgressType[]>([]);
 
     const handleCancelUploadAllFiles = () => {
-        if (confirm("Are you sure cancel all files!")) {
+        if (confirm("Are you sure!")) {
             setFileListWaitUpload(null)
+            setUploadFilesHistory([])
         }
     }
 
@@ -49,7 +51,7 @@ export default function PopUpFilesWaitUpload() {
 
     useEffect(() => {
         const files = Array.from(fileListWaitUpload || []);
-        setFileProgressList(files.map((file) => {return { name: file.name, size: file.size, progress: 0 }}));
+        setFileProgressList(files.map((file) => { return { name: file.name, size: file.size, progress: 0 } }));
         // if(fileProgressList.length > 0) {
         //     setFileProgressList((prevItems) => [...prevItems, ...files.map((file) => {return { name: file.name, size: file.size, progress: 0 }})]);
         // }
@@ -60,24 +62,6 @@ export default function PopUpFilesWaitUpload() {
             alert("Please Select files first!")
             return;
         }
-
-        // const formData = new FormData();
-        // formData.append("uploadByID", myDevice.id)
-        // if (deviceSelected && deviceSelected.id !== myDevice.id) {
-        //     formData.append('uploadToID', deviceSelected.id)
-        // }
-
-        // Array.from(fileListWaitUpload).forEach((file) => {
-        //     formData.append("files", file)
-        // })
-
-        // rest.uploadFiles(formData).then((data) => {
-        //     console.log(data)
-        //     setFileListWaitUpload(null)
-        // }).catch((err: any) => {
-        //     console.error("upload file failed : ", err.status, err.message)
-        //     alert("Upload file failed!")
-        // })
 
         const files = Array.from(fileListWaitUpload)
 
@@ -97,6 +81,7 @@ export default function PopUpFilesWaitUpload() {
                     const loaded = progressEvent.loaded ?? 0;
                     const total = progressEvent.total ?? loaded ?? 1;
                     const percent = Math.round((loaded * 100) / total);
+
                     setFileProgressList(prev => {
                         const newProgress = [...prev];
                         newProgress[i].progress = percent;
@@ -104,41 +89,77 @@ export default function PopUpFilesWaitUpload() {
                     });
                 },
             }).then((data) => {
-                console.log(data)
+                // console.log(data)
+                const newFileUploadHistory: FileUploadHistoryModel = { name: files[i].name, size: files[i].size, status: 'completed' };
+                setUploadFilesHistory((prev: FileUploadHistoryModel[]) => [
+                    ...prev,
+                    newFileUploadHistory
+                ]);
+            }).catch((err) => {
+                console.error("Upload file error: ", err);
+                const newFileUploadHistory: FileUploadHistoryModel = { name: files[i].name, size: files[i].size, status: 'failed' };
+                setUploadFilesHistory((prev: FileUploadHistoryModel[]) => [
+                    ...prev,
+                    newFileUploadHistory
+                ]);
             });
-            
+
         }
         setFileListWaitUpload(null)
     }
 
     return (
-        <div className="list-files-wait-upload">
-            <div className="header-list-files">
-                <h5>{fileListWaitUpload === null || fileListWaitUpload === undefined ? 0 : fileListWaitUpload?.length} รายการ</h5>
-                <p className='upload-status success'>สำเร็จ 0</p>
-                <p className='upload-status failed'>ล้มเหลว 0</p>
-            </div>
-            <div className="list-files">
-                {
-                    fileProgressList && Array.from(fileProgressList).map((file, i) => (
-                        <div className='item-file' key={i}>
-                            <img src={imgTest} alt="" />
-                            <div className='file-details'>
-                                <h5>{file.name}</h5>
-                                <span className='tag'>{Math.round(file.size / 1024)} KB</span>
+        fileListWaitUpload || uploadFilesHistory.length !== 0 ? (
+            <div className="list-files-wait-upload">
+                <div className="header-list-files">
+                    {/* <h5>{fileListWaitUpload === null || fileListWaitUpload === undefined ? 0 : fileListWaitUpload?.length} รายการ</h5> */}
+                    <p className='upload-status success'>สำเร็จ {uploadFilesHistory.filter(i => i.status === 'completed').length}</p>
+                <p className='upload-status failed'>ล้มเหลว {uploadFilesHistory.filter(i => i.status === 'failed').length}</p>
+                </div>
+                <div className="list-files">
+                    {
+                        fileProgressList && Array.from(fileProgressList).map((file, i) => (
+                            <div className='item-file' key={i}>
+                                <img src={imgTest} alt="" />
+                                <div className='file-details'>
+                                    <h5>{file.name}</h5>
+                                    <span className='tag'>{Math.round(file.size / 1024)} KB</span>
+                                </div>
+                                <div className="btn-cancel" onClick={() => handleCancelSomeFile(i)}>
+                                    <img src={iconClose} alt="Cancel upload" />
+                                </div>
+                                <div className="upload-progress" style={{ width: `${file.progress || 0}%` }}></div>
                             </div>
-                            <div className="btn-cancel" onClick={() => handleCancelSomeFile(i)}>
-                                <img src={iconClose} alt="Cancel upload" />
+                        ))
+                    }
+                    {
+                        uploadFilesHistory && Array.from(uploadFilesHistory).map((file, i) => (
+                            <div className='item-file' key={i}>
+                                <img src={imgTest} alt="" />
+                                <div className='file-details'>
+                                    <h5>{file.name}</h5>
+                                    <span className='tag'>{Math.round(file.size / 1024)} KB</span>
+                                </div>
+                                <div className="file-status">
+                                    {file.status === 'completed' ? (
+                                        <span className='text-status completed'>สำเร็จ</span>
+                                    ) : (
+                                        <span className='text-status failed'>ล้มเหลว</span>
+                                    )}
+                                </div>
                             </div>
-                            <div className="upload-progress" style={{ width: `${file.progress || 0}%` }}></div>
-                        </div>
-                    ))
-                }
+                        ))
+                    }
+                </div>
+                <div className="list-files-btn-group">
+                    {
+                        fileListWaitUpload && (
+                            <div className="btn-list-files btn-confirm-upload" onClick={handleConfirmUploadFiles}><img src={iconUpload} alt="" /><span>Confirm</span></div>
+                        )
+                    }
+                    <div className="btn-list-files btn-cancel-all" onClick={handleCancelUploadAllFiles}><img src={iconCloseWhite} alt="" />{fileProgressList.length === 0 && uploadFilesHistory.length !== 0 ? 'ล้างประวัติ': ''}</div>
+                </div>
             </div>
-            <div className="list-files-btn-group">
-                <div className="btn-list-files btn-confirm-upload" onClick={handleConfirmUploadFiles}><img src={iconUpload} alt="" /><span>Confirm</span></div>
-                <div className="btn-list-files btn-cancel-all" onClick={handleCancelUploadAllFiles}><img src={iconCloseWhite} alt="" /></div>
-            </div>
-        </div>
+        ) : (<></>)
     )
 }
