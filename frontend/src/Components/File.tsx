@@ -13,9 +13,10 @@ interface Props {
     file: FileModel
     isUpload?: boolean
     progressNow?: number
+    isSelected?: boolean
 }
 
-export default function File({ file, isUpload = false, progressNow = 0 }: Props) {
+export default function File({ file, isUpload = false, progressNow = 0, isSelected = false }: Props) {
     const [progress, setProgress] = useState<number>(0)
 
     useEffect(() => {
@@ -51,7 +52,7 @@ export default function File({ file, isUpload = false, progressNow = 0 }: Props)
 
     return (
         <>
-            <div className="file-item" key={file.id}>
+            <div className={`file-item ${isSelected ? "file-selected" : ""}`} key={file.id}>
                 {
                     isUpload ? (
                         <div className="file-progress">

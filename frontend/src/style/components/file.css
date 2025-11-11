@@ -26,7 +26,7 @@
   /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); */
   padding: 5px;
   transition: 0.3s;
-  
+
   &:hover {
     background-color: #f1f1f1;
     /* background-color: #fbe4fd; */
@@ -107,4 +107,9 @@
 .other-file-icon {
   width: 32px;
   height: 32px;
+}
+
+.file-selected {
+  outline: 2px solid #dddddd;
+  outline-offset: -2px;
 }

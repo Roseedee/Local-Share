@@ -41,7 +41,7 @@ export default function FileList() {
       {
         files && (
           files.map((file: any, i: number) => (
-            <File key={i} file={{ id: file.file_id, name: file.file_org_name, path: "http://localhost:5000/files/" + file.file_path, size: file.file_size, type: file.file_type}} />
+            <File key={i} file={{ id: file.file_id, name: file.file_org_name, path: "http://localhost:5000/files/" + file.file_path, size: file.file_size, type: file.file_type}} isSelected={i%2===0} />
           ))
         )
         // files.results.map((file) => (
