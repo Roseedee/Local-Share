@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useShared } from '../contexts/SharedContext'
 
@@ -10,18 +10,28 @@ import '../style/components/file.css'
 export default function FileList() {
   // const calledRef = useRef(false);
   const { id } = useParams<string>() || "";
+  const { myDevice, deviceSelected, fileListWaitUpload, isSelectMode, setIsSelectMode } = useShared();
 
   const local_id = localStorage.getItem("device_id") || ""
-  const selected_id = localStorage.getItem("device_selected_client_id") || ""  
-  const { myDevice, deviceSelected, fileListWaitUpload } = useShared();
+  const selected_id = localStorage.getItem("device_selected_client_id") || ""
+
+  const [fileSelected, setFileSelected] = useState<string[]>([]);
   const [files, setFiles] = useState<any[]>([]);
 
   useEffect(() => {
     // if (calledRef.current) return;
     // calledRef.current = true;
-
+    setFileSelected([]);
     loadFiles();
   }, [myDevice, deviceSelected, fileListWaitUpload]);
+
+  useEffect(() => {
+    setFileSelected([]);
+  }, [isSelectMode]);
+
+  useEffect(() => {
+    setIsSelectMode?.(false);
+  } , [id]);
 
   const loadFiles = async () => {
     const response = await fetch('http://localhost:5000/files', {
@@ -31,17 +41,29 @@ export default function FileList() {
     });
 
     const data = await response.json();
-    console.log("Files:", data);
+    // console.log("Files:", data);
     setFiles(data.results);
-    console.log("Files State:", files);
+    // console.log("Files State:", files);
   };
+
+  const handleFileSelect = (fileId: string) => {
+    // console.log("File selected:", fileId);
+    if(isSelectMode === false) return;
+    if (fileSelected.includes(fileId)) {
+      setFileSelected(fileSelected.filter(id => id !== fileId));
+    } else {
+      setFileSelected([...fileSelected, fileId]);
+    }
+  };
+
+
 
   return (
     <div className="file-list">
       {
         files && (
           files.map((file: any, i: number) => (
-            <File key={i} file={{ id: file.file_id, name: file.file_org_name, path: "http://localhost:5000/files/" + file.file_path, size: file.file_size, type: file.file_type}} isSelected={i%2===0} />
+            <File key={i} file={{ id: file.file_id, name: file.file_org_name, path: "http://localhost:5000/files/" + file.file_path, size: file.file_size, type: file.file_type }} isSelected={fileSelected.includes(file.file_id)} onClick={() => handleFileSelect(file.file_id)}/>
           ))
         )
         // files.results.map((file) => (

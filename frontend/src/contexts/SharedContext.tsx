@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect, use } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 
 import DeviceModel from "../model/DeviceModel";
 import FileUploadHistoryModel from "../model/FileUploadHistoryModel";
@@ -15,6 +15,9 @@ interface SharedContextType {
 
     deviceSelected: DeviceModel | null;
     setDeviceSelected: (value: DeviceModel | null) => void;
+
+    isSelectMode?: boolean;
+    setIsSelectMode?: (value: boolean) => void;
 }
 
 const SharedContext = createContext<SharedContextType | undefined>(undefined)
@@ -33,6 +36,8 @@ export function SharedProvider({ children }: SharedProviderProds) {
     const [fileListWaitUpload, setFileListWaitUpload] = useState<FileList | null>()
     const [uploadFilesHistory, setUploadFilesHistory] = useState<FileUploadHistoryModel[]>([])
 
+    const [isSelectMode, setIsSelectMode] = useState<boolean>(false)
+
     if (devMode) {
 
         useEffect(() => {
@@ -45,7 +50,8 @@ export function SharedProvider({ children }: SharedProviderProds) {
             myDevice, setMyDevice,
             deviceSelected, setDeviceSelected,
             fileListWaitUpload, setFileListWaitUpload,
-            uploadFilesHistory, setUploadFilesHistory
+            uploadFilesHistory, setUploadFilesHistory,
+            isSelectMode, setIsSelectMode
         }}>
             {children}
         </SharedContext.Provider>

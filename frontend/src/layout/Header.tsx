@@ -14,10 +14,9 @@ export default function Header() {
 
 
     // const [deviceSelected, setDeviceSelected] = useState<DeviceModel>()
-    const {deviceSelected, setFileListWaitUpload} = useShared();
+    const {deviceSelected, setFileListWaitUpload, isSelectMode, setIsSelectMode} = useShared();
 
     const fileUploadRef = useRef<HTMLInputElement | null>(null)
-    // const [files, setFiles] = useState<FileList | null>()
 
     const handleClickUpload = () => {
         fileUploadRef.current?.click()
@@ -27,6 +26,10 @@ export default function Header() {
         if (e.target.files) {
             setFileListWaitUpload(e.target.files)
         }
+    }
+
+    const handleClieckSelectMode = () => {
+        setIsSelectMode?.(!isSelectMode)
     }
 
     return (
@@ -41,7 +44,7 @@ export default function Header() {
                     <input type="file" multiple name="" className='hide' ref={fileUploadRef} onChange={handleFileInputChange} />
                     <img src={fileUploadIcon} alt="" className='content-header-icon' />
                 </div>
-                <div className="tool-icon">
+                <div className={`tool-icon ${isSelectMode ? 'active': ''}`} onClick={handleClieckSelectMode}>
                     <img src={selectIcon} alt="" className='content-header-icon' />
                 </div>
                 <div className="tool-icon">

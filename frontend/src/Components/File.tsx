@@ -14,9 +14,10 @@ interface Props {
     isUpload?: boolean
     progressNow?: number
     isSelected?: boolean
+    onClick?: () => void
 }
 
-export default function File({ file, isUpload = false, progressNow = 0, isSelected = false }: Props) {
+export default function File({ file, isUpload = false, progressNow = 0, isSelected = false, onClick }: Props) {
     const [progress, setProgress] = useState<number>(0)
 
     useEffect(() => {
@@ -51,31 +52,29 @@ export default function File({ file, isUpload = false, progressNow = 0, isSelect
 
 
     return (
-        <>
-            <div className={`file-item ${isSelected ? "file-selected" : ""}`} key={file.id}>
-                {
-                    isUpload ? (
-                        <div className="file-progress">
-                            <div className="progress">
-                                <div className="progress-value" style={{ width: progress + "%" }}></div>
-                            </div>
-                            <h5>{progressNow}</h5>
+        <div onClick={onClick} className={`file-item ${isSelected ? "file-selected" : ""}`} key={file.id}>
+            {
+                isUpload ? (
+                    <div className="file-progress">
+                        <div className="progress">
+                            <div className="progress-value" style={{ width: progress + "%" }}></div>
                         </div>
-                    ) : (<></>)
+                        <h5>{progressNow}</h5>
+                    </div>
+                ) : (<></>)
+            }
+            <div className="file-icon-container">
+                {
+                    fileCategory(file.type) === "image" ? (
+                        <img className='image-icon' src={file.path} alt={file.name} />
+
+                    ) : (
+                        <img className='other-file-icon' src={fileCategory(file.type)} alt="Can't preview this file" />
+                    )
+
                 }
-                <div className="file-icon-container">
-                    {
-                        fileCategory(file.type) === "image" ? (
-                            <img className='image-icon' src={file.path} alt={file.name} />
-
-                        ) : (
-                            <img className='other-file-icon' src={fileCategory(file.type)} alt="Can't preview this file" />
-                        )
-
-                    }
-                </div>
-                <h6>{file.name}</h6>
             </div>
-        </>
+            <h6>{file.name}</h6>
+        </div>
     )
 }
