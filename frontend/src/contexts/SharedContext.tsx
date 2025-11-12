@@ -18,6 +18,9 @@ interface SharedContextType {
 
     isSelectMode?: boolean;
     setIsSelectMode?: (value: boolean) => void;
+
+    fileSelected?: string[];
+    setFileSelected?: (value: string[]) => void;
 }
 
 const SharedContext = createContext<SharedContextType | undefined>(undefined)
@@ -37,6 +40,7 @@ export function SharedProvider({ children }: SharedProviderProds) {
     const [uploadFilesHistory, setUploadFilesHistory] = useState<FileUploadHistoryModel[]>([])
 
     const [isSelectMode, setIsSelectMode] = useState<boolean>(false)
+    const [fileSelected, setFileSelected] = useState<string[]>([])
 
     if (devMode) {
 
@@ -51,7 +55,8 @@ export function SharedProvider({ children }: SharedProviderProds) {
             deviceSelected, setDeviceSelected,
             fileListWaitUpload, setFileListWaitUpload,
             uploadFilesHistory, setUploadFilesHistory,
-            isSelectMode, setIsSelectMode
+            isSelectMode, setIsSelectMode,
+            fileSelected, setFileSelected
         }}>
             {children}
         </SharedContext.Provider>

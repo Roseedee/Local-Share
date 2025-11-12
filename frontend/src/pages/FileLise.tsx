@@ -10,23 +10,25 @@ import '../style/components/file.css'
 export default function FileList() {
   // const calledRef = useRef(false);
   const { id } = useParams<string>() || "";
-  const { myDevice, deviceSelected, fileListWaitUpload, isSelectMode, setIsSelectMode } = useShared();
+  const { myDevice, deviceSelected,
+          fileListWaitUpload, isSelectMode,
+          setIsSelectMode, fileSelected, setFileSelected } = useShared();
 
   const local_id = localStorage.getItem("device_id") || ""
   const selected_id = localStorage.getItem("device_selected_client_id") || ""
 
-  const [fileSelected, setFileSelected] = useState<string[]>([]);
+  // const [fileSelected, setFileSelected] = useState<string[]>([]);
   const [files, setFiles] = useState<any[]>([]);
 
   useEffect(() => {
     // if (calledRef.current) return;
     // calledRef.current = true;
-    setFileSelected([]);
+    setFileSelected?.([]);
     loadFiles();
   }, [myDevice, deviceSelected, fileListWaitUpload]);
 
   useEffect(() => {
-    setFileSelected([]);
+    setFileSelected?.([]);
   }, [isSelectMode]);
 
   useEffect(() => {
@@ -49,10 +51,10 @@ export default function FileList() {
   const handleFileSelect = (fileId: string) => {
     // console.log("File selected:", fileId);
     if(isSelectMode === false) return;
-    if (fileSelected.includes(fileId)) {
-      setFileSelected(fileSelected.filter(id => id !== fileId));
+    if (fileSelected?.includes(fileId)) {
+      setFileSelected?.(fileSelected.filter(id => id !== fileId));
     } else {
-      setFileSelected([...fileSelected, fileId]);
+      setFileSelected?.([...(fileSelected ?? []), fileId]);
     }
   };
 
@@ -63,7 +65,7 @@ export default function FileList() {
       {
         files && (
           files.map((file: any, i: number) => (
-            <File key={i} file={{ id: file.file_id, name: file.file_org_name, path: "http://localhost:5000/files/" + file.file_path, size: file.file_size, type: file.file_type }} isSelected={fileSelected.includes(file.file_id)} onClick={() => handleFileSelect(file.file_id)}/>
+            <File key={i} file={{ id: file.file_id, name: file.file_org_name, path: "http://localhost:5000/files/" + file.file_path, size: file.file_size, type: file.file_type }} isSelected={fileSelected?.includes(file.file_id)} onClick={() => handleFileSelect(file.file_id)}/>
           ))
         )
         // files.results.map((file) => (
