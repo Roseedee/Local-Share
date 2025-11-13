@@ -21,6 +21,9 @@ interface SharedContextType {
 
     fileSelected?: string[];
     setFileSelected?: (value: string[]) => void;
+
+    isLargeView?: boolean;
+    setIsLargeView?: (value: boolean) => void;
 }
 
 const SharedContext = createContext<SharedContextType | undefined>(undefined)
@@ -42,6 +45,8 @@ export function SharedProvider({ children }: SharedProviderProds) {
     const [isSelectMode, setIsSelectMode] = useState<boolean>(false)
     const [fileSelected, setFileSelected] = useState<string[]>([])
 
+    const [isLargeView, setIsLargeView] = useState<boolean>(true)
+
     if (devMode) {
 
         useEffect(() => {
@@ -56,7 +61,9 @@ export function SharedProvider({ children }: SharedProviderProds) {
             fileListWaitUpload, setFileListWaitUpload,
             uploadFilesHistory, setUploadFilesHistory,
             isSelectMode, setIsSelectMode,
-            fileSelected, setFileSelected
+            fileSelected, setFileSelected,
+            isLargeView, setIsLargeView
+
         }}>
             {children}
         </SharedContext.Provider>

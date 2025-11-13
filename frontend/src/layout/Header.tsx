@@ -6,6 +6,9 @@ import editIcon from '../assets/edit.png'
 import synsIcon from '../assets/sync.png'
 import fileUploadIcon from '../assets/up-loading.png'
 import downloadIcon from '../assets/downloads.png'
+import binIcon from '../assets/bin.png'
+import largeViewIcon from '../assets/large-view.png'
+import listViewIcon from '../assets/list-view.png'
 import selectIcon from '../assets/select.png'
 
 export default function Header() {
@@ -15,7 +18,7 @@ export default function Header() {
 
 
     // const [deviceSelected, setDeviceSelected] = useState<DeviceModel>()
-    const { deviceSelected, setFileListWaitUpload, isSelectMode, setIsSelectMode } = useShared();
+    const { deviceSelected, setFileListWaitUpload, isSelectMode, setIsSelectMode, isLargeView, setIsLargeView } = useShared();
 
     const fileUploadRef = useRef<HTMLInputElement | null>(null)
 
@@ -47,17 +50,36 @@ export default function Header() {
             <div className='tools-group'>
                 {
                     isSelectMode === true && (
-                        <div className="tool-icon">
-                            <img src={downloadIcon} alt="" className='content-header-icon' />
-                        </div>
+                        <>
+                            <div className="tool-icon">
+                                <img src={downloadIcon} alt="" className='content-header-icon' />
+                            </div>
+                            <div className="tool-icon">
+                                <img src={binIcon} alt="" className='content-header-icon' />
+                            </div>
+
+                        </>
                     )
                 }
                 {
                     isSelectMode === false && (
-                        <div className="tool-icon" onClick={handleClickUpload}>
-                            <input type="file" multiple name="" className='hide' ref={fileUploadRef} onChange={handleFileInputChange} />
-                            <img src={fileUploadIcon} alt="" className='content-header-icon' />
-                        </div>
+                        <>
+                            <div className="tool-icon" onClick={handleClickUpload}>
+                                <input type="file" multiple name="" className='hide' ref={fileUploadRef} onChange={handleFileInputChange} />
+                                <img src={fileUploadIcon} alt="" className='content-header-icon' />
+                            </div>
+                            {
+                                isLargeView ? (
+                                    <div className="tool-icon" onClick={() => setIsLargeView?.(false)}>
+                                        <img src={listViewIcon} alt="" className='content-header-icon' />
+                                    </div>
+                                ) : (
+                                    <div className="tool-icon" onClick={() => setIsLargeView?.(true)}>
+                                        <img src={largeViewIcon} alt="" className='content-header-icon' />
+                                    </div>
+                                )
+                            }
+                        </>
                     )
                 }
                 <div className={`tool-icon ${isSelectMode ? 'active' : ''}`} onClick={handleClieckSelectMode}>

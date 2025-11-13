@@ -5,6 +5,7 @@ const { auth, insertClient, loadClients, insertFiles, loadFiles } = require('./d
 const path = require('path')
 const fs = require('fs')
 const multer = require('multer');
+const AdmZip = require('adm-zip');
 const { error } = require('console');
 
 const app = express();
@@ -36,10 +37,10 @@ const upload = multer({ storage });
 
 app.use((req, res, next) => {
 
-    if(req.path === '/upload' && req.method === 'POST') {
+    if (req.path === '/upload' && req.method === 'POST') {
         const totalBytes = parseInt(req.headers["content-length"] || "0", 10);
         let uploadedBytes = 0;
-    
+
         req.on("data", chunk => {
             uploadedBytes += chunk.length;
             if (totalBytes > 0) {
@@ -47,7 +48,7 @@ app.use((req, res, next) => {
                 process.stdout.write(`\r📦 Uploading... ${percent}%`);
             }
         });
-    
+
         req.on("end", () => {
             console.log("\n✅ Upload complete (stream finished)");
         });
@@ -72,16 +73,16 @@ app.post('/auth', async (req, res) => {
     try {
         const result = await auth(uuid);
         // console.log(result)
-        if(result) {
+        if (result) {
             res.json({
                 client_id: result[0].client_id,
                 id: result[0].client_uuid,
                 name: result[0].client_name
             });
-        }else {
-            res.status(404).json({error: "Device Not Found"})
+        } else {
+            res.status(404).json({ error: "Device Not Found" })
         }
-    }catch(error) {
+    } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Failed to authentication" });
     }
@@ -136,7 +137,7 @@ app.post('/upload', upload.array("files", 10), (req, res) => {
 
     const uploadByID = req.body.uploadByID || "";
     const uploadToID = req.body.uploadToID || "";
-    
+
     if (!req.files || req.files.length === 0) {
         return res.status(400).json({ message: "No files uploaded" });
     }
@@ -157,7 +158,7 @@ app.post('/upload', upload.array("files", 10), (req, res) => {
         ).catch((error) => {
             console.error('Error inserting file record:', error);
             res.status(500).json({ error: "Failed file to record" });
-        }); 
+        });
     });
 
 
@@ -180,7 +181,7 @@ app.get('/files/:filename', (req, res) => {
     res.sendFile(filePath);
 });
 
-app.post('/files',async (req, res) => {
+app.post('/files', async (req, res) => {
     const { token } = req.body;
 
     console.log("Load Files for : " + token)
@@ -203,6 +204,30 @@ app.post('/files',async (req, res) => {
         console.error(error);
         res.status(500).json({ error: "Failed to load Files" });
     }
+});
+
+app.get("/downloads", (req, res) => {
+
+    const zip = new AdmZip();
+
+    // เพิ่มไฟล์ลงใน ZIP
+    zip.addLocalFile("uploads/0fe187f3-21cd-4e01-a948-07471401b420.png");
+    zip.addLocalFile("uploads/0fc07f85-2a43-4d9e-86d8-53bd7c878a09.jpg");
+
+    // สร้างไฟล์ zip จริงในเครื่องชั่วคราว
+    const outputPath = path.join(process.cwd(), "fasdfadf.zip");
+    zip.writeZip(outputPath, (err) => {
+        if (err) {
+            console.error("เกิดข้อผิดพลาด:", err);
+            return res.status(500).send("Error while zipping");
+        }
+
+        console.log("✅ ZIP เสร็จแล้ว!");
+        // ส่งไฟล์ให้ frontend ดาวน์โหลด
+        res.download(outputPath, "example.zip", (err) => {
+            if (err) console.error("ส่งไฟล์ไม่สำเร็จ:", err);
+        });
+    });
 });
 
 app.listen(port, () => {
