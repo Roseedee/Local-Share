@@ -1,4 +1,4 @@
-import { useRef, ChangeEvent } from 'react'
+import { useState, useRef, ChangeEvent } from 'react'
 import { useShared } from '../contexts/SharedContext'
 import { useParams } from 'react-router-dom'
 
@@ -14,7 +14,8 @@ import selectIcon from '../assets/select.png'
 export default function Header() {
 
     const { id } = useParams<string>()
-    const { myDevice, fileSelected } = useShared();
+    const { myDevice, fileSelected, setFileSelected } = useShared();
+    const [loading, setLoading] = useState<boolean>(false);
 
 
     // const [deviceSelected, setDeviceSelected] = useState<DeviceModel>()
@@ -36,6 +37,50 @@ export default function Header() {
         setIsSelectMode?.(!isSelectMode)
     }
 
+    const handleDownloadSelected = async () => {
+        if ((fileSelected === undefined || fileSelected.length === 0) && loading) return;
+        console.log("Download selected files:", fileSelected);
+        setLoading(true);
+        try {
+            const response = await fetch("http://localhost:5000/download", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ files: fileSelected })
+            });
+
+            if (!response.ok) throw new Error("Download failed");
+
+            // ✅ อ่านชื่อไฟล์จาก header
+            const disposition = response.headers.get("Content-Disposition");
+            let fileName = "download.zip";
+
+            if (disposition) {
+                const match = disposition.match(/filename="(.+)"/);
+                if (match && match[1]) fileName = match[1];
+            }
+
+            // ✅ ดาวน์โหลดไฟล์
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = fileName; // ← ใช้ชื่อจริงจาก backend
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+
+        } catch (err) {
+            console.error(err);
+            setLoading(false);
+        } finally {
+            setLoading(false);
+            setFileSelected?.([]);
+            setIsSelectMode?.(false);
+        }
+    }
+
     return (
         <div className="content-header">
             <div className="computer-name">
@@ -51,7 +96,7 @@ export default function Header() {
                 {
                     isSelectMode === true && (
                         <>
-                            <div className="tool-icon">
+                            <div className={`tool-icon ${loading ? ' loading' : ''}`} onClick={handleDownloadSelected}>
                                 <img src={downloadIcon} alt="" className='content-header-icon' />
                             </div>
                             <div className="tool-icon">

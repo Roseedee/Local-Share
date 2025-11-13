@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const { v4: uuidv4 } = require('uuid');
-const { auth, insertClient, loadClients, insertFiles, loadFiles } = require('./db/connect');
+const { auth, insertClient, loadClients, insertFiles, loadFiles, getFileByIds } = require('./db/connect');
 const path = require('path')
 const fs = require('fs')
 const multer = require('multer');
@@ -206,29 +206,46 @@ app.post('/files', async (req, res) => {
     }
 });
 
-app.get("/downloads", (req, res) => {
+app.post("/download", async (req, res) => {
+    const files = req.body.files;
+
+    if (!files || files.length === 0) {
+        return res.status(400).send("No files specified");
+    }
 
     const zip = new AdmZip();
 
-    // เพิ่มไฟล์ลงใน ZIP
-    zip.addLocalFile("uploads/0fe187f3-21cd-4e01-a948-07471401b420.png");
-    zip.addLocalFile("uploads/0fc07f85-2a43-4d9e-86d8-53bd7c878a09.jpg");
+    try {
+        // สมมติคุณมี getFileByIds(files)
+        const result = await getFileByIds(files);
 
-    // สร้างไฟล์ zip จริงในเครื่องชั่วคราว
-    const outputPath = path.join(process.cwd(), "fasdfadf.zip");
-    zip.writeZip(outputPath, (err) => {
-        if (err) {
-            console.error("เกิดข้อผิดพลาด:", err);
-            return res.status(500).send("Error while zipping");
+        for (const fileRecord of result) {
+            const filePath = path.join(__dirname, "uploads", fileRecord.file_new_name);
+            if (fs.existsSync(filePath)) zip.addLocalFile(filePath);
         }
 
-        console.log("✅ ZIP เสร็จแล้ว!");
-        // ส่งไฟล์ให้ frontend ดาวน์โหลด
-        res.download(outputPath, "example.zip", (err) => {
-            if (err) console.error("ส่งไฟล์ไม่สำเร็จ:", err);
-        });
-    });
+        // ✅ ตั้งชื่อไฟล์แบบ timestamp
+        const now = new Date();
+        const formatted = now.toISOString().replace(/[-:]/g, "").replace("T", "_").split(".")[0];
+        const zipFileName = `download_${formatted}.zip`;
+
+        // ใช้ buffer แทนการเขียนไฟล์ลงดิสก์
+        const buffer = zip.toBuffer();
+
+        // ✅ ตั้ง header ชื่อไฟล์แบบชัดเจน
+        res.setHeader("Content-Type", "application/zip");
+        res.setHeader("Content-Disposition", `attachment; filename="${zipFileName}"`);
+        res.setHeader("Content-Length", buffer.length);
+        res.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
+
+        console.log(`✅ ZIP ready: ${zipFileName}`);
+        res.end(buffer); // ส่ง blob ให้ React รับตรง ๆ
+    } catch (err) {
+        console.error("❌ Error:", err);
+        res.status(500).send("Failed to create zip");
+    }
 });
+
 
 app.listen(port, () => {
     console.log(`listent on port ${port}`)

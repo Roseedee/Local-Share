@@ -98,9 +98,23 @@ const loadFiles = async (client_id) => {
     });
 }
 
+const getFileByIds = async (files) => {
+    connectToDatabase();
+    const query = `SELECT file_new_name FROM files WHERE file_id IN (${files.map(() => '?').join(',')})`;
+    return new Promise((resolve, reject) => {
+        db.execute(query, files, (err, results) => {
+            if (err) {  
+                console.error('Error fetching files by IDs:', err);
+                return reject(err);
+            }
+            resolve(results);
+        });
+    });
+}
+
 module.exports = {
     db,
     auth, insertClient, loadClients, 
-    insertFiles, loadFiles
+    insertFiles, loadFiles, getFileByIds
 };
 
