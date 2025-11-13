@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import fileSize from '../util/fileSizeCalc'
 
 import '../style/components/file.css'
 
@@ -52,7 +53,12 @@ export default function File({ file, isUpload = false, progressNow = 0, isSelect
 
 
     return (
-        <div onClick={onClick} className={`file-item ${isSelected ? "file-selected" : ""}`} key={file.id}>
+        <div 
+            onClick={onClick}
+            className={`file-item ${isSelected ? "file-selected" : ""}`} 
+            key={file.id}
+            title={`ชื่อ : ${file.name} \nขนาด : ${fileSize(file.size)}`}
+        >
             {
                 isUpload ? (
                     <div className="file-progress">

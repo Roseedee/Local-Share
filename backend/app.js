@@ -198,7 +198,7 @@ app.post('/files', async (req, res) => {
             client_uuid_target: file.client_uuid_target,
             upload_time: file.create_at
         }));
-        console.log("Files Loaded: ", files.length)
+        // console.log("Files Loaded: ", files.length)
         res.json({ results: files });
     } catch (error) {
         console.error(error);
@@ -216,7 +216,6 @@ app.post("/download", async (req, res) => {
     const zip = new AdmZip();
 
     try {
-        // สมมติคุณมี getFileByIds(files)
         const result = await getFileByIds(files);
 
         for (const fileRecord of result) {
@@ -224,15 +223,12 @@ app.post("/download", async (req, res) => {
             if (fs.existsSync(filePath)) zip.addLocalFile(filePath);
         }
 
-        // ✅ ตั้งชื่อไฟล์แบบ timestamp
         const now = new Date();
         const formatted = now.toISOString().replace(/[-:]/g, "").replace("T", "_").split(".")[0];
         const zipFileName = `download_${formatted}.zip`;
 
-        // ใช้ buffer แทนการเขียนไฟล์ลงดิสก์
         const buffer = zip.toBuffer();
 
-        // ✅ ตั้ง header ชื่อไฟล์แบบชัดเจน
         res.setHeader("Content-Type", "application/zip");
         res.setHeader("Content-Disposition", `attachment; filename="${zipFileName}"`);
         res.setHeader("Content-Length", buffer.length);

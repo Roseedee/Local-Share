@@ -50,7 +50,6 @@ export default function Header() {
 
             if (!response.ok) throw new Error("Download failed");
 
-            // ✅ อ่านชื่อไฟล์จาก header
             const disposition = response.headers.get("Content-Disposition");
             let fileName = "download.zip";
 
@@ -59,13 +58,12 @@ export default function Header() {
                 if (match && match[1]) fileName = match[1];
             }
 
-            // ✅ ดาวน์โหลดไฟล์
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
 
             const a = document.createElement("a");
             a.href = url;
-            a.download = fileName; // ← ใช้ชื่อจริงจาก backend
+            a.download = fileName;
             document.body.appendChild(a);
             a.click();
             a.remove();
