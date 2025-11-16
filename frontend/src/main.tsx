@@ -7,6 +7,7 @@ import App from './pages/App'
 import Init from './pages/Init'
 import Register from './pages/Register'
 import FileView from './pages/FileView'
+import NetworkError from './pages/NetworkError'
 
 import "./style/index.css"
 
@@ -20,6 +21,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route path="/init/" element={<Init />} />
           <Route path="/register/" element={<Register />} />
           <Route path="/fileview/:id" element={<FileView />} />
+          <Route path="/error/network" element={<NetworkError />} />
         </Routes>
       </BrowserRouter>
     </SharedProvider>

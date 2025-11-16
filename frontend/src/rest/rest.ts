@@ -6,7 +6,7 @@ export default class Rest {
     static devMode = true
 
     static log(str: string) {
-        if(this.devMode) console.log(this.logTag, str)
+        if (this.devMode) console.log(this.logTag, str)
     }
 
     static async ping() {
@@ -24,24 +24,31 @@ export default class Rest {
     }
 
     static async auth(uuid: string) {
-        this.log("Authentication")
-        const response = await fetch(this.apiHost + "auth", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ uuid })
-        })
+        this.log("Authentication");
+        try {
+            const response = await fetch(this.apiHost + "auth", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ uuid })
+            });
 
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw {
+                    status: response.status,
+                    message: errorData.error || 'authentication failed'
+                };
+            }
+
+            return await response.json();
+
+        } catch (err: any) {
+            // Network error / CORS / server ไม่ตอบ
             throw {
-                status: response.status,
-                message: errorData.error || 'Request failed'
+                status: "NETWORK_ERROR",
+                message: err.message || "Network error or server did not respond"
             };
         }
-
-        return await response.json();
     }
 
     static async generateNewUUID() {
@@ -74,43 +81,43 @@ export default class Rest {
     }
 
     static async uploadFiles(form: FormData, onProgress?: (percent: number) => void) {
-    this.log("Upload Files");
+        this.log("Upload Files");
 
-    try {
-        const response = await axios.post(
-            this.apiHost + "upload",
-            form,
-            {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-                onUploadProgress: (e) => {
-                    if (!onProgress) return;
+        try {
+            const response = await axios.post(
+                this.apiHost + "upload",
+                form,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                    onUploadProgress: (e) => {
+                        if (!onProgress) return;
 
-                    const loaded = e.loaded ?? 0;
-                    const total = e.total ?? loaded;
-                    const percent = Math.round((loaded * 100) / total);
+                        const loaded = e.loaded ?? 0;
+                        const total = e.total ?? loaded;
+                        const percent = Math.round((loaded * 100) / total);
 
-                    onProgress(percent);
-                },
+                        onProgress(percent);
+                    },
+                }
+            );
+
+            return response.data;
+
+        } catch (error: any) {
+            let message = "Request failed";
+
+            if (error.response && error.response.data) {
+                message = error.response.data.error || message;
             }
-        );
 
-        return response.data;
-
-    } catch (error: any) {
-        let message = "Request failed";
-
-        if (error.response && error.response.data) {
-            message = error.response.data.error || message;
+            throw {
+                status: error.response?.status || 500,
+                message,
+            };
         }
-
-        throw {
-            status: error.response?.status || 500,
-            message,
-        };
     }
-}
 
 }
 

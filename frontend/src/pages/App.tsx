@@ -47,7 +47,11 @@ function App() {
       setMyDevice(data)
       // setIsLoading(false);
     }).catch((err: any) => {
-      console.error("Auth Failed: ", err.status, err.message)
+      console.error("Auth Failed: ", err.status, err.message, err.code);
+      // if(err.status === "NETWORK_ERROR" && err.message === "authentication failed") {
+      //   navigator("/error/network")
+      //   return;
+      // }
     }).finally(() => {
       setIsLoading(false);
     })
