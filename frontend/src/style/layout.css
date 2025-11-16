@@ -24,7 +24,7 @@
 }
 
 .device-list {
-  max-height: 100vh;
+  flex: 1;
   overflow: auto;
   display: flex;
   flex-direction: column;
