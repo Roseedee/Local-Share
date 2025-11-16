@@ -63,10 +63,12 @@ export default function FileList() {
   return (
     <div className="file-list">
       {
-        files && (
+        files && files.length !== 0 ? (
           files.map((file: any, i: number) => (
             <File key={i} file={{ id: file.file_id, name: file.file_org_name, path: "http://localhost:5000/files/" + file.file_path, size: file.file_size, type: file.file_type }} isSelected={fileSelected?.includes(file.file_id)} onClick={() => handleFileSelect(file.file_id)}/>
           ))
+        ) : (
+          <p className='no-item'>No files found.</p>
         )
         // files.results.map((file) => (
         //   <p>adf</p>

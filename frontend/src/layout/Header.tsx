@@ -129,11 +129,11 @@ export default function Header() {
                     <img src={selectIcon} alt="" className='content-header-icon' />
                 </div>
                 {
-                    isSelectMode === false && (
-                        <div className="tool-icon">
-                            <img src={synsIcon} alt="" className='content-header-icon' />
-                        </div>
-                    )
+                    // isSelectMode === false && (
+                    //     <div className="tool-icon">
+                    //         <img src={synsIcon} alt="" className='content-header-icon' />
+                    //     </div>
+                    // )
                 }
             </div>
         </div>
