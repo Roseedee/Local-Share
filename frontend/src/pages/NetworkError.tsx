@@ -11,11 +11,11 @@ const NetworkErrorPage: React.FC<NetworkErrorPageProps> = ({
   onRetry,
 }) => {
   const [loading, setLoading] = useState(false);
-    const navigator = useNavigate();
+  const navigator = useNavigate();
 
   const handleRetry = () => {
     navigator('/init');
-     if (onRetry) {
+    if (onRetry) {
       setLoading(true);
       Promise.resolve(onRetry()).finally(() => setLoading(false));
     }

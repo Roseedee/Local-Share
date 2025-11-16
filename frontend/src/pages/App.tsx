@@ -47,11 +47,17 @@ function App() {
       setMyDevice(data)
       // setIsLoading(false);
     }).catch((err: any) => {
-      console.error("Auth Failed: ", err.status, err.message, err.code);
-      // if(err.status === "NETWORK_ERROR" && err.message === "authentication failed") {
-      //   navigator("/error/network")
-      //   return;
-      // }
+      console.error("Auth Failed: ", err.status, err.message);
+      if(err.status === 404) {
+        localStorage.removeItem("device_uuid")
+        localStorage.removeItem("device_id")
+        localStorage.removeItem("device_name")
+        navigator("/init")
+        return;
+      }else if(err.status === "NETWORK_ERROR" ) {
+        navigator("/error/network")
+        return;
+      }
     }).finally(() => {
       setIsLoading(false);
     })

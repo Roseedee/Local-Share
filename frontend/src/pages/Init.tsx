@@ -22,7 +22,10 @@ export default function Init() {
             // console.log('generate new UUID')
             rest.generateNewUUID().then((data) => {
                 setUuid(data.uuid)
-            });
+            }).catch((err) => {
+                console.error('Generate UUID failed: ', err)
+                navigator('/error/network')
+            })
             return;
         }else {
             navigator('/')

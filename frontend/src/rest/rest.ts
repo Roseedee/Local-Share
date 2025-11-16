@@ -43,11 +43,14 @@ export default class Rest {
             return await response.json();
 
         } catch (err: any) {
-            // Network error / CORS / server ไม่ตอบ
-            throw {
+            if (err.status && typeof err.status === "number") {
+                return Promise.reject(err);
+            }
+
+            return Promise.reject({
                 status: "NETWORK_ERROR",
                 message: err.message || "Network error or server did not respond"
-            };
+            });
         }
     }
 
