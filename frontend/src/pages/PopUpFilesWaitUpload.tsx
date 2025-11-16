@@ -1,8 +1,6 @@
 import { useShared } from '../contexts/SharedContext'
 import rest from '../rest/rest'
 
-import axios from 'axios'
-
 import '../style/components/PopUpFilesWaitUpload.css'
 
 import imgTest from '../assets/file.png'
@@ -25,9 +23,14 @@ export default function PopUpFilesWaitUpload() {
     const [fileProgressList, setFileProgressList] = useState<FileProgressType[]>([]);
 
     const handleCancelUploadAllFiles = () => {
-        if (confirm("Are you sure!")) {
+        if(fileListWaitUpload === null || fileProgressList.length === 0) {
             setFileListWaitUpload(null)
             setUploadFilesHistory([])
+        }else {
+            if (confirm("Are you sure!")) {
+                setFileListWaitUpload(null)
+                setUploadFilesHistory([])
+            }
         }
     }
 
@@ -75,21 +78,13 @@ export default function PopUpFilesWaitUpload() {
 
             formData.append("files", files[i]);
 
-            await axios.post("http://localhost:5000/upload", formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-                onUploadProgress: (progressEvent) => {
-                    const loaded = progressEvent.loaded ?? 0;
-                    const total = progressEvent.total ?? loaded ?? 1;
-                    const percent = Math.round((loaded * 100) / total);
-
-                    setFileProgressList(prev => {
-                        const newProgress = [...prev];
-                        newProgress[i].progress = percent;
-                        return newProgress;
-                    });
-                },
-            }).then((data) => {
-                // console.log(data)
+            await rest.uploadFiles(formData, (percent: number) => {
+                setFileProgressList(prev => {
+                    const newProgress = [...prev];
+                    newProgress[i].progress = percent;
+                    return newProgress;
+                });
+            }).then(() => {
                 const newFileUploadHistory: FileUploadHistoryModel = { name: files[i].name, size: files[i].size, status: 'completed' };
                 setUploadFilesHistory((prev: FileUploadHistoryModel[]) => [
                     ...prev,
@@ -103,7 +98,6 @@ export default function PopUpFilesWaitUpload() {
                     newFileUploadHistory
                 ]);
             });
-
         }
         setFileListWaitUpload(null)
     }

@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 export default class Rest {
     static apiHost = "http://localhost:5000/";
     static logTag = "API: "
@@ -71,23 +73,45 @@ export default class Rest {
         }).then((res) => res.json())
     }
 
-    static async uploadFiles(form: FormData) {
-        this.log("Upload Files")
-        const response = await fetch(this.apiHost + "upload", {
-            method: "POST",
-            body: form
-        });
+    static async uploadFiles(form: FormData, onProgress?: (percent: number) => void) {
+    this.log("Upload Files");
 
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw {
-                status: response.status,
-                message: errorData.error || 'Request failed'
-            };
+    try {
+        const response = await axios.post(
+            this.apiHost + "upload",
+            form,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                onUploadProgress: (e) => {
+                    if (!onProgress) return;
+
+                    const loaded = e.loaded ?? 0;
+                    const total = e.total ?? loaded;
+                    const percent = Math.round((loaded * 100) / total);
+
+                    onProgress(percent);
+                },
+            }
+        );
+
+        return response.data;
+
+    } catch (error: any) {
+        let message = "Request failed";
+
+        if (error.response && error.response.data) {
+            message = error.response.data.error || message;
         }
 
-        return await response.json()
+        throw {
+            status: error.response?.status || 500,
+            message,
+        };
     }
+}
+
 }
 
 
