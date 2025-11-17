@@ -15,12 +15,12 @@ import selectIcon from '../assets/select.png'
 export default function Header() {
 
     const { id } = useParams<string>()
-    const { myDevice, fileSelected, setFileSelected } = useShared();
+    const { myDevice, selectedMultiFile, setSelectedMultiFile } = useShared();
     const [loading, setLoading] = useState<boolean>(false);
 
 
     // const [deviceSelected, setDeviceSelected] = useState<DeviceModel>()
-    const { deviceSelected, setFileListWaitUpload, isSelectMode, setIsSelectMode, isLargeView, setIsLargeView } = useShared();
+    const { deviceSelected, setFileListWaitUpload, isSelectMultiFile, setIsSelectMultiFile, isLargeView, setIsLargeView } = useShared();
 
     const fileUploadRef = useRef<HTMLInputElement | null>(null)
 
@@ -35,16 +35,16 @@ export default function Header() {
     }
 
     const handleClieckSelectMode = () => {
-        setIsSelectMode?.(!isSelectMode)
+        setIsSelectMultiFile?.(!isSelectMultiFile)
     }
 
     const handleDownloadSelected = async () => {
-        if ((fileSelected === undefined || fileSelected.length === 0) && loading) return;
-        // console.log("Download selected files:", fileSelected);
+        if ((selectedMultiFile === undefined || selectedMultiFile.length === 0) && loading) return;
+        // console.log("Download selected files:", selectedMultiFile);
         setLoading(true);
 
-        if(fileSelected !== undefined) {
-            await rest.downloadFiles(fileSelected).then(async (response) => {
+        if(selectedMultiFile !== undefined) {
+            await rest.downloadFiles(selectedMultiFile).then(async (response) => {
                 const disposition = response.headers.get("Content-Disposition");
                 let fileName = "download.zip";
                 if (disposition) {
@@ -65,8 +65,8 @@ export default function Header() {
                 setLoading(false);
             }).finally(() => {
                 setLoading(false);
-                setFileSelected?.([]);
-                setIsSelectMode?.(false);
+                setSelectedMultiFile?.([]);
+                setIsSelectMultiFile?.(false);
             });
         }
     }
@@ -75,7 +75,7 @@ export default function Header() {
         <div className="content-header">
             <div className="computer-name">
                 {
-                    isSelectMode ? <h4>เลือก {fileSelected?.length}</h4> :
+                    isSelectMultiFile ? <h4>เลือก {selectedMultiFile?.length}</h4> :
                         <>
                             <h4>{deviceSelected?.id === "" ? myDevice.name : deviceSelected?.name}{id === undefined ? '(You)' : ''}</h4>
                             <img src={editIcon} alt="" className='content-header-icon' />
@@ -84,7 +84,7 @@ export default function Header() {
             </div>
             <div className='tools-group'>
                 {
-                    isSelectMode === true && (
+                    isSelectMultiFile === true && (
                         <>
                             <div className={`tool-icon ${loading ? ' loading' : ''}`} onClick={handleDownloadSelected}>
                                 <img src={downloadIcon} alt="" className='content-header-icon' />
@@ -97,7 +97,7 @@ export default function Header() {
                     )
                 }
                 {
-                    isSelectMode === false && (
+                    isSelectMultiFile === false && (
                         <>
                             <div className="tool-icon" onClick={handleClickUpload}>
                                 <input type="file" multiple name="" className='hide' ref={fileUploadRef} onChange={handleFileInputChange} />
@@ -117,11 +117,11 @@ export default function Header() {
                         </>
                     )
                 }
-                <div className={`tool-icon ${isSelectMode ? 'active' : ''}`} onClick={handleClieckSelectMode}>
+                <div className={`tool-icon ${isSelectMultiFile ? 'active' : ''}`} onClick={handleClieckSelectMode}>
                     <img src={selectIcon} alt="" className='content-header-icon' />
                 </div>
                 {
-                    // isSelectMode === false && (
+                    // isSelectMultiFile === false && (
                     //     <div className="tool-icon">
                     //         <img src={synsIcon} alt="" className='content-header-icon' />
                     //     </div>

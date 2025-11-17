@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useShared } from '../contexts/SharedContext'
+import rest from '../rest/rest'
 
 import File from '../Components/File'
 import '../style/components/file.css'
@@ -11,28 +12,29 @@ export default function FileList() {
   // const calledRef = useRef(false);
   const { id } = useParams<string>() || "";
   const { myDevice, deviceSelected,
-          fileListWaitUpload, isSelectMode,
-          setIsSelectMode, fileSelected, setFileSelected } = useShared();
+          fileListWaitUpload, isSelectMultiFile,
+          setIsSelectMultiFile, selectedMultiFile, setSelectedMultiFile } = useShared();
 
   const local_id = localStorage.getItem("device_id") || ""
   const selected_id = localStorage.getItem("device_selected_client_id") || ""
 
-  // const [fileSelected, setFileSelected] = useState<string[]>([]);
   const [files, setFiles] = useState<any[]>([]);
+  const [fileSelected, setFileSelected] = useState<string>("");
 
   useEffect(() => {
     // if (calledRef.current) return;
     // calledRef.current = true;
-    setFileSelected?.([]);
+    setSelectedMultiFile?.([]);
     loadFiles();
   }, [myDevice, deviceSelected, fileListWaitUpload]);
 
   useEffect(() => {
-    setFileSelected?.([]);
-  }, [isSelectMode]);
+    setSelectedMultiFile?.([]);
+    setFileSelected("");
+  }, [isSelectMultiFile]);
 
   useEffect(() => {
-    setIsSelectMode?.(false);
+    setIsSelectMultiFile?.(false);
   } , [id]);
 
   const loadFiles = async () => {
@@ -50,22 +52,25 @@ export default function FileList() {
 
   const handleFileSelect = (fileId: string) => {
     // console.log("File selected:", fileId);
-    if(isSelectMode === false) return;
-    if (fileSelected?.includes(fileId)) {
-      setFileSelected?.(fileSelected.filter(id => id !== fileId));
-    } else {
-      setFileSelected?.([...(fileSelected ?? []), fileId]);
+    if(isSelectMultiFile) {
+      if (selectedMultiFile?.includes(fileId)) {
+        setSelectedMultiFile?.(selectedMultiFile.filter(id => id !== fileId));
+      } else {
+        setSelectedMultiFile?.([...(selectedMultiFile ?? []), fileId]);
+      }
+    }else {
+      setFileSelected(fileId);
     }
   };
 
 
 
   return (
-    <div className="file-list">
+    <div className="file-list" onClick={() => {setFileSelected("")}}>
       {
         files && files.length !== 0 ? (
           files.map((file: any, i: number) => (
-            <File key={i} file={{ id: file.file_id, name: file.file_org_name, path: "http://localhost:5000/files/" + file.file_path, size: file.file_size, type: file.file_type }} isSelected={fileSelected?.includes(file.file_id)} onClick={() => handleFileSelect(file.file_id)}/>
+            <File key={i} file={{ id: file.file_id, name: file.file_org_name, path:  rest.fileUrl(file.file_path), size: file.file_size, type: file.file_type }} isSelected={selectedMultiFile?.includes(file.file_id) || fileSelected === file.file_id} onClick={() => handleFileSelect(file.file_id)}/>
           ))
         ) : (
           <p className='no-item'>No files found.</p>

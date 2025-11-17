@@ -54,7 +54,10 @@ export default function File({ file, isUpload = false, progressNow = 0, isSelect
 
     return (
         <div 
-            onClick={onClick}
+            onClick={(e) => {
+                e.stopPropagation();
+                onClick && onClick();
+            }}
             className={`file-item ${isSelected ? "file-selected" : ""}`} 
             key={file.id}
             title={`ชื่อ : ${file.name} \nขนาด : ${fileSize(file.size)}`}

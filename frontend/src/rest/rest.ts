@@ -122,6 +122,10 @@ export default class Rest {
         }
     }
 
+    static fileUrl(file: string): string {
+        return this.apiHost + "files/" + file;
+    }
+
     static async downloadFiles(fileIds: string[]) {
         this.log("Download Files")
 

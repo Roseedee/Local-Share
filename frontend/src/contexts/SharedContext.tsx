@@ -16,11 +16,11 @@ interface SharedContextType {
     deviceSelected: DeviceModel | null;
     setDeviceSelected: (value: DeviceModel | null) => void;
 
-    isSelectMode?: boolean;
-    setIsSelectMode?: (value: boolean) => void;
+    isSelectMultiFile?: boolean;
+    setIsSelectMultiFile?: (value: boolean) => void;
 
-    fileSelected?: string[];
-    setFileSelected?: (value: string[]) => void;
+    selectedMultiFile?: string[];
+    setSelectedMultiFile?: (value: string[]) => void;
 
     isLargeView?: boolean;
     setIsLargeView?: (value: boolean) => void;
@@ -42,8 +42,8 @@ export function SharedProvider({ children }: SharedProviderProds) {
     const [fileListWaitUpload, setFileListWaitUpload] = useState<FileList | null>()
     const [uploadFilesHistory, setUploadFilesHistory] = useState<FileUploadHistoryModel[]>([])
 
-    const [isSelectMode, setIsSelectMode] = useState<boolean>(false)
-    const [fileSelected, setFileSelected] = useState<string[]>([])
+    const [isSelectMultiFile, setIsSelectMultiFile] = useState<boolean>(false)
+    const [selectedMultiFile, setSelectedMultiFile] = useState<string[]>([])
 
     const [isLargeView, setIsLargeView] = useState<boolean>(true)
 
@@ -60,8 +60,8 @@ export function SharedProvider({ children }: SharedProviderProds) {
             deviceSelected, setDeviceSelected,
             fileListWaitUpload, setFileListWaitUpload,
             uploadFilesHistory, setUploadFilesHistory,
-            isSelectMode, setIsSelectMode,
-            fileSelected, setFileSelected,
+            isSelectMultiFile, setIsSelectMultiFile,
+            selectedMultiFile, setSelectedMultiFile,
             isLargeView, setIsLargeView
 
         }}>
