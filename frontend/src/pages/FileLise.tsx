@@ -4,7 +4,6 @@ import { useShared } from '../contexts/SharedContext'
 import rest from '../rest/rest'
 
 import File from '../Components/File'
-import '../style/components/file.css'
 
 // import imgTest from './../assets/test1.jpg'
 
