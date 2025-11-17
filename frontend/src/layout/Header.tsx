@@ -2,8 +2,9 @@ import { useState, useRef, ChangeEvent } from 'react'
 import { useShared } from '../contexts/SharedContext'
 import { useParams } from 'react-router-dom'
 
+import rest from '../rest/rest'
+
 import editIcon from '../assets/edit.png'
-import synsIcon from '../assets/sync.png'
 import fileUploadIcon from '../assets/up-loading.png'
 import downloadIcon from '../assets/downloads.png'
 import binIcon from '../assets/bin.png'
@@ -39,43 +40,34 @@ export default function Header() {
 
     const handleDownloadSelected = async () => {
         if ((fileSelected === undefined || fileSelected.length === 0) && loading) return;
-        console.log("Download selected files:", fileSelected);
+        // console.log("Download selected files:", fileSelected);
         setLoading(true);
-        try {
-            const response = await fetch("http://localhost:5000/download", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ files: fileSelected })
+
+        if(fileSelected !== undefined) {
+            await rest.downloadFiles(fileSelected).then(async (response) => {
+                const disposition = response.headers.get("Content-Disposition");
+                let fileName = "download.zip";
+                if (disposition) {
+                    const match = disposition.match(/filename="(.+)"/);
+                    if (match && match[1]) fileName = match[1];
+                }
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+            }).catch((err) => {
+                console.error(err);
+                setLoading(false);
+            }).finally(() => {
+                setLoading(false);
+                setFileSelected?.([]);
+                setIsSelectMode?.(false);
             });
-
-            if (!response.ok) throw new Error("Download failed");
-
-            const disposition = response.headers.get("Content-Disposition");
-            let fileName = "download.zip";
-
-            if (disposition) {
-                const match = disposition.match(/filename="(.+)"/);
-                if (match && match[1]) fileName = match[1];
-            }
-
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = fileName;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            window.URL.revokeObjectURL(url);
-
-        } catch (err) {
-            console.error(err);
-            setLoading(false);
-        } finally {
-            setLoading(false);
-            setFileSelected?.([]);
-            setIsSelectMode?.(false);
         }
     }
 

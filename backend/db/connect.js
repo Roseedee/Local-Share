@@ -100,7 +100,7 @@ const loadFiles = async (client_id) => {
 
 const getFileByIds = async (files) => {
     connectToDatabase();
-    const query = `SELECT file_new_name FROM files WHERE file_id IN (${files.map(() => '?').join(',')})`;
+    const query = `SELECT file_org_name, file_new_name FROM files WHERE file_id IN (${files.map(() => '?').join(',')})`;
     return new Promise((resolve, reject) => {
         db.execute(query, files, (err, results) => {
             if (err) {  

@@ -122,6 +122,26 @@ export default class Rest {
         }
     }
 
+    static async downloadFiles(fileIds: string[]) {
+        this.log("Download Files")
+
+        try {
+            const response = await fetch(this.apiHost + "download", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ files: fileIds })
+            });
+
+            if (!response.ok) throw new Error("Download failed");
+
+            return response;
+
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
+    }
+
 }
 
 

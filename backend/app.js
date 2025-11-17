@@ -220,7 +220,7 @@ app.post("/download", async (req, res) => {
 
         for (const fileRecord of result) {
             const filePath = path.join(__dirname, "uploads", fileRecord.file_new_name);
-            if (fs.existsSync(filePath)) zip.addLocalFile(filePath);
+            if (fs.existsSync(filePath)) zip.addLocalFile(filePath, "", fileRecord.file_org_name);
         }
 
         const now = new Date();
