@@ -133,6 +133,17 @@
   height: 16px;
 }
 
+.computer-name-input {
+  border: none;
+  border-radius: 5px;
+  background-color: #fcd5ff;
+  border: 1px solid #da6ada;
+  padding: 10px 10px;
+  font-size: 1.1em;
+  outline: none;
+  transition: 0.2s;
+}
+
 .content-body {
   min-height: calc(100vh - 120px);
   display: flex;

@@ -146,6 +146,27 @@ export default class Rest {
         }
     }
 
+    static async renameComputer(userId: string, newName: string) {
+        this.log("Rename Computer")
+
+        if(newName.length > 30) throw new Error("Name is too long");
+        
+        try {
+            const response = await fetch(this.apiHost + "edit/computer/name", {
+                method: "POST",
+                headers: { "Content-Type": "application/json"},
+                body: JSON.stringify({userId, newName})
+            });
+
+            if(!response.ok) throw new Error("Can't rename you computer");
+
+            return response;
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
+    }
+
 }
 
 

@@ -112,9 +112,27 @@ const getFileByIds = async (files) => {
     });
 }
 
+const renameComputer = async (userId, newName) => {
+    connectToDatabase();
+    
+    const query = `UPDATE clients SET client_name = ? WHERE client_id = ?`;
+
+    return new Promise((resolve, reject) => {
+        db.execute(query, [newName, userId], (err, result) => {
+            if (err) {
+                console.error('Error renaming user:', err);
+                return reject(err);
+            }
+            resolve(result);
+        });
+    });
+};
+
+
 module.exports = {
     db,
     auth, insertClient, loadClients, 
-    insertFiles, loadFiles, getFileByIds
+    insertFiles, loadFiles, getFileByIds,
+    renameComputer
 };
 

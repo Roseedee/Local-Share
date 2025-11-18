@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const { v4: uuidv4 } = require('uuid');
-const { auth, insertClient, loadClients, insertFiles, loadFiles, getFileByIds } = require('./db/connect');
+const { auth, insertClient, loadClients, insertFiles, loadFiles, getFileByIds, renameComputer } = require('./db/connect');
 const path = require('path')
 const fs = require('fs')
 const multer = require('multer');
@@ -241,6 +241,23 @@ app.post("/download", async (req, res) => {
         res.status(500).send("Failed to create zip");
     }
 });
+
+
+app.post("/edit/computer/name", async (req, res) => {
+    const userId = req.body.userId || "";
+    const newName = req.body.newName || "";
+    // console.log(userId, " ", newName)
+    if (userId === "" || newName === "") {
+        return res.status(400).json({ message: "Data is not define" });
+    }
+    try {
+        const result = renameComputer(userId, newName)
+        res.json({ result: result });
+    } catch (err) {
+        console.error("❌ Error:", err);
+        res.status(500).send("Failed to rename computer");
+    }
+})
 
 
 app.listen(port, () => {
