@@ -122,6 +122,24 @@ export default class Rest {
         }
     }
 
+    static async getFiles(userId: string) {
+        this.log("Get File")
+
+        try {
+            const response = await fetch(this.apiHost + "files", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({userId})
+            })
+            if (!response.ok) throw new Error("Failed to fetch files");
+
+            return response.json();
+        }catch (err) {
+            console.error(err);
+            throw err;
+        }
+    }
+
     static fileUrl(file: string): string {
         return this.apiHost + "files/" + file;
     }
@@ -149,16 +167,16 @@ export default class Rest {
     static async renameComputer(userId: string, newName: string) {
         this.log("Rename Computer")
 
-        if(newName.length > 30) throw new Error("Name is too long");
-        
+        if (newName.length > 30) throw new Error("Name is too long");
+
         try {
             const response = await fetch(this.apiHost + "edit/computer/name", {
                 method: "POST",
-                headers: { "Content-Type": "application/json"},
-                body: JSON.stringify({userId, newName})
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userId, newName })
             });
 
-            if(!response.ok) throw new Error("Can't rename you computer");
+            if (!response.ok) throw new Error("Can't rename you computer");
 
             return response;
         } catch (err) {

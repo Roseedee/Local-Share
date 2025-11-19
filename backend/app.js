@@ -182,12 +182,12 @@ app.get('/files/:filename', (req, res) => {
 });
 
 app.post('/files', async (req, res) => {
-    const { token } = req.body;
+    const { userId } = req.body;
 
-    console.log("Load Files for : " + token)
+    console.log("Load Files for : " + userId)
 
     try {
-        const result = await loadFiles(token);
+        const result = await loadFiles(userId);
         const files = result.map(file => ({
             file_id: file.file_id,
             file_path: file.file_new_name,

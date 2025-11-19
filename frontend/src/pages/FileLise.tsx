@@ -37,16 +37,11 @@ export default function FileList() {
   } , [id]);
 
   const loadFiles = async () => {
-    const response = await fetch('http://localhost:5000/files', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: id === undefined ? local_id : selected_id })
-    });
-
-    const data = await response.json();
-    // console.log("Files:", data);
-    setFiles(data.results);
-    // console.log("Files State:", files);
+    const userId = id === undefined ? local_id : selected_id
+    await rest.getFiles(userId).then((data) => {
+      console.log("Files:", data);
+      setFiles(data.results)
+    })
   };
 
   const handleFileSelect = (fileId: string) => {

@@ -19,6 +19,9 @@ interface SharedContextType {
     isSelectMultiFile?: boolean;
     setIsSelectMultiFile?: (value: boolean) => void;
 
+    isSelectFile?: boolean;
+    setIsSelectFile: (value: boolean) => void;
+
     selectedMultiFile?: string[];
     setSelectedMultiFile?: (value: string[]) => void;
 
@@ -43,6 +46,7 @@ export function SharedProvider({ children }: SharedProviderProds) {
     const [uploadFilesHistory, setUploadFilesHistory] = useState<FileUploadHistoryModel[]>([])
 
     const [isSelectMultiFile, setIsSelectMultiFile] = useState<boolean>(false)
+    const [isSelectFile, setIsSelectFile] = useState<boolean>(false)
     const [selectedMultiFile, setSelectedMultiFile] = useState<string[]>([])
 
     const [isLargeView, setIsLargeView] = useState<boolean>(true)
@@ -61,6 +65,7 @@ export function SharedProvider({ children }: SharedProviderProds) {
             fileListWaitUpload, setFileListWaitUpload,
             uploadFilesHistory, setUploadFilesHistory,
             isSelectMultiFile, setIsSelectMultiFile,
+            isSelectFile, setIsSelectFile,
             selectedMultiFile, setSelectedMultiFile,
             isLargeView, setIsLargeView
 
