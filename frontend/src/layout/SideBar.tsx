@@ -103,7 +103,8 @@ export default function SideBar({ local_uuid }: Props) {
                 }
             </div>
             <div className="sidebar-bottom">
-                <button onClick={handleDeleteUUID}>Remove UUID</button>
+                {/* <button onClick={handleDeleteUUID}>Remove UUID</button> */}
+                <div className="footer">Local-Share&nbsp;<span className="tag">v1.0.100</span>&nbsp;@2025</div>
             </div>
         </div>
     )

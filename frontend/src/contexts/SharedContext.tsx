@@ -4,8 +4,8 @@ import DeviceModel from "../model/DeviceModel";
 import FileUploadHistoryModel from "../model/FileUploadHistoryModel";
 
 interface SharedContextType {
-    fileListWaitUpload: FileList | null | undefined;
-    setFileListWaitUpload: (value: FileList | null | undefined) => void;
+    fileListWaitUpload: File[] | null | undefined;
+    setFileListWaitUpload: (value: File[] | null | undefined) => void;
 
     uploadFilesHistory: FileUploadHistoryModel[];
     setUploadFilesHistory: React.Dispatch<React.SetStateAction<FileUploadHistoryModel[]>>;
@@ -20,10 +20,13 @@ interface SharedContextType {
     setIsSelectMultiFile?: (value: boolean) => void;
 
     isSelectFile?: boolean;
-    setIsSelectFile: (value: boolean) => void;
+    setIsSelectFile?: (value: boolean) => void;
 
     selectedMultiFile?: string[];
     setSelectedMultiFile?: (value: string[]) => void;
+
+    selectedFile?: string;
+    setSelectedFile?: (value: string) => void;
 
     isLargeView?: boolean;
     setIsLargeView?: (value: boolean) => void;
@@ -42,12 +45,13 @@ export function SharedProvider({ children }: SharedProviderProds) {
     const [myDevice, setMyDevice] = useState<DeviceModel>({ client_id: "", id: "", name: "" })
     const [deviceSelected, setDeviceSelected] = useState<DeviceModel | null>({ client_id: "", id: "", name: "" })
 
-    const [fileListWaitUpload, setFileListWaitUpload] = useState<FileList | null>()
+    const [fileListWaitUpload, setFileListWaitUpload] = useState<File[] | null>()
     const [uploadFilesHistory, setUploadFilesHistory] = useState<FileUploadHistoryModel[]>([])
 
     const [isSelectMultiFile, setIsSelectMultiFile] = useState<boolean>(false)
     const [isSelectFile, setIsSelectFile] = useState<boolean>(false)
     const [selectedMultiFile, setSelectedMultiFile] = useState<string[]>([])
+    const [selectedFile, setSelectedFile] = useState<string>()
 
     const [isLargeView, setIsLargeView] = useState<boolean>(true)
 
@@ -55,7 +59,12 @@ export function SharedProvider({ children }: SharedProviderProds) {
 
         useEffect(() => {
             console.log("File Wait Upload : ", fileListWaitUpload)
-        }, [fileListWaitUpload])
+        }, [fileListWaitUpload]);
+
+        useEffect(() => {
+            console.log("Selected File : ", isSelectFile)
+            console.log("Selected Muti File: ", isSelectMultiFile)
+        }, [isSelectFile, isSelectMultiFile]);
     }
 
     return (
@@ -67,6 +76,7 @@ export function SharedProvider({ children }: SharedProviderProds) {
             isSelectMultiFile, setIsSelectMultiFile,
             isSelectFile, setIsSelectFile,
             selectedMultiFile, setSelectedMultiFile,
+            selectedFile, setSelectedFile,
             isLargeView, setIsLargeView
 
         }}>

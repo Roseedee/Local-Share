@@ -24,11 +24,17 @@ export default function Header() {
 
 
     // const [deviceSelected, setDeviceSelected] = useState<DeviceModel>()
-    const { deviceSelected, setFileListWaitUpload, isSelectMultiFile, setIsSelectMultiFile, isLargeView, setIsLargeView } = useShared();
+    const {
+        deviceSelected, setFileListWaitUpload,
+        isSelectMultiFile, setIsSelectMultiFile,
+        isSelectFile,
+        isLargeView, setIsLargeView
+    } = useShared();
 
     const fileUploadRef = useRef<HTMLInputElement | null>(null)
 
     useEffect(() => {
+        setFileListWaitUpload(null)
         setIsEditName(false);
         if (id === undefined) {
             setIsMe(true);
@@ -49,9 +55,15 @@ export default function Header() {
     };
 
     const handleFileInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            setFileListWaitUpload(e.target.files)
-        }
+        
+
+        const files = e.target.files ? Array.from(e.target.files) : [];
+
+        console.log("selected files:", files);
+
+        setFileListWaitUpload(files);
+
+        e.target.value = "";
     }
 
     const handleClieckSelectMode = () => {
@@ -105,35 +117,42 @@ export default function Header() {
 
     return (
         <div className="content-header">
-            <div className="computer-name">
-                {
-                    isSelectMultiFile ?
-                        <h4>เลือก {selectedMultiFile?.length}</h4> :
-                        <>
-                            {
-                                !isEditName && <h4>{deviceSelected?.id === "" ? myDevice.name : deviceSelected?.name}{isMe ? '(You)' : ''}</h4>
-                            }
-                            {
-                                isMe && !isEditName && <img src={editIcon} alt="" className='content-header-icon' onClick={() => { setIsEditName(true) }} />
-                            }
-                            {
-                                isEditName && (
-                                    <>
-                                        <input ref={inputNameRef} className='computer-name-input' type="text" name="" id="" value={newName} onChange={(e) => { setNewName(e.target.value) }} onBlur={handleRenameComputer} onKeyDown={(e) => {
-                                            if (e.key === 'Enter') {
-                                                handleRenameComputer();
-                                                inputNameRef.current?.blur();
-                                            }
-                                        }} />
-                                    </>
-                                )
-                            }
-                        </>
-                }
+            <div className="header-title">
+                <div className="computer-name">
+                    {
+                        isSelectMultiFile ?
+                            <h4>เลือก {selectedMultiFile?.length}</h4> :
+                            <>
+                                {
+                                    !isEditName && <h4>{deviceSelected?.id === "" ? myDevice.name : deviceSelected?.name}{isMe ? '(You)' : ''}</h4>
+                                }
+                                {
+                                    isMe && !isEditName && <img src={editIcon} alt="" className='content-header-icon' onClick={() => { setIsEditName(true) }} />
+                                }
+                                {
+                                    isEditName && (
+                                        <>
+                                            <input ref={inputNameRef} className='computer-name-input' type="text" name="" id="" value={newName} onChange={(e) => { setNewName(e.target.value) }} onBlur={handleRenameComputer} onKeyDown={(e) => {
+                                                if (e.key === 'Enter') {
+                                                    handleRenameComputer();
+                                                    inputNameRef.current?.blur();
+                                                }
+                                            }} />
+                                        </>
+                                    )
+                                }
+                            </>
+                    }
+                </div>
+                <div className="tool-icon-upload" onClick={handleClickUpload}>
+                    <input type="file" multiple name="" className='hide' ref={fileUploadRef} onChange={handleFileInputChange} />
+                    <img src={fileUploadIcon} alt="" className='content-header-icon' />
+                    <span>อัพโหลด</span>
+                </div>
             </div>
             <div className='tools-group'>
                 {
-                    isSelectMultiFile === true && (
+                    isSelectMultiFile || isSelectFile ? (
                         <>
                             <div className={`tool-icon ${loading ? ' loading' : ''}`} onClick={handleDownloadSelected}>
                                 <img src={downloadIcon} alt="" className='content-header-icon' />
@@ -143,15 +162,11 @@ export default function Header() {
                             </div>
 
                         </>
-                    )
+                    ) : (<></>)
                 }
                 {
-                    isSelectMultiFile === false && (
+                    !isSelectMultiFile && (
                         <>
-                            <div className="tool-icon" onClick={handleClickUpload}>
-                                <input type="file" multiple name="" className='hide' ref={fileUploadRef} onChange={handleFileInputChange} />
-                                <img src={fileUploadIcon} alt="" className='content-header-icon' />
-                            </div>
                             {
                                 isLargeView ? (
                                     <div className="tool-icon" onClick={() => setIsLargeView?.(false)}>

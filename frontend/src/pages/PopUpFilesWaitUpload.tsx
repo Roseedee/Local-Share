@@ -23,10 +23,10 @@ export default function PopUpFilesWaitUpload() {
     const [fileProgressList, setFileProgressList] = useState<FileProgressType[]>([]);
 
     const handleCancelUploadAllFiles = () => {
-        if(fileListWaitUpload === null || fileProgressList.length === 0) {
+        if (fileListWaitUpload === null || fileProgressList.length === 0) {
             setFileListWaitUpload(null)
             setUploadFilesHistory([])
-        }else {
+        } else {
             if (confirm("Are you sure!")) {
                 setFileListWaitUpload(null)
                 setUploadFilesHistory([])
@@ -37,22 +37,18 @@ export default function PopUpFilesWaitUpload() {
     const handleCancelSomeFile = (removeIndex: number) => {
         if (!fileListWaitUpload) return;
 
-        const filesArray = Array.from(fileListWaitUpload);
-
-        const newFilesArray = filesArray.filter((_, i) => i !== removeIndex);
+        const newFilesArray = fileListWaitUpload.filter((_, i) => i !== removeIndex);
 
         if (newFilesArray.length === 0) {
-            setFileListWaitUpload(null)
+            setFileListWaitUpload(null);
             return;
         }
 
-        const dataTransfer = new DataTransfer();
-        newFilesArray.forEach(file => dataTransfer.items.add(file))
-
-        setFileListWaitUpload(dataTransfer.files)
+        setFileListWaitUpload(newFilesArray);
     }
 
     useEffect(() => {
+        console.log(fileListWaitUpload)
         const files = Array.from(fileListWaitUpload || []);
         setFileProgressList(files.map((file) => { return { name: file.name, size: file.size, progress: 0 } }));
         // if(fileProgressList.length > 0) {
@@ -108,13 +104,13 @@ export default function PopUpFilesWaitUpload() {
                 <div className="header-list-files">
                     {/* <h5>{fileListWaitUpload === null || fileListWaitUpload === undefined ? 0 : fileListWaitUpload?.length} รายการ</h5> */}
                     <p className='upload-status success'>สำเร็จ {uploadFilesHistory.filter(i => i.status === 'completed').length}</p>
-                <p className='upload-status failed'>ล้มเหลว {uploadFilesHistory.filter(i => i.status === 'failed').length}</p>
+                    <p className='upload-status failed'>ล้มเหลว {uploadFilesHistory.filter(i => i.status === 'failed').length}</p>
                 </div>
                 <div className="list-files">
                     {
                         fileProgressList && Array.from(fileProgressList).map((file, i) => (
                             <div className='item-file' key={i}>
-                                <img src={imgTest} alt="" />
+                                <img src={imgTest} alt="" className='img-file' />
                                 <div className='file-details'>
                                     <h5>{file.name}</h5>
                                     <span className='tag'>{Math.round(file.size / 1024)} KB</span>
@@ -129,7 +125,7 @@ export default function PopUpFilesWaitUpload() {
                     {
                         uploadFilesHistory && Array.from(uploadFilesHistory).map((file, i) => (
                             <div className='item-file' key={i}>
-                                <img src={imgTest} alt="" />
+                                <img src={imgTest} alt="" className='img-file' />
                                 <div className='file-details'>
                                     <h5>{file.name}</h5>
                                     <span className='tag'>{Math.round(file.size / 1024)} KB</span>
@@ -151,7 +147,7 @@ export default function PopUpFilesWaitUpload() {
                             <div className="btn-list-files btn-confirm-upload" onClick={handleConfirmUploadFiles}><img src={iconUpload} alt="" /><span>Confirm</span></div>
                         )
                     }
-                    <div className="btn-list-files btn-cancel-all" onClick={handleCancelUploadAllFiles}><img src={iconCloseWhite} alt="" />{fileProgressList.length === 0 && uploadFilesHistory.length !== 0 ? 'ล้างประวัติ': ''}</div>
+                    <div className="btn-list-files btn-cancel-all" onClick={handleCancelUploadAllFiles}><img src={iconCloseWhite} alt="" />{fileProgressList.length === 0 && uploadFilesHistory.length !== 0 ? 'ล้างประวัติ' : ''}</div>
                 </div>
             </div>
         ) : (<></>)
