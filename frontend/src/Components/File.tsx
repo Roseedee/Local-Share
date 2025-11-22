@@ -16,9 +16,10 @@ interface Props {
     progressNow?: number
     isSelected?: boolean
     onClick?: () => void
+    onDoubleClick?: () => void
 }
 
-export default function File({ file, isUpload = false, progressNow = 0, isSelected = false, onClick }: Props) {
+export default function File({ file, isUpload = false, progressNow = 0, isSelected = false, onClick, onDoubleClick }: Props) {
     const [progress, setProgress] = useState<number>(0)
 
     useEffect(() => {
@@ -57,6 +58,10 @@ export default function File({ file, isUpload = false, progressNow = 0, isSelect
             onClick={(e) => {
                 e.stopPropagation();
                 onClick && onClick();
+            }}
+
+            onDoubleClick={() => {
+                onDoubleClick && onDoubleClick()
             }}
             className={`file-item ${isSelected ? "file-selected" : ""}`} 
             key={file.id}
