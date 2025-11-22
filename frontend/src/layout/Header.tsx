@@ -11,6 +11,9 @@ import binIcon from '../assets/bin.png'
 import largeViewIcon from '../assets/large-view.png'
 import listViewIcon from '../assets/list-view.png'
 import selectIcon from '../assets/select.png'
+import renameIcon from '../assets/rename.png'
+import shareIcon from '../assets/share.png'
+import closeIcon from '../assets/close.png'
 
 export default function Header() {
 
@@ -55,7 +58,7 @@ export default function Header() {
     };
 
     const handleFileInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        
+
 
         const files = e.target.files ? Array.from(e.target.files) : [];
 
@@ -117,7 +120,7 @@ export default function Header() {
 
     return (
         <div className="content-header">
-            <div className="header-title">
+            <div className="header-child-content header-title">
                 <div className="computer-name">
                     {
                         isSelectMultiFile ?
@@ -150,7 +153,11 @@ export default function Header() {
                     <span>อัพโหลด</span>
                 </div>
             </div>
-            <div className='tools-group'>
+            <div className="header-child-content search-container">
+                <input type="text" className='search-input' name="" id="" placeholder='ค้นหา' />
+                <img src={closeIcon} alt="" />
+            </div>
+            <div className='header-child-content tools-group'>
                 {
                     isSelectMultiFile || isSelectFile ? (
                         <>
@@ -158,9 +165,20 @@ export default function Header() {
                                 <img src={downloadIcon} alt="" className='content-header-icon' />
                             </div>
                             <div className="tool-icon">
+                                <img src={shareIcon} alt="" className='content-header-icon' />
+                            </div>
+                            <div className="tool-icon">
                                 <img src={binIcon} alt="" className='content-header-icon' />
                             </div>
-
+                        </>
+                    ) : (<></>)
+                }
+                {
+                    isSelectFile ? (
+                        <>
+                            <div className="tool-icon">
+                                <img src={renameIcon} alt="" className='content-header-icon' />
+                            </div>
                         </>
                     ) : (<></>)
                 }
