@@ -18,7 +18,7 @@ import closeIcon from '../assets/close.png'
 export default function Header() {
 
     const { id } = useParams<string>()
-    const { myDevice, setMyDevice, selectedMultiFile, setSelectedMultiFile } = useShared();
+    const { myDevice, setMyDevice } = useShared();
     const [loading, setLoading] = useState<boolean>(false);
     const [isMe, setIsMe] = useState<boolean>(false);
     const [isEditName, setIsEditName] = useState<boolean>(false);
@@ -29,8 +29,10 @@ export default function Header() {
     // const [deviceSelected, setDeviceSelected] = useState<DeviceModel>()
     const {
         deviceSelected, setFileListWaitUpload,
+        selectedMultiFile, setSelectedMultiFile,
         isSelectMultiFile, setIsSelectMultiFile,
         isSelectFile,
+        selectedFile,
         isLargeView, setIsLargeView
     } = useShared();
 
@@ -86,37 +88,55 @@ export default function Header() {
     }
 
     const handleDownloadSelected = async () => {
-        if ((selectedMultiFile === undefined || selectedMultiFile.length === 0) && loading) return;
-        // console.log("Download selected files:", selectedMultiFile);
+        if (loading) return;
+
+        console.log("multi file selected:", selectedMultiFile,
+            "\nsingle file selected:", selectedFile);
+
+        const selected =
+            selectedMultiFile && selectedMultiFile.length > 0
+                ? selectedMultiFile
+                : selectedFile
+                    ? [selectedFile]
+                    : [];
+
+        if (selected.length === 0) {
+            console.error("No file selected");
+            return;
+        }
+
         setLoading(true);
 
-        if (selectedMultiFile !== undefined) {
-            await rest.downloadFiles(selectedMultiFile).then(async (response) => {
-                const disposition = response.headers.get("Content-Disposition");
-                let fileName = "download.zip";
-                if (disposition) {
-                    const match = disposition.match(/filename="(.+)"/);
-                    if (match && match[1]) fileName = match[1];
-                }
-                const blob = await response.blob();
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = fileName;
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
-                window.URL.revokeObjectURL(url);
-            }).catch((err) => {
-                console.error(err);
-                setLoading(false);
-            }).finally(() => {
-                setLoading(false);
-                setSelectedMultiFile?.([]);
-                setIsSelectMultiFile?.(false);
-            });
+
+        try {
+            const response = await rest.downloadFiles(selected);
+
+            const disposition = response.headers.get("Content-Disposition");
+            let fileName = "download.zip";
+            if (disposition) {
+                const match = disposition.match(/filename="(.+)"/);
+                if (match?.[1]) fileName = match[1];
+            }
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+
+        } catch (err) {
+            console.error(err);
+
+        } finally {
+            setLoading(false);
+            setSelectedMultiFile?.([]);
+            setIsSelectMultiFile?.(false);
         }
-    }
+    };
 
     return (
         <div className="content-header">

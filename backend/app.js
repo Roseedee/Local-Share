@@ -218,6 +218,22 @@ app.post("/download", async (req, res) => {
     try {
         const result = await getFileByIds(files);
 
+        if (files.length === 1) {
+            const fileRecord = result[0];
+            const filePath = path.join(__dirname, "uploads", fileRecord.file_new_name);
+
+            if (!fs.existsSync(filePath)) {
+                return res.status(404).send("File not found");
+            }
+
+            const originalName = fileRecord.file_org_name;
+
+            res.setHeader("Content-Disposition", `attachment; filename="${originalName}"`);
+            res.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
+
+            return res.download(filePath, originalName);
+        }
+        
         for (const fileRecord of result) {
             const filePath = path.join(__dirname, "uploads", fileRecord.file_new_name);
             if (fs.existsSync(filePath)) zip.addLocalFile(filePath, "", fileRecord.file_org_name);

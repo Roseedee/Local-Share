@@ -106,7 +106,7 @@
   background-color: white;
   border: none;
   outline: none;
-  border: 2px solid #f8c1fd;
+  /* border: 2px solid #f8c1fd; */
 }
 
 .search-container img {
@@ -115,8 +115,8 @@
   right: 9px;
   top: 50%;
   transform: translate(0, -50%);
-  width: 14px;
-  padding: 4px;
+  width: 12px;
+  padding: 6px;
   border-radius: 4px;
 }
 

@@ -147,6 +147,10 @@ export default class Rest {
     static async downloadFiles(fileIds: string[]) {
         this.log("Download Files")
 
+        console.log(fileIds)
+
+        if (fileIds.length === 0) throw new Error("ไม่สามารถดาวน์ไฟล์นี้ได้ กรุณาลองใหม่อีกครั้ง")
+
         try {
             const response = await fetch(this.apiHost + "download", {
                 method: "POST",

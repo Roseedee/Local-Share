@@ -22,8 +22,8 @@ interface SharedContextType {
     isSelectFile?: boolean;
     setIsSelectFile?: (value: boolean) => void;
 
-    selectedMultiFile?: string[];
-    setSelectedMultiFile?: (value: string[]) => void;
+    selectedMultiFile: string[];
+    setSelectedMultiFile: (value: string[]) => void;
 
     selectedFile?: string;
     setSelectedFile?: (value: string) => void;
@@ -51,7 +51,7 @@ export function SharedProvider({ children }: SharedProviderProds) {
     const [isSelectMultiFile, setIsSelectMultiFile] = useState<boolean>(false)
     const [isSelectFile, setIsSelectFile] = useState<boolean>(false)
     const [selectedMultiFile, setSelectedMultiFile] = useState<string[]>([])
-    const [selectedFile, setSelectedFile] = useState<string>()
+    const [selectedFile, setSelectedFile] = useState<string>("")
 
     const [isLargeView, setIsLargeView] = useState<boolean>(true)
 

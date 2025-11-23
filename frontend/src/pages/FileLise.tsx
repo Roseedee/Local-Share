@@ -65,11 +65,12 @@ export default function FileList() {
   };
 
   const handleFileDoubleClick = () => {
-    console.log("onDoubleClick")
+    // console.log("onDoubleClick")
     setOverlayFileFullView(true)
   }
 
   const handleFileFullViewClick = () => {
+    console.log("onCloseFullView")
     setOverlayFileFullView(false)
   }
 
