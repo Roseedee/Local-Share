@@ -1,14 +1,10 @@
 import { useState, useEffect } from 'react'
 import fileSize from '../util/fileSizeCalc'
+import FileCategory from '../util/fileCategory'
 
 import '../style/components/file.css'
 
 import FileModel from '../model/FileModel'
-
-import videoIcon from '../assets/video.png'
-import soundIcon from '../assets/sound.png'
-import documentIcon from '../assets/document.png'
-import otherIcon from '../assets/other.png'
 
 interface Props {
     file: FileModel
@@ -21,37 +17,11 @@ interface Props {
 
 export default function File({ file, isUpload = false, progressNow = 0, isSelected = false, onClick, onDoubleClick }: Props) {
     const [progress, setProgress] = useState<number>(0)
+    const fileCategory = new FileCategory(file.type);
 
     useEffect(() => {
         setProgress(progressNow)
     }, [])
-
-    function fileCategory(fileType: string): string {
-        if (!fileType) return otherIcon;
-
-        if (fileType.startsWith("image/")) return "image";
-        if (fileType.startsWith("video/")) return videoIcon;
-        if (fileType.startsWith("audio/")) return soundIcon;
-
-        const documentTypes = [
-            "application/pdf",
-            "application/msword",
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            "application/vnd.ms-excel",
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            "application/vnd.ms-powerpoint",
-            "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-            "text/plain",
-            "text/html",
-            "application/json",
-            "text/csv"
-        ];
-
-        if (documentTypes.includes(fileType)) return documentIcon;
-
-        return otherIcon;
-    }
-
 
     return (
         <div 
@@ -79,11 +49,10 @@ export default function File({ file, isUpload = false, progressNow = 0, isSelect
             }
             <div className="file-icon-container">
                 {
-                    fileCategory(file.type) === "image" ? (
+                    fileCategory.isImage() ? (
                         <img className='image-icon' src={file.path} alt={file.name} />
-
                     ) : (
-                        <img className='other-file-icon' src={fileCategory(file.type)} alt="Can't preview this file" />
+                        <img className='other-file-icon' src={fileCategory.getIcon()} alt="Can't preview this file" />
                     )
 
                 }

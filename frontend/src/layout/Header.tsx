@@ -90,8 +90,8 @@ export default function Header() {
     const handleDownloadSelected = async () => {
         if (loading) return;
 
-        console.log("multi file selected:", selectedMultiFile,
-            "\nsingle file selected:", selectedFile);
+        // console.log("multi file selected:", selectedMultiFile,
+        //     "\nsingle file selected:", selectedFile);
 
         const selected =
             selectedMultiFile && selectedMultiFile.length > 0
@@ -102,6 +102,7 @@ export default function Header() {
 
         if (selected.length === 0) {
             console.error("No file selected");
+            alert("กรุณาเลือกไฟล์ที่ต้องการดาวน์โหลด");
             return;
         }
 

@@ -23,6 +23,7 @@ p.no-item {
 }
 
 .file-item {
+  user-select: none;
   /* flex-grow: 1; */
   position: relative;
   width: 120px;
@@ -65,6 +66,7 @@ p.no-item {
 }
 
 .file-item h6 {
+  user-select: text;
   max-width: 100%;
   white-space: nowrap;
   overflow-x: hidden;

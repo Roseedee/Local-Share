@@ -12,3 +12,4 @@ export default function fileSize(sizeInBytes: number): string {
         return `${sizeInGB} GB`;
     }
 }
+
