@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 import '../style/layout.css'
+import '../style/header.css'
 
 import SideBar from "./SideBar"
 import Header from "./Header"

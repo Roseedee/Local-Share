@@ -14,6 +14,7 @@ import selectIcon from '../assets/select.png'
 import renameIcon from '../assets/rename.png'
 import shareIcon from '../assets/share.png'
 import closeIcon from '../assets/close.png'
+import noticeIcon from '../assets/attention.png'
 
 export default function Header() {
 
@@ -175,8 +176,13 @@ export default function Header() {
                 </div>
             </div>
             <div className="header-child-content search-container">
-                <input type="text" className='search-input' name="" id="" placeholder='ค้นหา' />
-                <img src={closeIcon} alt="" />
+                <div className="input-search-container">
+                    <input type="text" className='search-input' name="" id="" placeholder='ค้นหา' />
+                    <img src={closeIcon} alt="" className='input-search-clear' />
+                </div>
+                <div className="input-search-icon-container">
+                    <img src={noticeIcon} alt="" className='input-search-icon'/>
+                </div>
             </div>
             <div className='header-child-content tools-group'>
                 {
