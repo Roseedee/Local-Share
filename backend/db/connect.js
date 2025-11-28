@@ -128,11 +128,42 @@ const renameComputer = async (userId, newName) => {
     });
 };
 
+const deleteFileById = async (fileId) => {
+    connectToDatabase();
+    const query = 'DELETE FROM files WHERE file_id = ?';
+    return new Promise((resolve, reject) => {
+        db.execute(query, [fileId], (err, results) => {
+            if (err) {
+                console.error('Error deleting file:', err);
+                return reject(err);
+            }
+            console.log('File deleted with ID:', fileId);
+            resolve(results);
+        });
+    });
+}
+
+const deleteFilesById = async (fileId) => {
+    connectToDatabase();
+    const placeholders = fileId.map(() => '?').join(', ');
+    const query = `DELETE FROM files WHERE file_id IN (${placeholders})`;
+    return new Promise((resolve, reject) => {
+        db.execute(query, fileId, (err, results) => {
+            if (err) {
+                console.error('Error deleting file:', err);
+                return reject(err);
+            }
+            console.log('File deleted with ID:', fileId);
+            resolve(results);
+        });
+    });
+}
+
 
 module.exports = {
     db,
     auth, insertClient, loadClients, 
-    insertFiles, loadFiles, getFileByIds,
+    insertFiles, loadFiles, getFileByIds, deleteFileById, deleteFilesById,
     renameComputer
 };
 

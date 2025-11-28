@@ -34,7 +34,8 @@ export default function Header() {
         isSelectMultiFile, setIsSelectMultiFile,
         isSelectFile,
         selectedFile,
-        isLargeView, setIsLargeView
+        isLargeView, setIsLargeView,
+        setFileLoading
     } = useShared();
 
     const fileUploadRef = useRef<HTMLInputElement | null>(null)
@@ -135,6 +136,41 @@ export default function Header() {
         }
     };
 
+    const handleDeleteFiles = async () => {
+        if(!confirm("คุณแน่ใจหรือไม่ว่าต้องการลบไฟล์ที่เลือก?")) return;
+        if (loading) return;
+
+        // console.log("multi file selected:", selectedMultiFile,
+        //     "\nsingle file selected:", selectedFile);
+
+        const selected =
+            selectedMultiFile && selectedMultiFile.length > 0
+                ? selectedMultiFile
+                : selectedFile
+                    ? [selectedFile]
+                    : [];
+
+        if (selected.length === 0) {
+            console.error("No file selected");
+            alert("กรุณาเลือกไฟล์ที่ต้องการลบ");
+            return;
+        }
+
+        setLoading(true);
+
+        await rest.deleteFiles(selected).then((result) => {
+            console.log("Delete files result:", result);
+        }).catch((err) => {
+            console.error(err);
+        }).finally(() => {
+            // setLoading(false);
+            // setSelectedMultiFile?.([]);
+            // setIsSelectMultiFile?.(false);
+            // window.location.reload();
+            setFileLoading?.(true);
+        });
+    }
+
     return (
         <div className="content-header">
             <div className="header-child-content header-title">
@@ -189,7 +225,7 @@ export default function Header() {
                             <div className="tool-icon">
                                 <img src={shareIcon} alt="" className='content-header-icon' />
                             </div>
-                            <div className="tool-icon">
+                            <div className="tool-icon" onClick={handleDeleteFiles}>
                                 <img src={binIcon} alt="" className='content-header-icon' />
                             </div>
                         </>

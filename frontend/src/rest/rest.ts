@@ -189,6 +189,23 @@ export default class Rest {
         }
     }
 
+    static async deleteFiles(fileId: string[]) {
+        this.log("Delete File")
+        try {
+            const response = await fetch(this.apiHost + "delete/file", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ fileId })
+            });
+            if (!response.ok) throw new Error("Can't delete the file");
+            return response;
+        }
+        catch (err) {
+            console.error(err);
+            throw err;
+        }
+    }
+
 }
 
 

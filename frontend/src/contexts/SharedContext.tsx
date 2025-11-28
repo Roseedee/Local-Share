@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect, use } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 
 import DeviceModel from "../model/DeviceModel";
 import FileUploadHistoryModel from "../model/FileUploadHistoryModel";
@@ -30,6 +30,9 @@ interface SharedContextType {
 
     isLargeView?: boolean;
     setIsLargeView?: (value: boolean) => void;
+
+    fileLoading?: boolean;
+    setFileLoading?: (value: boolean) => void;
 }
 
 const SharedContext = createContext<SharedContextType | undefined>(undefined)
@@ -54,6 +57,8 @@ export function SharedProvider({ children }: SharedProviderProds) {
     const [selectedFile, setSelectedFile] = useState<string>("")
 
     const [isLargeView, setIsLargeView] = useState<boolean>(true)
+
+    const [fileLoading, setFileLoading] = useState<boolean>(false)
 
     if (devMode) {
 
@@ -81,8 +86,8 @@ export function SharedProvider({ children }: SharedProviderProds) {
             isSelectFile, setIsSelectFile,
             selectedMultiFile, setSelectedMultiFile,
             selectedFile, setSelectedFile,
-            isLargeView, setIsLargeView
-
+            isLargeView, setIsLargeView,
+            fileLoading, setFileLoading
         }}>
             {children}
         </SharedContext.Provider>

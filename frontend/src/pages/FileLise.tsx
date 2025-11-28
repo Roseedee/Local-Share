@@ -13,7 +13,7 @@ export default function FileList() {
     fileListWaitUpload, isSelectMultiFile,
     setIsSelectMultiFile, selectedMultiFile,
     selectedFile, setSelectedFile,
-    setSelectedMultiFile, setIsSelectFile } = useShared();
+    setSelectedMultiFile, setIsSelectFile, fileLoading, setFileLoading } = useShared();
 
   const local_id = localStorage.getItem("device_id") || ""
   const selected_id = localStorage.getItem("device_selected_client_id") || ""
@@ -37,6 +37,10 @@ export default function FileList() {
   }, [isSelectMultiFile]);
 
   useEffect(() => {
+    loadFiles();
+  }, [fileLoading]);
+
+  useEffect(() => {
     setIsSelectMultiFile?.(false);
   }, [id]);
 
@@ -45,7 +49,9 @@ export default function FileList() {
     await rest.getFiles(userId).then((data) => {
       // console.log("Files:", data);
       setFiles(data.results)
-    })
+    }).finally(() => {
+      setFileLoading?.(false);
+    });
   };
 
   const handleFileSelect = (fileId: string, filePath: string, fileType: string) => {
