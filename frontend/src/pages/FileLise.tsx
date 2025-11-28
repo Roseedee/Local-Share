@@ -13,7 +13,7 @@ export default function FileList() {
     fileListWaitUpload, isSelectMultiFile,
     setIsSelectMultiFile, selectedMultiFile,
     selectedFile, setSelectedFile,
-    setSelectedMultiFile, setIsSelectFile, fileLoading, setFileLoading } = useShared();
+    setSelectedMultiFile, setIsSelectFile, fileDeleting, setFileDeleting } = useShared();
 
   const local_id = localStorage.getItem("device_id") || ""
   const selected_id = localStorage.getItem("device_selected_client_id") || ""
@@ -38,7 +38,7 @@ export default function FileList() {
 
   useEffect(() => {
     loadFiles();
-  }, [fileLoading]);
+  }, [fileDeleting]);
 
   useEffect(() => {
     setIsSelectMultiFile?.(false);
@@ -50,7 +50,7 @@ export default function FileList() {
       // console.log("Files:", data);
       setFiles(data.results)
     }).finally(() => {
-      setFileLoading?.(false);
+      setFileDeleting?.(false);
     });
   };
 
