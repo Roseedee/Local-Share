@@ -61,14 +61,9 @@ export default function Header() {
     };
 
     const handleFileInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-
-
         const files = e.target.files ? Array.from(e.target.files) : [];
-
-        console.log("selected files:", files);
-
+        // console.log("selected files:", files);
         setFileListWaitUpload(files);
-
         e.target.value = "";
     }
 

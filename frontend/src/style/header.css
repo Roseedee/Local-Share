@@ -49,6 +49,7 @@
   flex-grow: 1;
   font-size: 1rem;
   padding: 10px;
+  padding-left: 12px;
   padding-right: 40px;
   outline: none;
   border: none;
@@ -78,12 +79,18 @@
 }
 
 .search-container .input-search-icon-container {
+  cursor: pointer;
   padding: 10px;
   border-radius: 5px;
-  background-color: rgb(255, 255, 255);
+  background-color: #fef8ff;
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: 0.3s;
+
+  &:hover {
+    background-color: white;
+  }
 }
 
 .search-container .input-search-icon-container img.input-search-icon {

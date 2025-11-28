@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import React, { useEffect, useRef } from "react"
 
 import '../style/layout.css'
 import '../style/header.css'

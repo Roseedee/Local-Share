@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
+import React, { createContext, useState, useContext, useEffect, use } from "react";
 
 import DeviceModel from "../model/DeviceModel";
 import FileUploadHistoryModel from "../model/FileUploadHistoryModel";
@@ -66,6 +66,10 @@ export function SharedProvider({ children }: SharedProviderProds) {
             console.log("Selected Muti File: ", isSelectMultiFile)
         }, [isSelectFile, isSelectMultiFile]);
     }
+
+    useEffect(() => {
+        if(isSelectMultiFile) setIsSelectFile(false);
+    }, [isSelectMultiFile, isSelectFile]);
 
     return (
         <SharedContext.Provider value={{
