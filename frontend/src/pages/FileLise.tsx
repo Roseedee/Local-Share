@@ -49,25 +49,26 @@ export default function FileList() {
   }, [id]);
 
   useEffect(() => {
-    if (fileSearch === "") {
-      setFileFilterd(files);
-      return;
-    }
+  if (fileSearch === "") {
+    setFileFilterd(files);
+    return;
+  }
 
-    // Convert wildcard pattern (*, ?) to RegExp
-    const pattern = fileSearch
-      ?.replace(/[-\/\\^$+?.()|[\]{}]/g, '\\$&') // escape regex chars
-      .replace(/\*/g, '.*')                    // * → any chars
-      .replace(/\?/g, '.');                    // ? → one char
+  let pattern = (fileSearch || "")
+    .replace(/[-\/\\^$+?.()|[\]{}]/g, "\\$&") // escape regex
+    .replace(/\*/g, ".*")   // wildcard *
+    .replace(/\?/g, ".");   // wildcard ?
 
-    const regex = new RegExp(`^${pattern}$`, "i"); // i = ignore case
+  // ❗ ไม่ใส่ ^$ เพื่อให้ค้นแบบ contains ได้
+  const regex = new RegExp(pattern, "i");
 
-    const filteredFiles = files.filter(file =>
-      regex.test(file.file_org_name)
-    );
+  const filteredFiles = files.filter(file =>
+    regex.test(file.file_org_name)
+  );
 
-    setFileFilterd(filteredFiles);
-  }, [fileSearch, files]);
+  setFileFilterd(filteredFiles);
+}, [fileSearch, files]);
+
 
 
   const loadFiles = async () => {
