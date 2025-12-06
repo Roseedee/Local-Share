@@ -32,8 +32,8 @@ export default function Header() {
         deviceSelected, setFileListWaitUpload,
         selectedMultiFile, setSelectedMultiFile,
         isSelectMultiFile, setIsSelectMultiFile,
-        isSelectFile,
-        selectedFile,
+        isSelectFile, setIsSelectFile,
+        selectedFile, setSelectedFile,
         isLargeView, setIsLargeView,
         setFileDeleting, fileDeleting
     } = useShared();
@@ -167,9 +167,11 @@ export default function Header() {
         }).catch((err) => {
             console.error(err);
         }).finally(() => {
+            setFileDeleting?.(false);
             setSelectedMultiFile?.([]);
             setIsSelectMultiFile?.(false);
-            setFileDeleting?.(false);
+            setSelectedFile?.("");
+            setIsSelectFile?.(false);
         });
     }
 
@@ -219,7 +221,7 @@ export default function Header() {
             </div>
             <div className='header-child-content tools-group'>
                 {
-                    isSelectMultiFile || isSelectFile ? (
+                    (isSelectMultiFile && selectedMultiFile.length !== 0) || (isSelectFile && selectedFile !== "") ? (
                         <>
                             <div className={`tool-icon ${loading ? ' loading' : ''}`} onClick={handleDownloadSelected}>
                                 <img src={downloadIcon} alt="" className='content-header-icon' />

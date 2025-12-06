@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const { v4: uuidv4 } = require('uuid');
-const { auth, insertClient, loadClients, insertFiles, loadFiles, getFileByIds, deleteFileById, deleteFilesById, renameComputer } = require('./db/connect');
+const { auth, insertClient, loadClients, insertFiles, loadFiles, getFileByIds, getFilesNameByIds, deleteFilesById, renameComputer } = require('./db/connect');
 const path = require('path')
 const fs = require('fs')
 const multer = require('multer');
@@ -283,19 +283,17 @@ app.post('/delete/file', async (req, res) => {
         return res.status(400).json({ message: "File ID is required." });
     }
 
-    if(fileId.length === 1) {
-        try {
-            const result = await deleteFileById(fileId[0]);
-            res.json({ result: result });
-        }catch (err) {
-            console.error("❌ Error:", err);
-            res.status(500).send("Failed to delete file");
-        }
-    }
-
     try {
-        const result = await deleteFilesById(fileId);
-        res.json({ result: result });
+        const fileNamesResult = await getFilesNameByIds(fileId);
+        for (const fileRecord of fileNamesResult) {
+            const filePath = path.join(__dirname, "uploads", fileRecord.file_new_name);
+            if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+                console.log(`Deleted file from filesystem: ${fileRecord.file_new_name}`);
+            }
+        }
+        const resultDel = await deleteFilesById(fileId);
+        res.json({ result: resultDel });
     }catch (err) {
         console.error("❌ Error:", err);
         res.status(500).send("Failed to delete file");

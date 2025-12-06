@@ -128,21 +128,6 @@ const renameComputer = async (userId, newName) => {
     });
 };
 
-const deleteFileById = async (fileId) => {
-    connectToDatabase();
-    const query = 'DELETE FROM files WHERE file_id = ?';
-    return new Promise((resolve, reject) => {
-        db.execute(query, [fileId], (err, results) => {
-            if (err) {
-                console.error('Error deleting file:', err);
-                return reject(err);
-            }
-            console.log('File deleted with ID:', fileId);
-            resolve(results);
-        });
-    });
-}
-
 const deleteFilesById = async (fileId) => {
     connectToDatabase();
     const placeholders = fileId.map(() => '?').join(', ');
@@ -153,7 +138,21 @@ const deleteFilesById = async (fileId) => {
                 console.error('Error deleting file:', err);
                 return reject(err);
             }
-            console.log('File deleted with ID:', fileId);
+            // console.log('File deleted with ID:', fileId);
+            resolve(results);
+        });
+    });
+}
+
+const getFilesNameByIds = async (files) => {
+    connectToDatabase();
+    const query = `SELECT file_new_name FROM files WHERE file_id IN (${files.map(() => '?').join(',')})`;
+    return new Promise((resolve, reject) => {
+        db.execute(query, files, (err, results) => {
+            if (err) {  
+                console.error('Error fetching files by IDs:', err);
+                return reject(err);
+            }
             resolve(results);
         });
     });
@@ -163,7 +162,7 @@ const deleteFilesById = async (fileId) => {
 module.exports = {
     db,
     auth, insertClient, loadClients, 
-    insertFiles, loadFiles, getFileByIds, deleteFileById, deleteFilesById,
+    insertFiles, loadFiles, getFileByIds, deleteFilesById, getFilesNameByIds,
     renameComputer
 };
 
