@@ -33,6 +33,9 @@ interface SharedContextType {
 
     fileDeleting?: boolean;
     setFileDeleting?: (value: boolean) => void;
+
+    fileSearch?: string;
+    setFileSearch?: (value: string) => void;
 }
 
 const SharedContext = createContext<SharedContextType | undefined>(undefined)
@@ -59,6 +62,8 @@ export function SharedProvider({ children }: SharedProviderProds) {
     const [isLargeView, setIsLargeView] = useState<boolean>(true)
 
     const [fileDeleting, setFileDeleting] = useState<boolean>(false)
+
+    const [fileSearch, setFileSearch] = useState<string>("")
 
     if (devMode) {
 
@@ -87,7 +92,8 @@ export function SharedProvider({ children }: SharedProviderProds) {
             selectedMultiFile, setSelectedMultiFile,
             selectedFile, setSelectedFile,
             isLargeView, setIsLargeView,
-            fileDeleting, setFileDeleting
+            fileDeleting, setFileDeleting,
+            fileSearch, setFileSearch
         }}>
             {children}
         </SharedContext.Provider>

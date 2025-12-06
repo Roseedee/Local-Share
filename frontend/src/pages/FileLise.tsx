@@ -13,7 +13,10 @@ export default function FileList() {
     fileListWaitUpload, isSelectMultiFile,
     setIsSelectMultiFile, selectedMultiFile,
     selectedFile, setSelectedFile,
-    setSelectedMultiFile, setIsSelectFile, fileDeleting, setFileDeleting } = useShared();
+    setSelectedMultiFile, setIsSelectFile,
+    fileDeleting, setFileDeleting,
+    fileSearch
+  } = useShared();
 
   const local_id = localStorage.getItem("device_id") || ""
   const selected_id = localStorage.getItem("device_selected_client_id") || ""
@@ -21,6 +24,7 @@ export default function FileList() {
   const [files, setFiles] = useState<any[]>([]);
   const [overlayFileFullView, setOverlayFileFullView] = useState<boolean>(false)
   const [fileSelectForFileFullView, setFileSelectForFileFullView] = useState<OverlayFileFullViewModel>()
+  const [fileFiltered, setFileFilterd] = useState<any[]>([])
   // const [fileSelected, setFileSelected] = useState<string>("");
 
   useEffect(() => {
@@ -44,6 +48,28 @@ export default function FileList() {
     setIsSelectMultiFile?.(false);
   }, [id]);
 
+  useEffect(() => {
+    if (fileSearch === "") {
+      setFileFilterd(files);
+      return;
+    }
+
+    // Convert wildcard pattern (*, ?) to RegExp
+    const pattern = fileSearch
+      ?.replace(/[-\/\\^$+?.()|[\]{}]/g, '\\$&') // escape regex chars
+      .replace(/\*/g, '.*')                    // * → any chars
+      .replace(/\?/g, '.');                    // ? → one char
+
+    const regex = new RegExp(`^${pattern}$`, "i"); // i = ignore case
+
+    const filteredFiles = files.filter(file =>
+      regex.test(file.file_org_name)
+    );
+
+    setFileFilterd(filteredFiles);
+  }, [fileSearch, files]);
+
+
   const loadFiles = async () => {
     const userId = id === undefined ? local_id : selected_id
     await rest.getFiles(userId).then((data) => {
@@ -66,7 +92,7 @@ export default function FileList() {
     } else {
       setIsSelectFile?.(true);
       setSelectedFile?.(fileId);
-      setFileSelectForFileFullView({fileId: fileId, filePath: filePath, fileType: fileType});
+      setFileSelectForFileFullView({ fileId: fileId, filePath: filePath, fileType: fileType });
     }
   };
 
@@ -85,7 +111,7 @@ export default function FileList() {
     const currentIndex = files.findIndex(file => file.file_id === fileSelectForFileFullView.fileId);
     if (currentIndex > 0) {
       const prevFile = files[currentIndex - 1];
-      setFileSelectForFileFullView({fileId: prevFile.file_id, filePath: rest.fileUrl(prevFile.file_path), fileType: prevFile.file_type});
+      setFileSelectForFileFullView({ fileId: prevFile.file_id, filePath: rest.fileUrl(prevFile.file_path), fileType: prevFile.file_type });
     }
   }
 
@@ -94,16 +120,16 @@ export default function FileList() {
     const currentIndex = files.findIndex(file => file.file_id === fileSelectForFileFullView.fileId);
     if (currentIndex < files.length - 1) {
       const nextFile = files[currentIndex + 1];
-      setFileSelectForFileFullView({fileId: nextFile.file_id, filePath: rest.fileUrl(nextFile.file_path), fileType: nextFile.file_type});
+      setFileSelectForFileFullView({ fileId: nextFile.file_id, filePath: rest.fileUrl(nextFile.file_path), fileType: nextFile.file_type });
     }
   }
 
   return (
     <div className="file-list" onClick={() => { setIsSelectFile?.(false); setSelectedFile?.("") }}>
       {
-        files && files.length !== 0 ? (
-          files.map((file: any, i: number) => (
-            <File key={i} file={{ id: file.file_id, name: file.file_org_name, path: rest.fileUrl(file.file_path), size: file.file_size, type: file.file_type }} isSelected={selectedMultiFile?.includes(file.file_id) || selectedFile === file.file_id} onClick={() => handleFileSelect(file.file_id, rest.fileUrl(file.file_path), file.file_type)} onDoubleClick={() => {handleFileDoubleClick()}} />
+        fileFiltered && fileFiltered.length !== 0 ? (
+          fileFiltered.map((file: any, i: number) => (
+            <File key={i} file={{ id: file.file_id, name: file.file_org_name, path: rest.fileUrl(file.file_path), size: file.file_size, type: file.file_type }} isSelected={selectedMultiFile?.includes(file.file_id) || selectedFile === file.file_id} onClick={() => handleFileSelect(file.file_id, rest.fileUrl(file.file_path), file.file_type)} onDoubleClick={() => { handleFileDoubleClick() }} />
           ))
         ) : (
           <p className='no-item'>No files found.</p>
@@ -117,7 +143,7 @@ export default function FileList() {
       <File file={{ id: "0", name: "Test", path: imgTest, size: 10 }} />*/}
       {
         overlayFileFullView && (
-          <OverlayFileFullView file={fileSelectForFileFullView} onClick={handleFileFullViewClick} onPrev={handlePrevFileFullView} onNext={handleNextFileFullView}/>
+          <OverlayFileFullView file={fileSelectForFileFullView} onClick={handleFileFullViewClick} onPrev={handlePrevFileFullView} onNext={handleNextFileFullView} />
         )
       }
     </div>
