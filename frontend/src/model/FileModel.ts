@@ -4,4 +4,5 @@ export default interface FileModel {
     path: string;
     size: number;
     type: string;
+    create_at?: Date;
 }

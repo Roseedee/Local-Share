@@ -49,25 +49,25 @@ export default function FileList() {
   }, [id]);
 
   useEffect(() => {
-  if (fileSearch === "") {
-    setFileFilterd(files);
-    return;
-  }
+    if (fileSearch === "") {
+      setFileFilterd(files);
+      return;
+    }
 
-  let pattern = (fileSearch || "")
-    .replace(/[-\/\\^$+?.()|[\]{}]/g, "\\$&") // escape regex
-    .replace(/\*/g, ".*")   // wildcard *
-    .replace(/\?/g, ".");   // wildcard ?
+    let pattern = (fileSearch || "")
+      .replace(/[-\/\\^$+?.()|[\]{}]/g, "\\$&") // escape regex
+      .replace(/\*/g, ".*")   // wildcard *
+      .replace(/\?/g, ".");   // wildcard ?
 
-  // ❗ ไม่ใส่ ^$ เพื่อให้ค้นแบบ contains ได้
-  const regex = new RegExp(pattern, "i");
+    // ❗ ไม่ใส่ ^$ เพื่อให้ค้นแบบ contains ได้
+    const regex = new RegExp(pattern, "i");
 
-  const filteredFiles = files.filter(file =>
-    regex.test(file.file_org_name)
-  );
+    const filteredFiles = files.filter(file =>
+      regex.test(file.file_org_name)
+    );
 
-  setFileFilterd(filteredFiles);
-}, [fileSearch, files]);
+    setFileFilterd(filteredFiles);
+  }, [fileSearch, files]);
 
 
 
@@ -126,22 +126,40 @@ export default function FileList() {
   }
 
   return (
-    <div className="file-list" onClick={() => { setIsSelectFile?.(false); setSelectedFile?.("") }}>
-      {
-        fileFiltered && fileFiltered.length !== 0 ? (
-          fileFiltered.map((file: any, i: number) => (
-            <File key={i} file={{ id: file.file_id, name: file.file_org_name, path: rest.fileUrl(file.file_path), size: file.file_size, type: file.file_type }} isSelected={selectedMultiFile?.includes(file.file_id) || selectedFile === file.file_id} onClick={() => handleFileSelect(file.file_id, rest.fileUrl(file.file_path), file.file_type)} onDoubleClick={() => { handleFileDoubleClick() }} />
-          ))
-        ) : (
-          <p className='no-item'>No files found.</p>
-        )
-        // files.results.map((file) => (
-        //   <p>adf</p>
-        //   // <File key={i} file={{id: file.file_id, name: file.file_path, path: "localhost:5000:files/" + file.file_path, size: file.file_size}} />
-        // ))
-      }
+    <div className="file-list" onClick={() => { setIsSelectFile?.(false); setSelectedFile?.(""); setSelectedMultiFile?.([]); }}>
+      {fileFiltered && fileFiltered.length !== 0 ? (
+        fileFiltered.map((file, i) => (
+          <File
+            key={i}
+            file={{
+              id: file.file_id,
+              name: file.file_org_name,
+              path: rest.fileUrl(file.file_path),
+              size: file.file_size,
+              type: file.file_type,
+              create_at: file.create_at
+            }}
+            isSelected={
+              selectedMultiFile?.includes(file.file_id) ||
+              selectedFile === file.file_id
+            }
+            onClick={() =>
+              handleFileSelect(
+                file.file_id,
+                rest.fileUrl(file.file_path),
+                file.file_type
+              )
+            }
+            onDoubleClick={() => {
+              handleFileDoubleClick();
+            }}
+          />
+        ))
+      ) : (
+        <p className="no-item">No files found.</p>
+      )}
       {/* <File file={{ id: "0", name: "Test", path: imgTest, size: 10 }} isUpload progressNow={100} />
-      <File file={{ id: "0", name: "Test", path: imgTest, size: 10 }} />*/}
+        <File file={{ id: "0", name: "Test", path: imgTest, size: 10 }} />*/}
       {
         overlayFileFullView && (
           <OverlayFileFullView file={fileSelectForFileFullView} onClick={handleFileFullViewClick} onPrev={handlePrevFileFullView} onNext={handleNextFileFullView} />

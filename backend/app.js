@@ -196,7 +196,7 @@ app.post('/files', async (req, res) => {
             file_type: file.file_type,
             client_uuid_source: file.client_uuid_source,
             client_uuid_target: file.client_uuid_target,
-            upload_time: file.create_at
+            create_at: file.create_at
         }));
         // console.log("Files Loaded: ", files.length)
         res.json({ results: files });

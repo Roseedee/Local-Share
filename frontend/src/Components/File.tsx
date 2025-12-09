@@ -5,6 +5,7 @@ import FileCategory from '../util/fileCategory'
 import '../style/components/file.css'
 
 import FileModel from '../model/FileModel'
+import { getDateTimeString } from '../util/dateConvert'
 
 interface Props {
     file: FileModel
@@ -35,7 +36,7 @@ export default function File({ file, isUpload = false, progressNow = 0, isSelect
             }}
             className={`file-item ${isSelected ? "file-selected" : ""}`} 
             key={file.id}
-            title={`ชื่อ : ${file.name} \nขนาด : ${fileSize(file.size)}`}
+            title={`ชื่อ : ${file.name}\nวันที่อัพโหลด : ${getDateTimeString(file.create_at)}\nขนาด : ${fileSize(file.size)}`}
         >
             {
                 isUpload ? (

@@ -85,7 +85,7 @@ const insertFiles = (fileOrgName, fileNewName, fileSize, fileType, uploadByID, u
 
 const loadFiles = async (client_id) => {
     connectToDatabase();
-    const query = 'SELECT * FROM files Where client_uuid_target = ' + db.escape(client_id);
+    const query = 'SELECT * FROM files Where client_uuid_target = ' + db.escape(client_id) + 'ORDER BY file_id DESC';
     return new Promise((resolve, reject) => {
         db.execute(query, (err, results) => {
             if (err) {
