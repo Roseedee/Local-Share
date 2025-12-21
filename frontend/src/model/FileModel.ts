@@ -1,10 +1,12 @@
 export default interface FileModel {
     id?: string;
     name?: string;
-    path?: string;
+    new_name?: string;
     size?: number;
     type?: string;
     create_at?: Date;
+    client_id_source?: string;
+    client_id_target?: string;
 }
 
 //--------------------------------------------//

@@ -8,7 +8,7 @@ import rightArrowIcon from "../assets/right-arrow-white.png"
 
 
 export interface OverlayFileFullViewModel {
-  fileId: string;
+  fileId?: string;
   filePath: string;
   fileType?: string;
 }

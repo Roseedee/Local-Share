@@ -5,6 +5,7 @@ import rest from '../rest/rest'
 
 import File from '../Components/File'
 import OverlayFileFullView, { OverlayFileFullViewModel } from '../Components/OverlayFileFullView';
+import FileModel from '../model/FileModel';
 
 export default function FileList() {
   // const calledRef = useRef(false);
@@ -21,10 +22,10 @@ export default function FileList() {
   const local_id = localStorage.getItem("device_id") || ""
   const selected_id = localStorage.getItem("device_selected_client_id") || ""
 
-  const [files, setFiles] = useState<any[]>([]);
+  const [files, setFiles] = useState<FileModel[]>([]);
   const [overlayFileFullView, setOverlayFileFullView] = useState<boolean>(false)
   const [fileSelectForFileFullView, setFileSelectForFileFullView] = useState<OverlayFileFullViewModel>()
-  const [fileFiltered, setFileFilterd] = useState<any[]>([])
+  const [fileFiltered, setFileFilterd] = useState<FileModel[]>([])
   // const [fileSelected, setFileSelected] = useState<string>("");
 
   useEffect(() => {
@@ -63,7 +64,7 @@ export default function FileList() {
     const regex = new RegExp(pattern, "i");
 
     const filteredFiles = files.filter(file =>
-      regex.test(file.file_org_name)
+      regex.test(file.name || "")
     );
 
     setFileFilterd(filteredFiles);
@@ -109,19 +110,19 @@ export default function FileList() {
 
   const handlePrevFileFullView = () => {
     if (!fileSelectForFileFullView) return;
-    const currentIndex = files.findIndex(file => file.file_id === fileSelectForFileFullView.fileId);
+    const currentIndex = files.findIndex(file => file.id === fileSelectForFileFullView.fileId);
     if (currentIndex > 0) {
       const prevFile = files[currentIndex - 1];
-      setFileSelectForFileFullView({ fileId: prevFile.file_id, filePath: rest.fileUrl(prevFile.file_path), fileType: prevFile.file_type });
+      setFileSelectForFileFullView({ fileId: prevFile.id, filePath: rest.fileUrl(prevFile.new_name || ""), fileType: prevFile.type });
     }
   }
 
   const handleNextFileFullView = () => {
     if (!fileSelectForFileFullView) return;
-    const currentIndex = files.findIndex(file => file.file_id === fileSelectForFileFullView.fileId);
+    const currentIndex = files.findIndex(file => file.id === fileSelectForFileFullView.fileId);
     if (currentIndex < files.length - 1) {
       const nextFile = files[currentIndex + 1];
-      setFileSelectForFileFullView({ fileId: nextFile.file_id, filePath: rest.fileUrl(nextFile.file_path), fileType: nextFile.file_type });
+      setFileSelectForFileFullView({ fileId: nextFile.id, filePath: rest.fileUrl(nextFile.new_name || ""), fileType: nextFile.type });
     }
   }
 
@@ -132,22 +133,22 @@ export default function FileList() {
           <File
             key={i}
             file={{
-              id: file.file_id,
-              name: file.file_org_name,
-              path: rest.fileUrl(file.file_path),
-              size: file.file_size,
-              type: file.file_type,
+              id: file.id,
+              name: file.name,
+              new_name: rest.fileUrl(file.new_name || ""),
+              size: file.size,
+              type: file.type,
               create_at: file.create_at
             }}
             isSelected={
-              selectedMultiFile?.includes(file.file_id) ||
-              selectedFile === file.file_id
+              (file.id ? selectedMultiFile?.includes(file.id) : false) ||
+              selectedFile === file.id
             }
             onClick={() =>
               handleFileSelect(
-                file.file_id,
-                rest.fileUrl(file.file_path),
-                file.file_type
+                file.id || "",
+                rest.fileUrl(file.new_name || ""),
+                file.type || ""
               )
             }
             onDoubleClick={() => {

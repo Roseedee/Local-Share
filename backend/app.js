@@ -192,13 +192,13 @@ app.post('/files', async (req, res) => {
     try {
         const result = await loadFiles(userId);
         const files = result.map(file => ({
-            file_id: file.file_id,
-            file_path: file.file_new_name,
-            file_org_name: file.file_org_name,
-            file_size: file.file_size,
-            file_type: file.file_type,
-            client_uuid_source: file.client_uuid_source,
-            client_uuid_target: file.client_uuid_target,
+            id: file.file_id,
+            new_name: file.file_new_name,
+            name: file.file_org_name,
+            size: file.file_size,
+            type: file.file_type,
+            client_id_source: file.client_uuid_source,
+            client_id_target: file.client_uuid_target,
             create_at: file.create_at
         }));
         // console.log("Files Loaded: ", files.length)
