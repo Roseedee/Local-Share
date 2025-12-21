@@ -6,7 +6,6 @@ const path = require('path')
 const fs = require('fs')
 const multer = require('multer');
 const AdmZip = require('adm-zip');
-const { error } = require('console');
 const dotenv = require('dotenv');
 
 dotenv.config();

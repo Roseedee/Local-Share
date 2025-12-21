@@ -6,6 +6,7 @@ import rest from '../rest/rest'
 import File from '../Components/File'
 import OverlayFileFullView, { OverlayFileFullViewModel } from '../Components/OverlayFileFullView';
 import FileModel from '../model/FileModel';
+import OverlayEditFileName from '../Components/OverlayEditFileName';
 
 export default function FileList() {
   // const calledRef = useRef(false);
@@ -16,7 +17,8 @@ export default function FileList() {
     selectedFile, setSelectedFile,
     setSelectedMultiFile, setIsSelectFile,
     fileDeleting, setFileDeleting,
-    fileSearch
+    fileSearch,
+    isEditFileName, setIsEditFileName
   } = useShared();
 
   const local_id = localStorage.getItem("device_id") || ""
@@ -83,6 +85,7 @@ export default function FileList() {
   };
 
   const handleFileSelect = (fileId: string, filePath: string, fileType: string) => {
+    setIsEditFileName?.(false);
     // console.log("File selected:", fileId);
     if (isSelectMultiFile) {
       setIsSelectFile?.(false);
@@ -127,7 +130,7 @@ export default function FileList() {
   }
 
   return (
-    <div className="file-list" onClick={() => { setIsSelectFile?.(false); setSelectedFile?.(""); setSelectedMultiFile?.([]); }}>
+    <div className="file-list" onClick={() => { setIsSelectFile?.(false); setSelectedFile?.(""); setSelectedMultiFile?.([]); setIsEditFileName?.(false); }}>
       {fileFiltered && fileFiltered.length !== 0 ? (
         fileFiltered.map((file, i) => (
           <File
@@ -164,6 +167,12 @@ export default function FileList() {
       {
         overlayFileFullView && (
           <OverlayFileFullView file={fileSelectForFileFullView} onClick={handleFileFullViewClick} onPrev={handlePrevFileFullView} onNext={handleNextFileFullView} />
+        )
+      }
+
+      {
+        isEditFileName && (
+          <OverlayEditFileName />
         )
       }
     </div>

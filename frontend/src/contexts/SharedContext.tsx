@@ -36,6 +36,9 @@ interface SharedContextType {
 
     fileSearch?: string;
     setFileSearch?: (value: string) => void;
+
+    isEditFileName?: boolean;
+    setIsEditFileName?: (value: boolean) => void;
 }
 
 const SharedContext = createContext<SharedContextType | undefined>(undefined)
@@ -65,6 +68,8 @@ export function SharedProvider({ children }: SharedProviderProds) {
 
     const [fileSearch, setFileSearch] = useState<string>("")
 
+    const [isEditFileName, setIsEditFileName] = useState<boolean>(false);
+
     if (devMode) {
 
         useEffect(() => {
@@ -93,7 +98,8 @@ export function SharedProvider({ children }: SharedProviderProds) {
             selectedFile, setSelectedFile,
             isLargeView, setIsLargeView,
             fileDeleting, setFileDeleting,
-            fileSearch, setFileSearch
+            fileSearch, setFileSearch, 
+            isEditFileName, setIsEditFileName
         }}>
             {children}
         </SharedContext.Provider>

@@ -11,7 +11,7 @@ import binIcon from '../assets/bin.png'
 import largeViewIcon from '../assets/large-view.png'
 import listViewIcon from '../assets/list-view.png'
 import selectIcon from '../assets/select.png'
-// import renameIcon from '../assets/rename.png'
+import renameIcon from '../assets/rename.png'
 import shareIcon from '../assets/share.png'
 import closeIcon from '../assets/close.png'
 import noticeIcon from '../assets/attention.png'
@@ -36,7 +36,8 @@ export default function Header() {
         selectedFile, setSelectedFile,
         isLargeView, setIsLargeView,
         setFileDeleting, fileDeleting,
-        setFileSearch
+        setFileSearch,
+        setIsEditFileName
     } = useShared();
 
     const fileUploadRef = useRef<HTMLInputElement | null>(null)
@@ -238,15 +239,15 @@ export default function Header() {
                             </>
                         ) : (<></>)
                     }
-                    {/* {
+                    {
                         isSelectFile ? (
                             <>
-                                <div className="tool-icon">
+                                <div className="tool-icon" onClick={() => setIsEditFileName?.(true)}>
                                     <img src={renameIcon} alt="" className='content-header-icon' />
                                 </div>
                             </>
                         ) : (<></>)
-                    } */}
+                    }
                     {
                         !isSelectMultiFile && (
                             <>

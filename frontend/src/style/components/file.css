@@ -7,6 +7,7 @@
   align-content: flex-start;
   gap: 10px;
   overflow: auto;
+  position: relative;
 }
 
 p.no-item {
