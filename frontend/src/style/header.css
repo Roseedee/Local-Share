@@ -6,6 +6,7 @@
   justify-content: space-between;
   padding: 0 20px;
   background-color: #FDE9FF;
+  position: relative;
 }
 
 .header-child-content {

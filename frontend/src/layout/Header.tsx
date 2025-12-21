@@ -11,7 +11,7 @@ import binIcon from '../assets/bin.png'
 import largeViewIcon from '../assets/large-view.png'
 import listViewIcon from '../assets/list-view.png'
 import selectIcon from '../assets/select.png'
-import renameIcon from '../assets/rename.png'
+// import renameIcon from '../assets/rename.png'
 import shareIcon from '../assets/share.png'
 import closeIcon from '../assets/close.png'
 import noticeIcon from '../assets/attention.png'
@@ -138,7 +138,7 @@ export default function Header() {
     };
 
     const handleDeleteFiles = async () => {
-        if(!confirm("คุณแน่ใจหรือไม่ว่าต้องการลบไฟล์ที่เลือก?")) return;
+        if (!confirm("คุณแน่ใจหรือไม่ว่าต้องการลบไฟล์ที่เลือก?")) return;
 
         // console.log("multi file selected:", selectedMultiFile,
         //     "\nsingle file selected:", selectedFile);
@@ -162,9 +162,9 @@ export default function Header() {
             // console.log("Delete files result:", result);
             if (result.ok) {
                 console.log("Delete files success");
-            }else{
+            } else {
                 alert("การลบไฟล์ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง");
-            }   
+            }
         }).catch((err) => {
             console.error(err);
         }).finally(() => {
@@ -177,102 +177,105 @@ export default function Header() {
     }
 
     return (
-        <div className="content-header">
-            <div className="header-child-content header-title">
-                <div className="computer-name">
+        <>
+
+            <div className="content-header">
+                <div className="header-child-content header-title">
+                    <div className="computer-name">
+                        {
+                            isSelectMultiFile ?
+                                <h4>เลือก {selectedMultiFile?.length}</h4> :
+                                <>
+                                    {
+                                        !isEditName && <h4>{deviceSelected?.id === "" ? myDevice.name : deviceSelected?.name}{isMe ? '(You)' : ''}</h4>
+                                    }
+                                    {
+                                        isMe && !isEditName && <img src={editIcon} alt="" className='content-header-icon' onClick={() => { setIsEditName(true) }} />
+                                    }
+                                    {
+                                        isEditName && (
+                                            <>
+                                                <input ref={inputNameRef} className='computer-name-input' type="text" name="" id="" value={newName} onChange={(e) => { setNewName(e.target.value) }} onBlur={handleRenameComputer} onKeyDown={(e) => {
+                                                    if (e.key === 'Enter') {
+                                                        handleRenameComputer();
+                                                        inputNameRef.current?.blur();
+                                                    }
+                                                }} />
+                                            </>
+                                        )
+                                    }
+                                </>
+                        }
+                    </div>
+                    <div className="tool-icon-upload" onClick={handleClickUpload}>
+                        <input type="file" multiple name="" className='hide' ref={fileUploadRef} onChange={handleFileInputChange} />
+                        <img src={fileUploadIcon} alt="" className='content-header-icon' />
+                        <span>อัพโหลด</span>
+                    </div>
+                </div>
+                <div className="header-child-content search-container">
+                    <div className="input-search-container">
+                        <input type="text" className='search-input' name="" id="" placeholder='ค้นหา, สามารถใช้ wildcard ได้' onChange={(e) => setFileSearch?.(e.target.value)} />
+                        <img src={closeIcon} alt="" className='input-search-clear' />
+                    </div>
+                    <div className="input-search-icon-container">
+                        <img src={noticeIcon} alt="" className='input-search-icon' />
+                    </div>
+                </div>
+                <div className='header-child-content tools-group'>
                     {
-                        isSelectMultiFile ?
-                            <h4>เลือก {selectedMultiFile?.length}</h4> :
+                        (isSelectMultiFile && selectedMultiFile.length !== 0) || (isSelectFile && selectedFile !== "") ? (
+                            <>
+                                <div className={`tool-icon ${loading ? ' loading' : ''}`} onClick={handleDownloadSelected}>
+                                    <img src={downloadIcon} alt="" className='content-header-icon' />
+                                </div>
+                                <div className="tool-icon">
+                                    <img src={shareIcon} alt="" className='content-header-icon' />
+                                </div>
+                                <div className={`tool-icon ${fileDeleting ? ' loading' : ''}`} onClick={handleDeleteFiles}>
+                                    <img src={binIcon} alt="" className='content-header-icon' />
+                                </div>
+                            </>
+                        ) : (<></>)
+                    }
+                    {/* {
+                        isSelectFile ? (
+                            <>
+                                <div className="tool-icon">
+                                    <img src={renameIcon} alt="" className='content-header-icon' />
+                                </div>
+                            </>
+                        ) : (<></>)
+                    } */}
+                    {
+                        !isSelectMultiFile && (
                             <>
                                 {
-                                    !isEditName && <h4>{deviceSelected?.id === "" ? myDevice.name : deviceSelected?.name}{isMe ? '(You)' : ''}</h4>
-                                }
-                                {
-                                    isMe && !isEditName && <img src={editIcon} alt="" className='content-header-icon' onClick={() => { setIsEditName(true) }} />
-                                }
-                                {
-                                    isEditName && (
-                                        <>
-                                            <input ref={inputNameRef} className='computer-name-input' type="text" name="" id="" value={newName} onChange={(e) => { setNewName(e.target.value) }} onBlur={handleRenameComputer} onKeyDown={(e) => {
-                                                if (e.key === 'Enter') {
-                                                    handleRenameComputer();
-                                                    inputNameRef.current?.blur();
-                                                }
-                                            }} />
-                                        </>
+                                    isLargeView ? (
+                                        <div className="tool-icon" onClick={() => setIsLargeView?.(false)}>
+                                            <img src={listViewIcon} alt="" className='content-header-icon' />
+                                        </div>
+                                    ) : (
+                                        <div className="tool-icon" onClick={() => setIsLargeView?.(true)}>
+                                            <img src={largeViewIcon} alt="" className='content-header-icon' />
+                                        </div>
                                     )
                                 }
                             </>
+                        )
+                    }
+                    <div className={`tool-icon ${isSelectMultiFile ? 'active' : ''}`} onClick={handleClieckSelectMode}>
+                        <img src={selectIcon} alt="" className='content-header-icon' />
+                    </div>
+                    {
+                        // isSelectMultiFile === false && (
+                        //     <div className="tool-icon">
+                        //         <img src={synsIcon} alt="" className='content-header-icon' />
+                        //     </div>
+                        // )
                     }
                 </div>
-                <div className="tool-icon-upload" onClick={handleClickUpload}>
-                    <input type="file" multiple name="" className='hide' ref={fileUploadRef} onChange={handleFileInputChange} />
-                    <img src={fileUploadIcon} alt="" className='content-header-icon' />
-                    <span>อัพโหลด</span>
-                </div>
             </div>
-            <div className="header-child-content search-container">
-                <div className="input-search-container">
-                    <input type="text" className='search-input' name="" id="" placeholder='ค้นหา, สามารถใช้ wildcard ได้' onChange={(e) => setFileSearch?.(e.target.value)}/>
-                    <img src={closeIcon} alt="" className='input-search-clear' />
-                </div>
-                <div className="input-search-icon-container">
-                    <img src={noticeIcon} alt="" className='input-search-icon'/>
-                </div>
-            </div>
-            <div className='header-child-content tools-group'>
-                {
-                    (isSelectMultiFile && selectedMultiFile.length !== 0) || (isSelectFile && selectedFile !== "") ? (
-                        <>
-                            <div className={`tool-icon ${loading ? ' loading' : ''}`} onClick={handleDownloadSelected}>
-                                <img src={downloadIcon} alt="" className='content-header-icon' />
-                            </div>
-                            <div className="tool-icon">
-                                <img src={shareIcon} alt="" className='content-header-icon' />
-                            </div>
-                            <div className={`tool-icon ${ fileDeleting ? ' loading' : ''}`} onClick={handleDeleteFiles}>
-                                <img src={binIcon} alt="" className='content-header-icon' />
-                            </div>
-                        </>
-                    ) : (<></>)
-                }
-                {
-                    isSelectFile ? (
-                        <>
-                            <div className="tool-icon">
-                                <img src={renameIcon} alt="" className='content-header-icon' />
-                            </div>
-                        </>
-                    ) : (<></>)
-                }
-                {
-                    !isSelectMultiFile && (
-                        <>
-                            {
-                                isLargeView ? (
-                                    <div className="tool-icon" onClick={() => setIsLargeView?.(false)}>
-                                        <img src={listViewIcon} alt="" className='content-header-icon' />
-                                    </div>
-                                ) : (
-                                    <div className="tool-icon" onClick={() => setIsLargeView?.(true)}>
-                                        <img src={largeViewIcon} alt="" className='content-header-icon' />
-                                    </div>
-                                )
-                            }
-                        </>
-                    )
-                }
-                <div className={`tool-icon ${isSelectMultiFile ? 'active' : ''}`} onClick={handleClieckSelectMode}>
-                    <img src={selectIcon} alt="" className='content-header-icon' />
-                </div>
-                {
-                    // isSelectMultiFile === false && (
-                    //     <div className="tool-icon">
-                    //         <img src={synsIcon} alt="" className='content-header-icon' />
-                    //     </div>
-                    // )
-                }
-            </div>
-        </div>
+        </>
     )
 }

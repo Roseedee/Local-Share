@@ -8,7 +8,7 @@ import DeviceModel from '../model/DeviceModel'
 
 import Device from '../Components/Device'
 
-import '../style/layout.css'
+import '../style/layout/sidebar.css'
 
 type Props = {
     local_uuid: string
@@ -77,10 +77,10 @@ export default function SideBar({ local_uuid }: Props) {
 
 
 
-    const handleDeleteUUID = () => {
-        console.log('remove uuid')
-        localStorage.removeItem('device_uuid')
-    }
+    // const handleDeleteUUID = () => {
+    //     console.log('remove uuid')
+    //     localStorage.removeItem('device_uuid')
+    // }
 
     return (
         <div className="sidebar">
@@ -103,6 +103,7 @@ export default function SideBar({ local_uuid }: Props) {
                 }
             </div>
             <div className="sidebar-bottom">
+                <button className="sidebar-bottom-btn">Settings</button>
                 {/* <button onClick={handleDeleteUUID}>Remove UUID</button> */}
                 <div className="footer">Local-Share&nbsp;<span className="tag">v1.0.100</span>&nbsp;@2025</div>
             </div>

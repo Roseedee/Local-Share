@@ -103,7 +103,7 @@ export default function FileList() {
   }
 
   const handleFileFullViewClick = () => {
-    console.log("onCloseFullView")
+    // console.log("onCloseFullView")
     setOverlayFileFullView(false)
   }
 
