@@ -1,4 +1,7 @@
-export default function fileSize(sizeInBytes: number): string {
+export default function fileSize(sizeInBytes: number | null | undefined): string {
+    if (sizeInBytes === null || sizeInBytes === undefined) {
+        return "0B";
+    }
     if (sizeInBytes < 1024) {
         return `${sizeInBytes}B`;
     } else if (sizeInBytes < 1048576) {

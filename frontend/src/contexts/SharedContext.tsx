@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 
 import DeviceModel from "../model/DeviceModel";
-import FileUploadHistoryModel from "../model/FileUploadHistoryModel";
+import { FileUploadHistoryModel } from "../model/FileModel";
 
 interface SharedContextType {
     fileListWaitUpload: File[] | null | undefined;
