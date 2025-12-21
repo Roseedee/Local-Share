@@ -7,9 +7,12 @@ const fs = require('fs')
 const multer = require('multer');
 const AdmZip = require('adm-zip');
 const { error } = require('console');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const app = express();
-const port = 5000;
+const port = process.env.SERVER_PORT || 5000;
 
 app.use(cors())
 
