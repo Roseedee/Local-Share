@@ -8,16 +8,21 @@ const multer = require('multer');
 const AdmZip = require('adm-zip');
 const dotenv = require('dotenv');
 
+const authRoutes = require('./routes/auth.routes');
+
 dotenv.config();
 
 const app = express();
 const port = process.env.SERVER_PORT || 5000;
+
 
 app.use(cors())
 
 app.set('trust proxy', true);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use('/auth', authRoutes);
 
 // app.use('/files', express.static(path.join(__dirname, 'uploads')));
 
@@ -69,53 +74,53 @@ app.post('/connection', (req, res) => {
     res.json({ url: init_path });
 });
 
-app.post('/auth', async (req, res) => {
-    const { uuid } = req.body;
-    console.log("Authentication with : ", uuid)
-    try {
-        const result = await auth(uuid);
-        // console.log(result)
-        if (result) {
-            res.json({
-                client_id: result[0].client_id,
-                id: result[0].client_uuid,
-                name: result[0].client_name
-            });
-        } else {
-            res.status(404).json({ error: "Device Not Found" })
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Failed to authentication" });
-    }
-});
+// app.post('/auth', async (req, res) => {
+//     const { uuid } = req.body;
+//     console.log("Authentication with : ", uuid)
+//     try {
+//         const result = await auth(uuid);
+//         // console.log(result)
+//         if (result) {
+//             res.json({
+//                 client_id: result[0].client_id,
+//                 id: result[0].client_uuid,
+//                 name: result[0].client_name
+//             });
+//         } else {
+//             res.status(404).json({ error: "Device Not Found" })
+//         }
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ error: "Failed to authentication" });
+//     }
+// });
 
 
-let cgen_uuid = 0
-app.post('/generate-uuid', (req, res) => {
-    cgen_uuid++
-    console.log('generate new uuid: ', cgen_uuid)
-    const new_uuid = uuidv4();
-    res.json({ uuid: new_uuid })
-})
+// let cgen_uuid = 0
+// app.post('/generate-uuid', (req, res) => {
+//     cgen_uuid++
+//     console.log('generate new uuid: ', cgen_uuid)
+//     const new_uuid = uuidv4();
+//     res.json({ uuid: new_uuid })
+// })
 
-app.post('/verify-uuid', async (req, res) => {
-    const { uuid, name } = req.body;
-    if (uuid === "" || name === "") {
-        res.json({ status: 'bad' })
-        return;
-    }
+// app.post('/verify-uuid', async (req, res) => {
+//     const { uuid, name } = req.body;
+//     if (uuid === "" || name === "") {
+//         res.json({ status: 'bad' })
+//         return;
+//     }
 
-    try {
-        const id = await insertClient(uuid, name);
-        console.log('Returned ID:', id);
-        res.json({ status: "ok", client_id: id });
-    } catch (err) {
-        console.error('Insert failed:', err);
-    }
-    // const insertId = await insertClient(uuid, name);
-    // console.log("verify id: ", uuid, "name: ", name)
-})
+//     try {
+//         const id = await insertClient(uuid, name);
+//         console.log('Returned ID:', id);
+//         res.json({ status: "ok", client_id: id });
+//     } catch (err) {
+//         console.error('Insert failed:', err);
+//     }
+//     // const insertId = await insertClient(uuid, name);
+//     // console.log("verify id: ", uuid, "name: ", name)
+// })
 
 
 app.post('/get-client', async (req, res) => {

@@ -26,7 +26,7 @@ export default class Rest {
     static async auth(uuid: string) {
         this.log("Authentication");
         try {
-            const response = await fetch(this.apiHost + "auth", {
+            const response = await fetch(this.apiHost + "auth/login", {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ uuid })
@@ -56,14 +56,14 @@ export default class Rest {
 
     static async generateNewUUID() {
         this.log("Generate New UUID")
-        return await fetch(this.apiHost + "generate-uuid", {
+        return await fetch(this.apiHost + "auth/generate-uuid", {
             method: "POST"
         }).then((res) => res.json())
     }
 
     static async verifyUUID(uuid: string, name: string) {
         this.log("Verify UUID")
-        return await fetch(this.apiHost + "verify-uuid", {
+        return await fetch(this.apiHost + "auth/verify-uuid", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
