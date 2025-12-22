@@ -9,6 +9,7 @@ const AdmZip = require('adm-zip');
 const dotenv = require('dotenv');
 
 const authRoutes = require('./routes/auth.routes');
+const clientRoutes = require('./routes/client.routes');
 
 dotenv.config();
 
@@ -21,8 +22,6 @@ app.use(cors())
 app.set('trust proxy', true);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-app.use('/auth', authRoutes);
 
 // app.use('/files', express.static(path.join(__dirname, 'uploads')));
 
@@ -74,6 +73,9 @@ app.post('/connection', (req, res) => {
     res.json({ url: init_path });
 });
 
+app.use('/auth', authRoutes);
+app.use('/device', clientRoutes);
+
 // app.post('/auth', async (req, res) => {
 //     const { uuid } = req.body;
 //     console.log("Authentication with : ", uuid)
@@ -123,22 +125,22 @@ app.post('/connection', (req, res) => {
 // })
 
 
-app.post('/get-client', async (req, res) => {
-    const { client_id } = req.body
-    console.log("Get All Client by : " + client_id)
-    try {
-        const result = await loadClients(client_id);
-        const clients = result.map(client => ({
-            client_id: client.client_id,
-            id: client.client_uuid,
-            name: client.client_name
-        }));
-        res.json({ clients: clients });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Failed to load clients" });
-    }
-});
+// app.post('/get-client', async (req, res) => {
+//     const { client_id } = req.body
+//     console.log("Get All Client by : " + client_id)
+//     try {
+//         const result = await loadClients(client_id);
+//         const clients = result.map(client => ({
+//             client_id: client.client_id,
+//             id: client.client_uuid,
+//             name: client.client_name
+//         }));
+//         res.json({ clients: clients });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ error: "Failed to load clients" });
+//     }
+// });
 
 app.post('/upload', upload.array("files", 10), (req, res) => {
 
@@ -266,21 +268,21 @@ app.post("/download", async (req, res) => {
 });
 
 
-app.post("/edit/computer/name", async (req, res) => {
-    const userId = req.body.userId || "";
-    const newName = req.body.newName || "";
-    // console.log(userId, " ", newName)
-    if (userId === "" || newName === "") {
-        return res.status(400).json({ message: "Data is not define" });
-    }
-    try {
-        const result = renameComputer(userId, newName)
-        res.json({ result: result });
-    } catch (err) {
-        console.error("❌ Error:", err);
-        res.status(500).send("Failed to rename computer");
-    }
-})
+// app.post("/edit/computer/name", async (req, res) => {
+//     const userId = req.body.userId || "";
+//     const newName = req.body.newName || "";
+//     // console.log(userId, " ", newName)
+//     if (userId === "" || newName === "") {
+//         return res.status(400).json({ message: "Data is not define" });
+//     }
+//     try {
+//         const result = renameComputer(userId, newName)
+//         res.json({ result: result });
+//     } catch (err) {
+//         console.error("❌ Error:", err);
+//         res.status(500).send("Failed to rename computer");
+//     }
+// })
 
 app.post('/delete/file', async (req, res) => {
     const fileId = req.body.fileId || "";

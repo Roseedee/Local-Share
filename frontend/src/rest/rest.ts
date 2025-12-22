@@ -74,7 +74,7 @@ export default class Rest {
 
     static async getAllClient(client_id: string) {
         this.log("Get All Client")
-        return await fetch(this.apiHost + "get-client", {
+        return await fetch(this.apiHost + "device/get-devices", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -174,7 +174,7 @@ export default class Rest {
         if (newName.length > 30) throw new Error("Name is too long");
 
         try {
-            const response = await fetch(this.apiHost + "edit/computer/name", {
+            const response = await fetch(this.apiHost + "device/edit-device-name", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ userId, newName })
