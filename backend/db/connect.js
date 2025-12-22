@@ -20,7 +20,7 @@ const connectToDatabase = () => {
     });
 }
 
-const auth = (uuid) => {
+exports.auth = (uuid) => {
     connectToDatabase();
     const query = 'SELECT * FROM clients WHERE client_uuid=?';
     return new Promise((resolve, reject) => {
@@ -37,7 +37,7 @@ const auth = (uuid) => {
     })
 }
 
-const insertClient = async (uuid, name) => {
+exports.insertClient = async (uuid, name) => {
     connectToDatabase();
     const query = 'INSERT INTO clients (client_uuid, client_name) VALUES (?, ?)';
     
@@ -53,7 +53,7 @@ const insertClient = async (uuid, name) => {
     })
 }
 
-const loadClients = async (client_id) => {
+exports.loadClients = async (client_id) => {
     connectToDatabase();
     const query = 'SELECT * FROM clients Where client_id != ' + db.escape(client_id);
     return new Promise((resolve, reject) => {
@@ -68,7 +68,7 @@ const loadClients = async (client_id) => {
     });
 }
 
-const insertFiles = (fileOrgName, fileNewName, fileSize, fileType, uploadByID, uploadToID) => {
+exports.insertFiles = (fileOrgName, fileNewName, fileSize, fileType, uploadByID, uploadToID) => {
 
     uploadToID = uploadToID === "" ? uploadByID : uploadToID;
 
@@ -86,7 +86,7 @@ const insertFiles = (fileOrgName, fileNewName, fileSize, fileType, uploadByID, u
     });
 }
 
-const loadFiles = async (client_id) => {
+exports.loadFiles = async (client_id) => {
     connectToDatabase();
     const query = 'SELECT * FROM files Where client_uuid_target = ' + db.escape(client_id) + 'ORDER BY file_id DESC';
     return new Promise((resolve, reject) => {
@@ -101,7 +101,7 @@ const loadFiles = async (client_id) => {
     });
 }
 
-const getFileByIds = async (files) => {
+exports.getFileByIds = async (files) => {
     connectToDatabase();
     const query = `SELECT file_org_name, file_new_name FROM files WHERE file_id IN (${files.map(() => '?').join(',')})`;
     return new Promise((resolve, reject) => {
@@ -115,7 +115,7 @@ const getFileByIds = async (files) => {
     });
 }
 
-const renameComputer = async (userId, newName) => {
+exports.renameComputer = async (userId, newName) => {
     connectToDatabase();
     
     const query = `UPDATE clients SET client_name = ? WHERE client_id = ?`;
@@ -131,7 +131,7 @@ const renameComputer = async (userId, newName) => {
     });
 };
 
-const deleteFilesById = async (fileId) => {
+exports.deleteFilesById = async (fileId) => {
     connectToDatabase();
     const placeholders = fileId.map(() => '?').join(', ');
     const query = `DELETE FROM files WHERE file_id IN (${placeholders})`;
@@ -147,7 +147,7 @@ const deleteFilesById = async (fileId) => {
     });
 }
 
-const getFilesNameByIds = async (files) => {
+exports.getFilesNameByIds = async (files) => {
     connectToDatabase();
     const query = `SELECT file_new_name FROM files WHERE file_id IN (${files.map(() => '?').join(',')})`;
     return new Promise((resolve, reject) => {
@@ -160,12 +160,3 @@ const getFilesNameByIds = async (files) => {
         });
     });
 }
-
-
-module.exports = {
-    db,
-    auth, insertClient, loadClients, 
-    insertFiles, loadFiles, getFileByIds, deleteFilesById, getFilesNameByIds,
-    renameComputer
-};
-

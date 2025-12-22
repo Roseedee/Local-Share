@@ -1,11 +1,11 @@
 const {v4: uuidv4} = require('uuid');
-const { auth, insertClient } = require('../db/connect');
+const db = require('../db/connect');
 
 exports.login = async (req, res) => {
     const { uuid } = req.body;
     console.log("Authentication with : ", uuid)
     try {
-        const result = await auth(uuid);
+        const result = await db.auth(uuid);
         // console.log(result)
         if (result) {
             res.json({
@@ -35,7 +35,7 @@ exports.verifyUUID = async (req, res) => {
     }
 
     try {
-        const id = await insertClient(uuid, name);
+        const id = await db.insertClient(uuid, name);
         console.log('Returned ID:', id);
         res.json({ status: "ok", client_id: id });
     } catch (err) {

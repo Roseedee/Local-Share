@@ -1,10 +1,10 @@
-const {loadClients, renameComputer} = require('../db/connect');
+const db = require('../db/connect');
 
 exports.getDevices = async (req, res) => {
     const { client_id } = req.body
     console.log("Get All Client by : " + client_id)
     try {
-        const result = await loadClients(client_id);
+        const result = await db.loadClients(client_id);
         const clients = result.map(client => ({
             client_id: client.client_id,
             id: client.client_uuid,
@@ -25,7 +25,7 @@ exports.editDeviceName = async (req, res) => {
         return res.status(400).json({ message: "Data is not define" });
     }
     try {
-        const result = renameComputer(userId, newName)
+        const result = db.renameComputer(userId, newName)
         res.json({ result: result });
     } catch (err) {
         console.error("❌ Error:", err);

@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const { v4: uuidv4 } = require('uuid');
-const { auth, insertClient, loadClients, insertFiles, loadFiles, getFileByIds, getFilesNameByIds, deleteFilesById, renameComputer } = require('./db/connect');
+const db = require('./db/connect');
 const path = require('path')
 const fs = require('fs')
 const multer = require('multer');
@@ -157,7 +157,7 @@ app.post('/upload', upload.array("files", 10), (req, res) => {
     });
 
     req.files.forEach((file) => {
-        insertFiles(
+        db.insertFiles(
             file.originalname,
             file.filename,
             file.size,
@@ -196,7 +196,7 @@ app.post('/files', async (req, res) => {
     console.log("Load Files for : " + userId)
 
     try {
-        const result = await loadFiles(userId);
+        const result = await db.loadFiles(userId);
         const files = result.map(file => ({
             id: file.file_id,
             new_name: file.file_new_name,
@@ -225,7 +225,7 @@ app.post("/download", async (req, res) => {
     const zip = new AdmZip();
 
     try {
-        const result = await getFileByIds(files);
+        const result = await db.getFileByIds(files);
 
         if (files.length === 1) {
             const fileRecord = result[0];
@@ -293,7 +293,7 @@ app.post('/delete/file', async (req, res) => {
     }
 
     try {
-        const fileNamesResult = await getFilesNameByIds(fileId);
+        const fileNamesResult = await db.getFilesNameByIds(fileId);
         for (const fileRecord of fileNamesResult) {
             const filePath = path.join(__dirname, "uploads", fileRecord.file_new_name);
             if (fs.existsSync(filePath)) {
