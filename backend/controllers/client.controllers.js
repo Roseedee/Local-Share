@@ -2,7 +2,7 @@ const db = require('../db/connect');
 
 exports.getDevices = async (req, res) => {
     const { client_id } = req.body
-    console.log("Get All Client by : " + client_id)
+    // console.log("Get All Client by : " + client_id)
     try {
         const result = await db.loadClients(client_id);
         const clients = result.map(client => ({

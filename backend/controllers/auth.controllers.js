@@ -3,7 +3,7 @@ const db = require('../db/connect');
 
 exports.login = async (req, res) => {
     const { uuid } = req.body;
-    console.log("Authentication with : ", uuid)
+    console.log("Authentication")
     try {
         const result = await db.auth(uuid);
         // console.log(result)

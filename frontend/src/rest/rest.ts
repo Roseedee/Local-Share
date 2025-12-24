@@ -88,7 +88,7 @@ export default class Rest {
 
         try {
             const response = await axios.post(
-                this.apiHost + "upload",
+                this.apiHost + "file/upload",
                 form,
                 {
                     headers: {
@@ -126,7 +126,7 @@ export default class Rest {
         this.log("Get File")
 
         try {
-            const response = await fetch(this.apiHost + "files", {
+            const response = await fetch(this.apiHost + "file/all", {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({userId})
@@ -141,7 +141,7 @@ export default class Rest {
     }
 
     static fileUrl(file: string): string {
-        return this.apiHost + "files/" + file;
+        return this.apiHost + "file/" + file;
     }
 
     static async downloadFiles(fileIds: string[]) {
@@ -152,7 +152,7 @@ export default class Rest {
         if (fileIds.length === 0) throw new Error("ไม่สามารถดาวน์ไฟล์นี้ได้ กรุณาลองใหม่อีกครั้ง")
 
         try {
-            const response = await fetch(this.apiHost + "download", {
+            const response = await fetch(this.apiHost + "file/download", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ files: fileIds })
@@ -192,7 +192,7 @@ export default class Rest {
     static async deleteFiles(fileId: string[]) {
         this.log("Delete File")
         try {
-            const response = await fetch(this.apiHost + "delete/file", {
+            const response = await fetch(this.apiHost + "file/delete", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ fileId })
