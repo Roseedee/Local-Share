@@ -39,7 +39,7 @@ export default function FileList() {
 
   useEffect(() => {
     setSelectedMultiFile?.([]);
-    setSelectedFile?.("");
+    setSelectedFile?.(null);
     // setFileSelected("");
   }, [isSelectMultiFile]);
 
@@ -84,7 +84,7 @@ export default function FileList() {
     });
   };
 
-  const handleFileSelect = (fileId: string, filePath: string, fileType: string) => {
+  const handleFileSelect = (fileId: string, filePath: string, fileType: string, orgName: string) => {
     setIsEditFileName?.(false);
     // console.log("File selected:", fileId);
     if (isSelectMultiFile) {
@@ -96,7 +96,7 @@ export default function FileList() {
       }
     } else {
       setIsSelectFile?.(true);
-      setSelectedFile?.(fileId);
+      setSelectedFile?.({ id: fileId, new_name: filePath, type: fileType, name: orgName });
       setFileSelectForFileFullView({ fileId: fileId, filePath: filePath, fileType: fileType });
     }
   };
@@ -130,7 +130,7 @@ export default function FileList() {
   }
 
   return (
-    <div className="file-list" onClick={() => { setIsSelectFile?.(false); setSelectedFile?.(""); setSelectedMultiFile?.([]); setIsEditFileName?.(false); }}>
+    <div className="file-list" onClick={() => { setIsSelectFile?.(false); setSelectedFile?.(null); setSelectedMultiFile?.([]); setIsEditFileName?.(false); }}>
       {fileFiltered && fileFiltered.length !== 0 ? (
         fileFiltered.map((file, i) => (
           <File
@@ -145,13 +145,14 @@ export default function FileList() {
             }}
             isSelected={
               (file.id ? selectedMultiFile?.includes(file.id) : false) ||
-              selectedFile === file.id
+              (selectedFile?.id === file.id)
             }
             onClick={() =>
               handleFileSelect(
                 file.id || "",
                 rest.fileUrl(file.new_name || ""),
-                file.type || ""
+                file.type || "",
+                file.name || ""
               )
             }
             onDoubleClick={() => {

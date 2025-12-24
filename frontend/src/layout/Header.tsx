@@ -95,8 +95,8 @@ export default function Header() {
         const selected =
             selectedMultiFile && selectedMultiFile.length > 0
                 ? selectedMultiFile
-                : selectedFile
-                    ? [selectedFile]
+                : selectedFile?.id
+                    ? [selectedFile?.id]
                     : [];
 
         if (selected.length === 0) {
@@ -147,8 +147,8 @@ export default function Header() {
         const selected =
             selectedMultiFile && selectedMultiFile.length > 0
                 ? selectedMultiFile
-                : selectedFile
-                    ? [selectedFile]
+                : selectedFile?.id
+                    ? [selectedFile?.id]
                     : [];
 
         if (selected.length === 0) {
@@ -172,7 +172,7 @@ export default function Header() {
             setFileDeleting?.(false);
             setSelectedMultiFile?.([]);
             setIsSelectMultiFile?.(false);
-            setSelectedFile?.("");
+            setSelectedFile?.(null);
             setIsSelectFile?.(false);
         });
     }
@@ -225,7 +225,7 @@ export default function Header() {
                 </div>
                 <div className='header-child-content tools-group'>
                     {
-                        (isSelectMultiFile && selectedMultiFile.length !== 0) || (isSelectFile && selectedFile !== "") ? (
+                        (isSelectMultiFile && selectedMultiFile.length !== 0) || (isSelectFile && selectedFile !== null) ? (
                             <>
                                 <div className={`tool-icon ${loading ? ' loading' : ''}`} onClick={handleDownloadSelected}>
                                     <img src={downloadIcon} alt="" className='content-header-icon' />

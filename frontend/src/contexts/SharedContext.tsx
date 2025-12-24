@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 
 import DeviceModel from "../model/DeviceModel";
-import { FileUploadHistoryModel } from "../model/FileModel";
+import FileModel, { FileUploadHistoryModel } from "../model/FileModel";
 
 interface SharedContextType {
     fileListWaitUpload: File[] | null | undefined;
@@ -25,8 +25,8 @@ interface SharedContextType {
     selectedMultiFile: string[];
     setSelectedMultiFile: (value: string[]) => void;
 
-    selectedFile?: string;
-    setSelectedFile?: (value: string) => void;
+    selectedFile?: FileModel | null;
+    setSelectedFile?: (value: FileModel | null) => void;
 
     isLargeView?: boolean;
     setIsLargeView?: (value: boolean) => void;
@@ -60,7 +60,7 @@ export function SharedProvider({ children }: SharedProviderProds) {
     const [isSelectMultiFile, setIsSelectMultiFile] = useState<boolean>(false)
     const [isSelectFile, setIsSelectFile] = useState<boolean>(false)
     const [selectedMultiFile, setSelectedMultiFile] = useState<string[]>([])
-    const [selectedFile, setSelectedFile] = useState<string>("")
+    const [selectedFile, setSelectedFile] = useState<FileModel | null>(null)
 
     const [isLargeView, setIsLargeView] = useState<boolean>(true)
 
