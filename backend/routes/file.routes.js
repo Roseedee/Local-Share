@@ -8,5 +8,6 @@ router.post('/upload', upload.array("files", 10), controller.uploadFiles);
 router.post('/all', controller.allFiles);
 router.post('/download', controller.downloadFiles);
 router.post('/delete', controller.deleteFiles);
+router.post('/rename', controller.renameFile);
 
 module.exports = router;

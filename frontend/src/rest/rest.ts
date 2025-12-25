@@ -206,6 +206,23 @@ export default class Rest {
         }
     }
 
+    static async renameFile(fileId: string, newName: string, fileExt: string) {
+        this.log("Rename File")
+        try {
+            const response = await fetch(this.apiHost + "file/rename", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ fileId, newName, fileExt })
+            });
+            if (!response.ok) throw new Error("Can't rename the file");
+            return response;
+        }
+        catch (err) {
+            console.error(err);
+            throw err;
+        }
+    }
+
 }
 
 

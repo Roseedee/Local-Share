@@ -52,6 +52,14 @@ export default function FileList() {
   }, [id]);
 
   useEffect(() => {
+    if (!isEditFileName) return;
+
+    return () => {
+      loadFiles();
+    };
+  }, [isEditFileName]);
+
+  useEffect(() => {
     if (fileSearch === "") {
       setFileFilterd(files);
       return;
@@ -71,8 +79,6 @@ export default function FileList() {
 
     setFileFilterd(filteredFiles);
   }, [fileSearch, files]);
-
-
 
   const loadFiles = async () => {
     const userId = id === undefined ? local_id : selected_id

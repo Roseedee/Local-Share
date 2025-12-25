@@ -151,3 +151,22 @@ exports.deleteFiles = async (req, res) => {
         res.status(500).send("Failed to delete file");
     }
 }
+
+exports.renameFile = async (req, res) => {
+    const fileId = req.body.fileId || "";
+    const newName = req.body.newName || "";
+    const fileExt = req.body.fileExt || "";
+    console.log(`Rename File ID: ${fileId} to New Name: ${newName}.${fileExt}`);
+
+    if (fileId === "" || newName === "" || fileExt === "") {
+        return res.status(400).json({ message: "File ID, New Name, and File Extension are required." });
+    }
+
+    try {
+        const result = await db.renameFileById(fileId, newName, fileExt);
+        res.json({ result });
+    } catch (err) {
+        console.error("❌ Error:", err);
+        res.status(500).send("Failed to rename file");
+    }
+}

@@ -6,6 +6,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-left: 150px;
 }
 
 .overlay-edit-file-name-content {
