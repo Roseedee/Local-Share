@@ -1,13 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-import { SharedProvider } from './contexts/SharedContext'
+import { SharedProvider } from '@/contexts/SharedContext'
 
-import App from './pages/App'
-import Init from './pages/Init'
-import NetworkError from './pages/NetworkError'
+import App from '@pages/App'
+import Init from '@pages/Init'
+import NetworkError from '@pages/NetworkError'
 
-import "./style/index.css"
+import Settings from '@pages/settings/SettingsPage'
+
+import "@/style/index.css"
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -18,6 +20,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route path="/:id" element={<App />} />
           <Route path="/init/" element={<Init />} />
           <Route path="/error/network" element={<NetworkError />} />
+          <Route path="/settings" element={<Settings />} />
         </Routes>
       </BrowserRouter>
     </SharedProvider>

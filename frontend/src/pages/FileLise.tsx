@@ -136,7 +136,7 @@ export default function FileList() {
   }
 
   return (
-    <div className="file-list" onClick={() => { setIsSelectFile?.(false); setSelectedFile?.(null); setSelectedMultiFile?.([]); setIsEditFileName?.(false); }}>
+    <div className="files-content" onClick={() => { setIsSelectFile?.(false); setSelectedFile?.(null); setSelectedMultiFile?.([]); setIsEditFileName?.(false); }}>
       {fileFiltered && fileFiltered.length !== 0 ? (
         fileFiltered.map((file, i) => (
           <File

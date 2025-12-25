@@ -89,7 +89,7 @@ export default function SideBar({ local_uuid }: Props) {
                 <QRCodeSVG value={serverPath} />
                 <h5>{serverPath}</h5>
             </div>
-            <div className="device-list">
+            <div className="sidebar-item-list">
                 {
                     myDevice && (
                         <Device item={myDevice} active={id === undefined ? true : false} />
