@@ -1,14 +1,14 @@
 import { useState, useRef, useEffect } from "react"
 import { QRCodeSVG } from "qrcode.react"
 import { useParams } from "react-router-dom"
-import { useShared } from "../contexts/SharedContext"
+import { useShared } from "@/contexts/SharedContext"
 
-import rest from '../rest/rest'
-import DeviceModel from '../model/DeviceModel'
+import rest from '@/rest/rest'
+import DeviceModel from '@/model/DeviceModel'
 
-import Device from '../Components/Device'
+import Device from '@/Components/Device'
 
-import '../style/layout/sidebar.css'
+import '@/style/layout/sidebar.css'
 
 type Props = {
     local_uuid: string

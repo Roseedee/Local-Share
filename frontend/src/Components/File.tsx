@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
-import fileSize from '../util/fileSizeCalc'
-import FileCategory from '../util/fileCategory'
+import fileSize from '@/util/fileSizeCalc'
+import FileCategory from '@/util/fileCategory'
 
-import '../style/components/file.css'
+import '@/style/components/file.css'
 
-import FileModel from '../model/FileModel'
-import { getDateTimeString } from '../util/dateConvert'
+import FileModel from '@/model/FileModel'
+import { getDateTimeString } from '@/util/dateConvert'
 
 interface Props {
     file: FileModel

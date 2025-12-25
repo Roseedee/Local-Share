@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useShared } from '../contexts/SharedContext'
-import rest from '../rest/rest'
+import { useShared } from '@/contexts/SharedContext'
+import rest from '@/rest/rest'
 
-import File from '../Components/File'
-import OverlayFileFullView, { OverlayFileFullViewModel } from '../Components/OverlayFileFullView';
-import FileModel from '../model/FileModel';
-import OverlayEditFileName from '../Components/OverlayEditFileName';
+import File from '@/Components/File'
+import OverlayFileFullView, { OverlayFileFullViewModel } from '@/Components/OverlayFileFullView';
+import FileModel from '@/model/FileModel';
+import OverlayEditFileName from '@/Components/OverlayEditFileName';
 
 export default function FileList() {
   // const calledRef = useRef(false);

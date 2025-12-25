@@ -1,20 +1,20 @@
 import { useState, useRef, ChangeEvent, useEffect } from 'react'
-import { useShared } from '../contexts/SharedContext'
+import { useShared } from '@/contexts/SharedContext'
 import { useParams } from 'react-router-dom'
 
-import rest from '../rest/rest'
+import rest from '@/rest/rest'
 
-import editIcon from '../assets/edit.png'
-import fileUploadIcon from '../assets/up-loading.png'
-import downloadIcon from '../assets/downloads.png'
-import binIcon from '../assets/bin.png'
-import largeViewIcon from '../assets/large-view.png'
-import listViewIcon from '../assets/list-view.png'
-import selectIcon from '../assets/select.png'
-import renameIcon from '../assets/rename.png'
-import shareIcon from '../assets/share.png'
-import closeIcon from '../assets/close.png'
-import noticeIcon from '../assets/attention.png'
+import editIcon from '@/assets/edit.png'
+import fileUploadIcon from '@/assets/up-loading.png'
+import downloadIcon from '@/assets/downloads.png'
+import binIcon from '@/assets/bin.png'
+import largeViewIcon from '@/assets/large-view.png'
+import listViewIcon from '@/assets/list-view.png'
+import selectIcon from '@/assets/select.png'
+import renameIcon from '@/assets/rename.png'
+import shareIcon from '@/assets/share.png'
+import closeIcon from '@/assets/close.png'
+import noticeIcon from '@/assets/attention.png'
 
 export default function Header() {
 

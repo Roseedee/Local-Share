@@ -1,8 +1,8 @@
-import iconPicture from '../assets/file-category/picture.png'
-import iconVideo from '../assets/file-category/video.png'
-import iconAudio from '../assets/file-category/sound.png'
-import iconDocument from '../assets/file-category/document.png'
-import iconOther from '../assets/file-category/other.png'
+import iconPicture from '@/assets/file-category/picture.png'
+import iconVideo from '@/assets/file-category/video.png'
+import iconAudio from '@/assets/file-category/sound.png'
+import iconDocument from '@/assets/file-category/document.png'
+import iconOther from '@/assets/file-category/other.png'
 
 export default class FileCategory {
     private Image = "image";

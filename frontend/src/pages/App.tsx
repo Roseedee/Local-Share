@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useShared } from '../contexts/SharedContext'
+import { useShared } from '@/contexts/SharedContext'
 
-import '../style/App.css'
+import '@/style/App.css'
 
-import Layout from '../layout/Layout'
-import FileList from './FileLise'
-import PopUpFilesWaitUpload from './PopUpFilesWaitUpload'
+import Layout from '@/layout/Layout'
+import FileList from '@pages/FileLise'
+import PopUpFilesWaitUpload from '@pages/PopUpFilesWaitUpload'
 
-import rest from '../rest/rest'
+import rest from '@/rest/rest'
+import DeviceModel from '@/model/DeviceModel'
 
 function App() {
   const { id } = useParams<string>()
@@ -43,7 +44,7 @@ function App() {
   }, []);
 
   const loadData = async () => {
-    rest.auth(local_uuid).then((data) => {
+    rest.auth(local_uuid).then((data: DeviceModel) => {
       setMyDevice(data)
       // setIsLoading(false);
     }).catch((err: any) => {

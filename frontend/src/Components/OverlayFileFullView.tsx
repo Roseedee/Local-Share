@@ -1,9 +1,9 @@
-import FileCategory from '../util/fileCategory';
+import FileCategory from '@/util/fileCategory';
 
-import '../style/components/OverlayFileFullView.css'
+import '@/style/components/OverlayFileFullView.css'
 
-import leftArrowIcon from "../assets/left-arrow-white.png"
-import rightArrowIcon from "../assets/right-arrow-white.png"
+import leftArrowIcon from "@/assets/left-arrow-white.png"
+import rightArrowIcon from "@/assets/right-arrow-white.png"
 
 
 

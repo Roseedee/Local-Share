@@ -1,14 +1,14 @@
-import { useShared } from '../contexts/SharedContext'
-import rest from '../rest/rest'
+import { useShared } from '@/contexts/SharedContext'
+import rest from '@/rest/rest'
 
-import '../style/components/PopUpFilesWaitUpload.css'
+import '@/style/components/PopUpFilesWaitUpload.css'
 
-import imgTest from '../assets/file.png'
-import iconClose from '../assets/close.png'
-import iconCloseWhite from '../assets/close-white.png'
-import iconUpload from '../assets/up-loading.png'
+import imgTest from '@/assets/file.png'
+import iconClose from '@/assets/close.png'
+import iconCloseWhite from '@/assets/close-white.png'
+import iconUpload from '@/assets/up-loading.png'
 import { useEffect, useState } from 'react'
-import { FileUploadHistoryModel } from '../model/FileModel'
+import { FileUploadHistoryModel } from '@/model/FileModel'
 
 export default function PopUpFilesWaitUpload() {
 

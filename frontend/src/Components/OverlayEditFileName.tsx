@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { useShared } from '../contexts/SharedContext';
-import rest from '../rest/rest';
-import '../style/components/OverlayEditFileName.css'
+import { useShared } from '@/contexts/SharedContext';
+import rest from '@/rest/rest';
+import '@/style/components/OverlayEditFileName.css'
 
 export default function OverlayEditFileName() {
 

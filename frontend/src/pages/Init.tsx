@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import rest from '../rest/rest';
+import rest from '@/rest/rest';
 import { useNavigate } from 'react-router-dom';
 
-import "../style/Init.css"
+import "@/style/Init.css"
 
 
 export default function Init() {

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react"
 
-import '../style/layout.css'
-import '../style/header.css'
+import '@/style/layout.css'
+import '@/style/header.css'
 
 import SideBar from "./SideBar"
 import Header from "./Header"
