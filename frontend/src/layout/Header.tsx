@@ -36,8 +36,9 @@ export default function Header() {
         selectedFile, setSelectedFile,
         isLargeView, setIsLargeView,
         setFileDeleting, fileDeleting,
-        setFileSearch,
-        setIsEditFileName
+        setFileSearch, fileSearch,
+        setIsEditFileName,
+        isShowFileInfo, setIsShowFileInfo
     } = useShared();
 
     const fileUploadRef = useRef<HTMLInputElement | null>(null)
@@ -216,12 +217,12 @@ export default function Header() {
                 </div>
                 <div className="header-child-content search-container">
                     <div className="input-search-container">
-                        <input type="text" className='search-input' name="" id="" placeholder='ค้นหา, สามารถใช้ wildcard ได้' onChange={(e) => setFileSearch?.(e.target.value)} />
-                        <img src={closeIcon} alt="" className='input-search-clear' />
+                        <input type="text" className='search-input' name="" id="" placeholder='ค้นหา, สามารถใช้ wildcard ได้' onChange={(e) => setFileSearch?.(e.target.value)} value={fileSearch}/>
+                        <img src={closeIcon} alt="" className='input-search-clear' onClick={() => setFileSearch?.("")} />
                     </div>
-                    <div className="input-search-icon-container">
+                    {/* <div className="input-search-icon-container">
                         <img src={noticeIcon} alt="" className='input-search-icon' />
-                    </div>
+                    </div> */}
                 </div>
                 <div className='header-child-content tools-group'>
                     {
@@ -275,6 +276,9 @@ export default function Header() {
                         //     </div>
                         // )
                     }
+                    <div className={`tool-icon ${isShowFileInfo ? 'active' : ''}`} onClick={() => setIsShowFileInfo?.(!isShowFileInfo)}>
+                        <img src={noticeIcon} alt="" className='content-header-icon' />
+                    </div>
                 </div>
             </div>
         </>

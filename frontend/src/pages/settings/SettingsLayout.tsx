@@ -13,12 +13,12 @@ export default function SettingsLayout({ children }: Props) {
                 </div>
                 <div className="sidebar-item-list"></div>
                 <div className="sidebar-bottom">
-                    asd
+                    Exit Settings
                 </div>
             </div>
             <div className="content">
                 <div className="content-header">
-                    
+
                 </div>
                 <div className="content-body">
                     { children }

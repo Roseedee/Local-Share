@@ -66,4 +66,14 @@ export default class FileCategory {
             default: return iconOther;
         }
     }
+
+    getCategoryName(): string {
+        switch (this.category) {
+            case this.Image: return "Picture";
+            case this.Video: return "Video";
+            case this.Audio: return "Audio";
+            case this.Document: return "Document";
+            default: return "Other";
+        }
+    }
 }
