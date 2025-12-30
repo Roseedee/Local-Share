@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import fileSize from '@/util/fileSizeCalc'
 import FileCategory from '@/util/fileCategory'
+import rest from '@/rest/rest'
 
 import '@/style/components/file.css'
 
@@ -51,7 +52,7 @@ export default function File({ file, isUpload = false, progressNow = 0, isSelect
             <div className="file-icon-container">
                 {
                     fileCategory.isImage() ? (
-                        <img className='image-icon' src={file.new_name} alt={file.name} />
+                        <img className='image-icon' src={rest.fileUrl(file.new_name || "")} alt={file.name} />
                     ) : (
                         <img className='other-file-icon' src={fileCategory.getIcon()} alt="Can't preview this file" />
                     )

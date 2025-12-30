@@ -90,20 +90,22 @@ export default function FileList() {
     });
   };
 
-  const handleFileSelect = (fileId: string, filePath: string, fileType: string, orgName: string) => {
+  const handleFileSelect = (file: FileModel) => {
     setIsEditFileName?.(false);
     // console.log("File selected:", fileId);
     if (isSelectMultiFile) {
       setIsSelectFile?.(false);
-      if (selectedMultiFile?.includes(fileId)) {
-        setSelectedMultiFile?.(selectedMultiFile.filter(id => id !== fileId));
+      if (selectedMultiFile?.includes(file.id || "")) {
+        setSelectedMultiFile?.(selectedMultiFile.filter(id => id !== file.id));
       } else {
-        setSelectedMultiFile?.([...(selectedMultiFile ?? []), fileId]);
+        setSelectedMultiFile?.([...(selectedMultiFile ?? []), file.id || ""]);
       }
     } else {
+
+      const fileUrl = rest.fileUrl(file.new_name || "");
       setIsSelectFile?.(true);
-      setSelectedFile?.({ id: fileId, new_name: filePath, type: fileType, name: orgName });
-      setFileSelectForFileFullView({ fileId: fileId, filePath: filePath, fileType: fileType });
+      setSelectedFile?.({ id: file.id, new_name: fileUrl, type: file.type, name: file.name, size: file.size, create_at: file.create_at });
+      setFileSelectForFileFullView({ fileId: file.id, filePath: fileUrl, fileType: file.type });
     }
   };
 
@@ -141,25 +143,13 @@ export default function FileList() {
         fileFiltered.map((file, i) => (
           <File
             key={i}
-            file={{
-              id: file.id,
-              name: file.name,
-              new_name: rest.fileUrl(file.new_name || ""),
-              size: file.size,
-              type: file.type,
-              create_at: file.create_at
-            }}
+            file={file}
             isSelected={
               (file.id ? selectedMultiFile?.includes(file.id) : false) ||
               (selectedFile?.id === file.id)
             }
             onClick={() =>
-              handleFileSelect(
-                file.id || "",
-                rest.fileUrl(file.new_name || ""),
-                file.type || "",
-                file.name || ""
-              )
+              handleFileSelect(file)
             }
             onDoubleClick={() => {
               handleFileDoubleClick();

@@ -13,7 +13,7 @@ import rest from '@/rest/rest'
 import DeviceModel from '@/model/DeviceModel'
 import FileCategory from '@/util/fileCategory'
 import fileSize from '@/util/fileSizeCalc'
-import { getDateString } from '@/util/dateConvert'
+import { getDateTimeString } from '@/util/dateConvert'
 
 function App() {
   const { id } = useParams<string>()
@@ -102,7 +102,7 @@ function App() {
               </div>
               <div className="meta-data-item">
                 <p>Uploaded At</p>
-                <p>{getDateString(selectedFile?.create_at) || "NULL"}</p>
+                <p>{getDateTimeString(selectedFile?.create_at) || "NULL"}</p>
               </div>
             </div>
           </div>
