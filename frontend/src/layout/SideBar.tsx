@@ -10,6 +10,9 @@ import Device from '@/Components/Device'
 
 import '@/style/layout/sidebar.css'
 
+import upArrowIcon from '@/assets/up-arrow.png'
+import StorageChart from "@/Components/StorageChart"
+
 type Props = {
     local_uuid: string
 }
@@ -22,8 +25,10 @@ export default function SideBar({ local_uuid }: Props) {
     const [serverPath, setServerPath] = useState<string>("can't connect to server")
 
     const { myDevice, setDeviceSelected } = useShared();
-    
+
     const [devicesList, setDevicesList] = useState<DeviceModel[]>([])
+
+    const [isShowStorageChart, setIsShowStorageChart] = useState<boolean>(true);
 
     useEffect(() => {
         if (calledRef.current) return;
@@ -85,9 +90,19 @@ export default function SideBar({ local_uuid }: Props) {
     return (
         <div className="sidebar">
             <div className="sidebar-header">
-                <span className='tag'>แสกนเพื่อเข้ากลุ่ม</span>
-                <QRCodeSVG value={serverPath} />
-                <h5>{serverPath}</h5>
+                <div className={`qr-for-share ${!isShowStorageChart ? 'qr-for-share-show' : ''}`}>
+                    <span className='tag'>แสกนเพื่อเข้ากลุ่ม</span>
+                    <QRCodeSVG value={serverPath} />
+                    <h5>{serverPath}</h5>
+                </div>
+                <div className="sw-view-header-sidebar" onClick={() => setIsShowStorageChart(!isShowStorageChart)} ><img src={upArrowIcon} alt="" style={{
+                    transform: isShowStorageChart ? "rotate(180deg)" : "rotate(0deg)",
+                    transition: "transform 0.2s ease",
+                }} /></div>
+                <div className={`storage-chart ${isShowStorageChart ? 'storage-chart-show' : ''}`}>
+                    <StorageChart />
+                    <h2>{myDevice?.name}</h2>
+                </div>
             </div>
             <div className="sidebar-item-list">
                 {
