@@ -12,10 +12,19 @@
 }
 
 .file-info-header {
+    width: 100%;
     display: flex;
     justify-content: space-between;
     gap: 5px;
 }
+
+.file-info-header h5 {
+    max-width: max-content;
+    white-space: wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 
 .file-info-preview {
     position: relative;
@@ -73,12 +82,13 @@
 .file-info-meta-data {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
     font-size: 0.9rem;
 }
 
 .file-info-meta-data .meta-data-item {
     display: flex;
+    align-items: center;
     justify-content: space-between;
     gap: 10px;
 }

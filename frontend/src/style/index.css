@@ -30,3 +30,22 @@ h1, h2, h3, h4, h5, h6, p {
 .hide {
   display: none;
 }
+
+p.card-text {
+  padding: 3px 5px;
+  border-radius: 3px;
+  font-size: 9px;
+  color: white
+}
+
+.bg-green {
+  background-color: #7ec08e;
+}
+
+.bg-red {
+  background-color: #d42231;
+}
+
+.bg-blue {
+  background-color: #4ba2ca;
+}

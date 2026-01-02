@@ -10,6 +10,7 @@ const dotenv = require('dotenv');
 const authRoutes = require('./routes/auth.routes');
 const clientRoutes = require('./routes/client.routes');
 const fileRoutes = require('./routes/file.routes');
+
 const uploadProgress = require('./middlewares/uploadProgress');
 
 dotenv.config();

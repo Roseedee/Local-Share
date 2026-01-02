@@ -5,6 +5,7 @@ export default interface FileModel {
     size?: number;
     type?: string;
     create_at?: Date;
+    access_scope?: string;
     client_id_source?: string;
     client_id_target?: string;
 }

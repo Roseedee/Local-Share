@@ -1,9 +1,22 @@
+import { useEffect } from "react";
+import { useShared } from "@/contexts/SharedContext";
+
+import fileSize from "@/util/fileSizeCalc";
+
 import "@/style/components/storage-chart.css";
 
 export default function StorageChart() {
-  const total = 36;
-  const used = 22;
+
+  const { sumFileSize } = useShared();
+
+  const total = 1073741824;
+  const used = sumFileSize || 0;
   const percent = (used / total) * 100;
+
+
+  useEffect(() => {
+    console.log("Sum File Size in StorageChart: ", sumFileSize);
+  }, [sumFileSize]);
 
   return (
     <div className="circle-wrap">
@@ -26,9 +39,9 @@ export default function StorageChart() {
       </svg>
 
       <div className="text">
-        <div className="title">{total}GB</div>
+        <div className="title">{fileSize(total)}</div>
         <div className="sub">
-          {used}GB ({percent.toFixed(1)}%)
+          {fileSize(used)} ({percent.toFixed(1)}%)
         </div>
       </div>
     </div>

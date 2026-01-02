@@ -42,6 +42,9 @@ interface SharedContextType {
 
     isShowFileInfo?: boolean;
     setIsShowFileInfo?: (value: boolean) => void;
+
+    sumFileSize?: number;
+    setSumFileSize?: (value: number) => void;
 }
 
 const SharedContext = createContext<SharedContextType | undefined>(undefined)
@@ -75,6 +78,8 @@ export function SharedProvider({ children }: SharedProviderProds) {
 
     const [isShowFileInfo, setIsShowFileInfo] = useState<boolean>(false);
 
+    const [sumFileSize, setSumFileSize] = useState<number>(0);
+
     if (devMode) {
 
         useEffect(() => {
@@ -105,7 +110,8 @@ export function SharedProvider({ children }: SharedProviderProds) {
             fileDeleting, setFileDeleting,
             fileSearch, setFileSearch, 
             isEditFileName, setIsEditFileName,
-            isShowFileInfo, setIsShowFileInfo
+            isShowFileInfo, setIsShowFileInfo,
+            sumFileSize, setSumFileSize
         }}>
             {children}
         </SharedContext.Provider>

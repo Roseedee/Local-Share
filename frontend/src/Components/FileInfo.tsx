@@ -15,6 +15,17 @@ export default function FileInfo() {
         isShowFileInfo
     } = useShared();
 
+    const colorTag = (tag?: string) => {
+        switch (tag) {
+            case 'PUBLIC':
+                return 'bg-green';
+            case 'PRIVATE':
+                return 'bg-red';
+            default:
+                return 'bg-blue';
+        }
+    };
+
     useEffect(() => {
         console.log("Selected File Info: ", selectedFile);
         console.log("isSelectFile: ", isSelectFile);
@@ -53,6 +64,10 @@ export default function FileInfo() {
                 <div className="meta-data-item">
                     <p>Uploaded At</p>
                     <p>{getDateTimeString(selectedFile?.create_at) || "NULL"}</p>
+                </div>
+                <div className="meta-data-item">
+                    <p>Access Level</p>
+                    <p className={`card-text ${colorTag(selectedFile?.access_scope)}`}>{selectedFile?.access_scope}</p>
                 </div>
             </div>
         </div>

@@ -18,7 +18,8 @@ export default function FileList() {
     setSelectedMultiFile, setIsSelectFile,
     fileDeleting, setFileDeleting,
     fileSearch,
-    isEditFileName, setIsEditFileName
+    isEditFileName, setIsEditFileName,
+    setSumFileSize
   } = useShared();
 
   const local_id = localStorage.getItem("device_id") || ""
@@ -84,9 +85,10 @@ export default function FileList() {
     const ownerId = id === undefined ? local_id : selected_id
     const viewerId = local_id;
     await rest.getFiles(viewerId, ownerId).then((data) => {
-      console.log("Files:", data.results);
+      // console.log("Files:", data.results);
       setFiles(data.results)
     }).finally(() => {
+      setSumFileSize?.(files.reduce((acc, file) => acc + (file.size || 0), 0));
       setFileDeleting?.(false);
     });
   };
@@ -105,7 +107,7 @@ export default function FileList() {
 
       const fileUrl = rest.fileUrl(file.new_name || "");
       setIsSelectFile?.(true);
-      setSelectedFile?.({ id: file.id, new_name: fileUrl, type: file.type, name: file.name, size: file.size, create_at: file.create_at });
+      setSelectedFile?.({ id: file.id, new_name: fileUrl, type: file.type, name: file.name, size: file.size, create_at: file.create_at, access_scope: file.access_scope });
       setFileSelectForFileFullView({ fileId: file.id, filePath: fileUrl, fileType: file.type });
     }
   };
