@@ -122,14 +122,14 @@ export default class Rest {
         }
     }
 
-    static async getFiles(userId: string) {
+    static async getFiles(viewer_device_id: string, owner_device_id: string) {
         this.log("Get File")
 
         try {
             const response = await fetch(this.apiHost + "file/all", {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({userId})
+                body: JSON.stringify({ viewer_device_id, owner_device_id })
             })
             if (!response.ok) throw new Error("Failed to fetch files");
 

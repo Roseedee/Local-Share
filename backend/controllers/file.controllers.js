@@ -51,23 +51,25 @@ exports.files = async (req, res) => {
 }
 
 exports.allFiles = async (req, res) => {
-    const { userId } = req.body;
+    const { viewer_device_id, owner_device_id } = req.body;
 
-    console.log("Load Files for : " + userId)
+    console.log("Viewer : " + viewer_device_id + ", Onwer : " + owner_device_id);
 
     try {
-        const result = await db.loadFiles(userId);
-        const files = result.map(file => ({
+        const result = await db.loadFiles(viewer_device_id, owner_device_id);
+        // console.log("DB Result: ", result[0].file_id);
+        const files = result[0].map(file => ({
             id: file.file_id,
             new_name: file.file_new_name,
             name: file.file_org_name,
             size: file.file_size,
             type: file.file_type,
-            client_id_source: file.client_uuid_source,
-            client_id_target: file.client_uuid_target,
+            access_scope: file.access_scope,
+            client_id_source: file.uploader_device_id,
+            client_id_target: file.owner_device_id,
             create_at: file.create_at
         }));
-        // console.log("Files Loaded: ", files.length)
+        // console.log("Files Loaded: ", files)
         res.json({ results: files });
     } catch (error) {
         console.error(error);

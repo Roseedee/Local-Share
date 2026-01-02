@@ -81,9 +81,10 @@ export default function FileList() {
   }, [fileSearch, files]);
 
   const loadFiles = async () => {
-    const userId = id === undefined ? local_id : selected_id
-    await rest.getFiles(userId).then((data) => {
-      // console.log("Files:", data);
+    const ownerId = id === undefined ? local_id : selected_id
+    const viewerId = local_id;
+    await rest.getFiles(viewerId, ownerId).then((data) => {
+      console.log("Files:", data.results);
       setFiles(data.results)
     }).finally(() => {
       setFileDeleting?.(false);

@@ -25,7 +25,7 @@ exports.auth = (uuid) => {
     const query = 'SELECT * FROM clients WHERE client_uuid=?';
     return new Promise((resolve, reject) => {
         db.execute(query, [uuid], (err, results) => {
-            if(err) {
+            if (err) {
                 console.error('Error auth : ', err);
             }
             if (!results || results.length === 0) {
@@ -40,7 +40,7 @@ exports.auth = (uuid) => {
 exports.insertClient = async (uuid, name) => {
     connectToDatabase();
     const query = 'INSERT INTO clients (client_uuid, client_name) VALUES (?, ?)';
-    
+
     return new Promise((resolve, reject) => {
         db.execute(query, [uuid, name], (err, results) => {
             if (err) {
@@ -73,7 +73,7 @@ exports.insertFiles = (fileOrgName, fileNewName, fileSize, fileType, uploadByID,
     uploadToID = uploadToID === "" ? uploadByID : uploadToID;
 
     connectToDatabase();
-    const query = 'INSERT INTO files (file_org_name, file_new_name, file_size, file_type, client_uuid_source, client_uuid_target) VALUES (?, ?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO files (file_org_name, file_new_name, file_size, file_type, uploader_device_id, owner_device_id) VALUES (?, ?, ?, ?, ?, ?)';
     return new Promise((resolve, reject) => {
         db.execute(query, [fileOrgName, fileNewName, fileSize, fileType, uploadByID, uploadToID], (err, results) => {
             if (err) {
@@ -86,9 +86,9 @@ exports.insertFiles = (fileOrgName, fileNewName, fileSize, fileType, uploadByID,
     });
 }
 
-exports.loadFiles = async (client_id) => {
+exports.loadFiles = async (viewer_device_id, owner_device_id) => {
     connectToDatabase();
-    const query = 'SELECT * FROM files Where client_uuid_target = ' + db.escape(client_id) + 'ORDER BY file_id DESC';
+    const query = 'CALL get_visible_files(' + db.escape(viewer_device_id) + ', ' + db.escape(owner_device_id) + ')';
     return new Promise((resolve, reject) => {
         db.execute(query, (err, results) => {
             if (err) {
@@ -106,7 +106,7 @@ exports.getFileByIds = async (files) => {
     const query = `SELECT file_org_name, file_new_name FROM files WHERE file_id IN (${files.map(() => '?').join(',')})`;
     return new Promise((resolve, reject) => {
         db.execute(query, files, (err, results) => {
-            if (err) {  
+            if (err) {
                 console.error('Error fetching files by IDs:', err);
                 return reject(err);
             }
@@ -117,7 +117,7 @@ exports.getFileByIds = async (files) => {
 
 exports.renameComputer = async (userId, newName) => {
     connectToDatabase();
-    
+
     const query = `UPDATE clients SET client_name = ? WHERE client_id = ?`;
 
     return new Promise((resolve, reject) => {
@@ -152,7 +152,7 @@ exports.getFilesNameByIds = async (files) => {
     const query = `SELECT file_new_name FROM files WHERE file_id IN (${files.map(() => '?').join(',')})`;
     return new Promise((resolve, reject) => {
         db.execute(query, files, (err, results) => {
-            if (err) {  
+            if (err) {
                 console.error('Error fetching files by IDs:', err);
                 return reject(err);
             }
@@ -166,10 +166,10 @@ exports.renameFileById = async (fileId, newName, fileExt) => {
     const query = `UPDATE files SET file_org_name = ? WHERE file_id = ?`;
     return new Promise((resolve, reject) => {
         db.execute(query, [newName + "." + fileExt, fileId], (err, results) => {
-            if (err) { 
+            if (err) {
                 console.error('Error renaming file by ID:', err);
                 return reject(err);
-            }   
+            }
             resolve(results);
         });
     });
