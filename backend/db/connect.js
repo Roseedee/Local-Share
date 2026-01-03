@@ -174,3 +174,28 @@ exports.renameFileById = async (fileId, newName, fileExt) => {
         });
     });
 }
+
+exports.getStorageInfo = async (userId) => {
+    connectToDatabase();
+    const query = 
+    `SELECT
+        clients.client_id,
+        SUM(files.file_size) AS total_storage_used,
+        clients.storage_limit
+    FROM clients 
+    LEFT JOIN files
+    ON files.owner_device_id = clients.client_id
+    WHERE clients.client_id = ${db.escape(userId)}
+    GROUP BY
+        clients.client_id,
+        clients.storage_limit;`;
+    return new Promise((resolve, reject) => {
+        db.execute(query, (err, results) => {
+            if (err) {
+                console.error('Error fetching storage info:', err);
+                return reject(err);
+            }
+            resolve(results);
+        });
+    });
+}

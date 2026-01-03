@@ -10,6 +10,7 @@ const dotenv = require('dotenv');
 const authRoutes = require('./routes/auth.routes');
 const clientRoutes = require('./routes/client.routes');
 const fileRoutes = require('./routes/file.routes');
+const storageInfoRoutes = require('./routes/storage.routes');
 
 const uploadProgress = require('./middlewares/uploadProgress');
 
@@ -35,6 +36,7 @@ app.post('/connection', (req, res) => {
 app.use('/auth', authRoutes);
 app.use('/device', clientRoutes);
 app.use('/file', fileRoutes);
+app.use('/storage', storageInfoRoutes);
 app.use(uploadProgress);
 
 app.listen(port, () => {
