@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/', (req, res) => res.json({ status: 'ok' }))
 
 app.post('/connection', (req, res) => {
-    console.log("Get Connection")
+    // console.log("Get Connection")
     const init_path = "http://192.168.1.240:8080/init"
     res.json({ url: init_path });
 });

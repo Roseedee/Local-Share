@@ -223,6 +223,21 @@ export default class Rest {
         }
     }
 
+    static async getStorageInfo(userId: string) {
+        this.log("Get Storage Info")
+        try {
+            const response = await fetch(this.apiHost + "storage/info", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userId})
+            });
+            if (!response.ok) throw new Error("Can't get storage info");
+            return response.json();
+        }catch (err) {
+            console.error(err);
+            throw err;
+        }
+    }
 }
 
 

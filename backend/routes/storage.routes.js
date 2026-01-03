@@ -3,6 +3,6 @@ const route = express.Router();
 
 const controller = require('../controllers/storage.controllers');
 
-route.get('/info', controller.storageInfo);
+route.post('/info', controller.storageInfo);
 
 module.exports = route;

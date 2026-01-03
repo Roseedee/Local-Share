@@ -40,7 +40,6 @@ exports.auth = (uuid) => {
 exports.insertClient = async (uuid, name) => {
     connectToDatabase();
     const query = 'INSERT INTO clients (client_uuid, client_name) VALUES (?, ?)';
-
     return new Promise((resolve, reject) => {
         db.execute(query, [uuid, name], (err, results) => {
             if (err) {
@@ -69,9 +68,7 @@ exports.loadClients = async (client_id) => {
 }
 
 exports.insertFiles = (fileOrgName, fileNewName, fileSize, fileType, uploadByID, uploadToID) => {
-
     uploadToID = uploadToID === "" ? uploadByID : uploadToID;
-
     connectToDatabase();
     const query = 'INSERT INTO files (file_org_name, file_new_name, file_size, file_type, uploader_device_id, owner_device_id) VALUES (?, ?, ?, ?, ?, ?)';
     return new Promise((resolve, reject) => {
@@ -178,17 +175,17 @@ exports.renameFileById = async (fileId, newName, fileExt) => {
 exports.getStorageInfo = async (userId) => {
     connectToDatabase();
     const query = 
-    `SELECT
-        clients.client_id,
-        SUM(files.file_size) AS total_storage_used,
-        clients.storage_limit
-    FROM clients 
-    LEFT JOIN files
-    ON files.owner_device_id = clients.client_id
-    WHERE clients.client_id = ${db.escape(userId)}
-    GROUP BY
-        clients.client_id,
-        clients.storage_limit;`;
+        `SELECT
+            clients.client_id,
+            SUM(files.file_size) AS total_storage_used,
+            clients.storage_limit
+        FROM clients 
+        LEFT JOIN files
+        ON files.owner_device_id = clients.client_id
+        WHERE clients.client_id = ${db.escape(userId)}
+        GROUP BY
+            clients.client_id,
+            clients.storage_limit;`;
     return new Promise((resolve, reject) => {
         db.execute(query, (err, results) => {
             if (err) {

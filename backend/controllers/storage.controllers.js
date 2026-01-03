@@ -1,4 +1,3 @@
-const { configDotenv } = require('dotenv');
 const db = require('../db/connect');
 
 exports.storageInfo = async (req, res) => {
