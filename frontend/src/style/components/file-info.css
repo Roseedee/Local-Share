@@ -92,3 +92,24 @@
     justify-content: space-between;
     gap: 10px;
 }
+
+.file-info-selector {
+    font-size: 0.7rem;
+    padding: 4px 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.file-info-selector:focus {
+    outline: none;
+}
+
+.file-info-btn-save-access-scope {
+    font-size: 0.7rem;
+    padding: 5px 10px;
+    border-radius: 3px;
+    border: none;
+    background-color: #649b4a;
+    color: white;
+    cursor: pointer;
+}
