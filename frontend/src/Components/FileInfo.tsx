@@ -92,6 +92,10 @@ export default function FileInfo() {
                         }
                     </div>
                 </div>
+                <div className="meta-data-item">
+                    <p>File Permission</p>
+                    <p>{selectedFile?.permission_code}</p>
+                </div>
             </div>
         </div>
     ) : (<></>)

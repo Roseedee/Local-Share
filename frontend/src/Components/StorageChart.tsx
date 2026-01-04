@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useShared } from '@/contexts/SharedContext'
 
 import rest from "@/rest/rest";
 
@@ -7,6 +8,8 @@ import fileSize from "@/util/fileSizeCalc";
 import "@/style/components/storage-chart.css";
 
 export default function StorageChart() {
+  const { fileListWaitUpload } = useShared();
+
   const [storageInfo, setStorageInfo] = useState<{ total_storage_used: number; storage_limit: number }>({ total_storage_used: 0, storage_limit: 0 });
 
   const [percent, setPercent] = useState<number>(0);
@@ -14,7 +17,7 @@ export default function StorageChart() {
 
   useEffect(() => {
     getStorageInfo();
-  }, []);
+  }, [fileListWaitUpload]);
 
   const getStorageInfo = async () => {
     await rest.getStorageInfo(local_id).then((res) => {

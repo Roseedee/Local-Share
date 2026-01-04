@@ -104,10 +104,9 @@ export default function FileList() {
         setSelectedMultiFile?.([...(selectedMultiFile ?? []), file.id || ""]);
       }
     } else {
-
       const fileUrl = rest.fileUrl(file.new_name || "");
       setIsSelectFile?.(true);
-      setSelectedFile?.({ id: file.id, new_name: fileUrl, type: file.type, name: file.name, size: file.size, create_at: file.create_at, access_scope: file.access_scope });
+      setSelectedFile?.({ id: file.id, new_name: fileUrl, type: file.type, name: file.name, size: file.size, create_at: file.create_at, access_scope: file.access_scope, permission_code: file.permission_code, client_id_source: file.client_id_source, client_id_target: file.client_id_target });
       setFileSelectForFileFullView({ fileId: file.id, filePath: fileUrl, fileType: file.type });
     }
   };

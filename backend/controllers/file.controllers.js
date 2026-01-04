@@ -65,6 +65,7 @@ exports.allFiles = async (req, res) => {
             size: file.file_size,
             type: file.file_type,
             access_scope: file.access_scope,
+            permission_code: file.permission_code,
             client_id_source: file.uploader_device_id,
             client_id_target: file.owner_device_id,
             create_at: file.create_at
