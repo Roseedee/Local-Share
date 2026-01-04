@@ -196,3 +196,17 @@ exports.getStorageInfo = async (userId) => {
         });
     });
 }
+
+exports.editFileAccessScopeById = async (fileId, owner_device_id, accessScope) => {
+    connectToDatabase();
+    const query = `UPDATE files SET access_scope = ? WHERE file_id = ? AND owner_device_id = ?`;
+    return new Promise((resolve, reject) => {
+        db.execute(query, [accessScope, fileId, owner_device_id], (err, results) => {
+            if (err) {
+                console.error('Error editing file access scope by ID:', err);
+                return reject(err);
+            }
+            resolve(results);
+        });
+    });
+}

@@ -173,3 +173,23 @@ exports.renameFile = async (req, res) => {
         res.status(500).send("Failed to rename file");
     }
 }
+
+exports.editFileAccessScope = async (req, res) => {
+    const fileId = req.params.id;
+    const { owner_device_id, access_scope } = req.body;
+    if (fileId === "" || owner_device_id === "" || access_scope === "") {
+        return res.status(400).json({ message: "File ID, Owner Device ID, and Access Scope are required." });
+    }
+
+    try {
+        const result = await db.editFileAccessScopeById(fileId, owner_device_id, access_scope);
+        if(result.affectedRows === 0){
+            return res.status(404).json({ message: "File not found or no changes made." });
+        }
+        res.json({ message: "File access scope updated successfully", result });
+    }
+    catch (err) {
+        console.error("❌ Error:", err);
+        res.status(500).send("Failed to edit file access scope");
+    }
+}

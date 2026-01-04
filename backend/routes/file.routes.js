@@ -9,5 +9,6 @@ router.post('/all', controller.allFiles);
 router.post('/download', controller.downloadFiles);
 router.post('/delete', controller.deleteFiles);
 router.post('/rename', controller.renameFile);
+router.patch('/:id/access-scope', controller.editFileAccessScope);
 
 module.exports = router;

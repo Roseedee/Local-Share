@@ -238,7 +238,20 @@ export default class Rest {
             throw err;
         }
     }
+
+    static async editFileAccessScope(file_id: string, owner_device_id: string, access_scope: string) {
+        this.log("Edit File Access Scope")
+        try {
+            const response = await fetch(this.apiHost + `file/${file_id}/access-scope`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ owner_device_id, access_scope })
+            });
+            if (!response.ok) throw new Error("Can't edit file access scope");
+            return response;
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
+    }
 }
-
-
-

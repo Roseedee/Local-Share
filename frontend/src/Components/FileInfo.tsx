@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useShared } from '@/contexts/SharedContext'
+
+import rest from '@/rest/rest'
 
 import '@/style/components/file-info.css'
 
@@ -15,10 +17,13 @@ export default function FileInfo() {
     const {
         selectedFile,
         isSelectFile,
-        isShowFileInfo
+        isShowFileInfo,
+        setIsFileListLoading
     } = useShared();
+    const local_id = localStorage.getItem("device_id") || ""
 
     const [isEditingAccessScope, setIsEditingAccessScope] = useState(false);
+    const [accessScopeInput, setAccessScopeInput] = useState<string>("");
 
     const colorTag = (tag?: string) => {
         switch (tag) {
@@ -31,11 +36,32 @@ export default function FileInfo() {
         }
     };
 
-    // useEffect(() => {
-    //     console.log("Selected File Info: ", selectedFile);
-    //     console.log("isSelectFile: ", isSelectFile);
-    //     console.log("isShowFileInfo: ", isShowFileInfo);
-    // }, [selectedFile]);
+    useEffect(() => {
+        setAccessScopeInput(selectedFile?.access_scope || "");
+    }, [selectedFile]);
+
+    useEffect(() => {
+        console.log("Access Scope Input Changed: ", accessScopeInput);
+    }, [accessScopeInput]);
+
+    const handleConfirmAccessScopeChange = async () => {
+        // console.log("Confirm Change Access Scope");
+        // console.log("Old Access Scope: ", selectedFile?.access_scope);
+        // console.log("New Access Scope: ", accessScopeInput);
+        if (accessScopeInput === selectedFile?.access_scope) {
+            setIsEditingAccessScope(false);
+            return;
+        }
+
+        await rest.editFileAccessScope(selectedFile?.id || "", local_id, accessScopeInput).then(() => {
+            // console.log("Access Scope Updated Successfully");
+            setIsEditingAccessScope(false);
+            setIsFileListLoading?.(true);
+            selectedFile!.access_scope = accessScopeInput;
+        }).catch((err) => {
+            console.error("Failed to update access scope:", err);
+        });
+    };
 
 
     return isSelectFile && isShowFileInfo && selectedFile ? (
@@ -76,12 +102,12 @@ export default function FileInfo() {
                         {
                             isEditingAccessScope ? (
                                 <>
-                                    <select name="" id="" className='file-info-selector'>
+                                    <select name="" id="" className='file-info-selector' value={accessScopeInput} onChange={(e) => setAccessScopeInput(e.target.value)}>
                                         <option value="PUBLIC">PUBLIC</option>
                                         <option value="PRIVATE">PRIVATE</option>
                                         <option value="PROTECTED">PROTECTED</option>
                                     </select>
-                                    <input type="button" value="Save" className='file-info-btn-save-access-scope' onClick={() => setIsEditingAccessScope(false)}/>
+                                    <input type="button" value="Save" className='file-info-btn-save-access-scope' onClick={handleConfirmAccessScopeChange} />
                                 </>
                             ) : (
                                 <>

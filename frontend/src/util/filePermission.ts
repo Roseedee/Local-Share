@@ -3,6 +3,8 @@ export default function permissionCodeToString(permCode: string | null | undefin
         return 'Read Only';
     }else if(permCode === 'rw-') {
         return 'Read and Write';
+    }else if(permCode === 'r-x') {
+        return 'Read and Execute';
     }else if(permCode === 'rwx') {
         return 'Read, Write and Execute';
     }

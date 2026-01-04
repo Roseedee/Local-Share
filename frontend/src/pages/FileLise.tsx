@@ -19,7 +19,8 @@ export default function FileList() {
     fileDeleting, setFileDeleting,
     fileSearch,
     isEditFileName, setIsEditFileName,
-    setSumFileSize
+    setSumFileSize,
+    isFileListLoading, setIsFileListLoading
   } = useShared();
 
   const local_id = localStorage.getItem("device_id") || ""
@@ -28,12 +29,13 @@ export default function FileList() {
   const [files, setFiles] = useState<FileModel[]>([]);
   const [overlayFileFullView, setOverlayFileFullView] = useState<boolean>(false)
   const [fileSelectForFileFullView, setFileSelectForFileFullView] = useState<OverlayFileFullViewModel>()
-  const [fileFiltered, setFileFilterd] = useState<FileModel[]>([])
-  // const [fileSelected, setFileSelected] = useState<string>("");
+  const [fileFiltered, setFileFilterd] = useState<FileModel[]>([]);
 
   useEffect(() => {
-    // if (calledRef.current) return;
-    // calledRef.current = true;
+    loadFiles();
+  }, [isFileListLoading]);
+
+  useEffect(() => {
     setSelectedMultiFile?.([]);
     loadFiles();
   }, [myDevice, deviceSelected, fileListWaitUpload]);
@@ -90,6 +92,7 @@ export default function FileList() {
     }).finally(() => {
       setSumFileSize?.(files.reduce((acc, file) => acc + (file.size || 0), 0));
       setFileDeleting?.(false);
+      setIsFileListLoading?.(false);
     });
   };
 

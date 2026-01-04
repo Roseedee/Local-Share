@@ -16,6 +16,9 @@ interface SharedContextType {
     deviceSelected: DeviceModel | null;
     setDeviceSelected: (value: DeviceModel | null) => void;
 
+    isFileListLoading?: boolean;
+    setIsFileListLoading?: (value: boolean) => void;
+
     isSelectMultiFile?: boolean;
     setIsSelectMultiFile?: (value: boolean) => void;
 
@@ -60,6 +63,8 @@ export function SharedProvider({ children }: SharedProviderProds) {
     const [myDevice, setMyDevice] = useState<DeviceModel>({ client_id: "", id: "", name: "" })
     const [deviceSelected, setDeviceSelected] = useState<DeviceModel | null>({ client_id: "", id: "", name: "" })
 
+    const [isFileListLoading, setIsFileListLoading] = useState<boolean>(false);
+
     const [fileListWaitUpload, setFileListWaitUpload] = useState<File[] | null>()
     const [uploadFilesHistory, setUploadFilesHistory] = useState<FileUploadHistoryModel[]>([])
 
@@ -100,6 +105,7 @@ export function SharedProvider({ children }: SharedProviderProds) {
         <SharedContext.Provider value={{
             myDevice, setMyDevice,
             deviceSelected, setDeviceSelected,
+            isFileListLoading, setIsFileListLoading,
             fileListWaitUpload, setFileListWaitUpload,
             uploadFilesHistory, setUploadFilesHistory,
             isSelectMultiFile, setIsSelectMultiFile,

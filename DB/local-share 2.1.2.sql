@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 04, 2026 at 07:25 AM
+-- Generation Time: Jan 04, 2026 at 09:33 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -37,7 +37,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `get_visible_files` (IN `p_viewer_de
         f.owner_device_id,
         CASE
     		WHEN p_viewer_device_id = f.owner_device_id
-         		THEN 'rwd'
+         		THEN 'rwx'
     		-- 🎯 permission เฉพาะบุคคล
     		WHEN fp.permissions_code IS NOT NULL
          		THEN fp.permissions_code
@@ -88,7 +88,7 @@ CREATE TABLE `clients` (
   `client_uuid` varchar(255) NOT NULL,
   `client_name` varchar(30) NOT NULL,
   `role` varchar(10) NOT NULL DEFAULT 'Client',
-  `storage_limit` bigint(11) UNSIGNED NOT NULL DEFAULT 1073741824
+  `storage_limit` bigint(11) UNSIGNED NOT NULL DEFAULT 10737418240
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
