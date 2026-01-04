@@ -11,6 +11,7 @@ import fileSize from '@/util/fileSizeCalc';
 // import { useEffect } from 'react';
 
 import editIcon from '@/assets/edit.png';
+import filePermissionCodeToString from '@/util/filePermission';
 
 export default function FileInfo() {
 
@@ -18,12 +19,16 @@ export default function FileInfo() {
         selectedFile,
         isSelectFile,
         isShowFileInfo,
-        setIsFileListLoading
+        setIsFileListLoading,
+        nowIsYou
     } = useShared();
     const local_id = localStorage.getItem("device_id") || ""
 
     const [isEditingAccessScope, setIsEditingAccessScope] = useState(false);
     const [accessScopeInput, setAccessScopeInput] = useState<string>("");
+
+    // const [isEditingFilePermission, setIsEditingFilePermission] = useState(false);
+    // const [filePermissionInput, setFilePermissionInput] = useState<string>("");
 
     const colorTag = (tag?: string) => {
         switch (tag) {
@@ -38,6 +43,7 @@ export default function FileInfo() {
 
     useEffect(() => {
         setAccessScopeInput(selectedFile?.access_scope || "");
+        setIsEditingAccessScope(false);
     }, [selectedFile]);
 
     useEffect(() => {
@@ -62,6 +68,15 @@ export default function FileInfo() {
             console.error("Failed to update access scope:", err);
         });
     };
+
+
+    // const handleConfirmFilePermissionChange = async () => {
+    //     // console.log("Confirm Change File Permission");
+    //     if (filePermissionInput === selectedFile?.permission_code) {
+    //         setIsEditingFilePermission(false);
+    //         return;
+    //     }
+    // }
 
 
     return isSelectFile && isShowFileInfo && selectedFile ? (
@@ -107,21 +122,30 @@ export default function FileInfo() {
                                         <option value="PRIVATE">PRIVATE</option>
                                         <option value="PROTECTED">PROTECTED</option>
                                     </select>
-                                    <input type="button" value="Save" className='file-info-btn-save-access-scope' onClick={handleConfirmAccessScopeChange} />
+                                    <input type="button" value="Save" className='file-info-btn-save' onClick={handleConfirmAccessScopeChange} />
                                 </>
                             ) : (
                                 <>
                                     <p className={`card-text ${colorTag(selectedFile?.access_scope)}`}>{selectedFile?.access_scope}</p>
-                                    <img src={editIcon} className='small' alt="" onClick={() => setIsEditingAccessScope(!isEditingAccessScope)} />
+                                    {
+                                        nowIsYou ?
+                                            <img src={editIcon} className='small' alt="" onClick={() => setIsEditingAccessScope(!isEditingAccessScope)} />
+                                            :
+                                            <></>
+                                    }
                                 </>
                             )
                         }
                     </div>
                 </div>
-                <div className="meta-data-item">
-                    <p>File Permission</p>
-                    <p>{selectedFile?.permission_code}</p>
-                </div>
+                {
+                    !nowIsYou ? (
+                        <div className="meta-data-item">
+                            <p>File Permission</p>
+                            <p>{filePermissionCodeToString(selectedFile?.permission_code)}</p>
+                        </div>
+                    ) : (<></>)
+                }
             </div>
         </div>
     ) : (<></>)

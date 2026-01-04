@@ -13,6 +13,9 @@ interface SharedContextType {
     myDevice: DeviceModel;
     setMyDevice: (value: DeviceModel) => void;
 
+    nowIsYou: boolean;
+    setNowIsYou: (value: boolean) => void;
+
     deviceSelected: DeviceModel | null;
     setDeviceSelected: (value: DeviceModel | null) => void;
 
@@ -61,6 +64,8 @@ export function SharedProvider({ children }: SharedProviderProds) {
     const devMode = true;
 
     const [myDevice, setMyDevice] = useState<DeviceModel>({ client_id: "", id: "", name: "" })
+    const [nowIsYou, setNowIsYou] = useState<boolean>(true);
+
     const [deviceSelected, setDeviceSelected] = useState<DeviceModel | null>({ client_id: "", id: "", name: "" })
 
     const [isFileListLoading, setIsFileListLoading] = useState<boolean>(false);
@@ -104,6 +109,7 @@ export function SharedProvider({ children }: SharedProviderProds) {
     return (
         <SharedContext.Provider value={{
             myDevice, setMyDevice,
+            nowIsYou, setNowIsYou,
             deviceSelected, setDeviceSelected,
             isFileListLoading, setIsFileListLoading,
             fileListWaitUpload, setFileListWaitUpload,

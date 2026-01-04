@@ -24,7 +24,7 @@ export default function SideBar({ local_uuid }: Props) {
 
     const [serverPath, setServerPath] = useState<string>("can't connect to server")
 
-    const { myDevice, setDeviceSelected } = useShared();
+    const { myDevice, setDeviceSelected, setNowIsYou } = useShared();
 
     const [devicesList, setDevicesList] = useState<DeviceModel[]>([])
 
@@ -65,6 +65,7 @@ export default function SideBar({ local_uuid }: Props) {
         if (myDevice && devicesList) {
             if (id === "" || id === undefined) {
                 setDeviceSelected(myDevice)
+                setNowIsYou(true)
                 localStorage.setItem("device_selected_client_id", myDevice.client_id)
                 localStorage.setItem("device_selected_uuid", myDevice.id)
                 localStorage.setItem("device_selected_name", myDevice.name)
@@ -72,6 +73,7 @@ export default function SideBar({ local_uuid }: Props) {
                 const device = devicesList.find((d) => d.id === id)
                 if (device) {
                     setDeviceSelected(device)
+                    setNowIsYou(false)
                     localStorage.setItem("device_selected_client_id", device.client_id)
                     localStorage.setItem("device_selected_uuid", device.id)
                     localStorage.setItem("device_selected_name", device.name)

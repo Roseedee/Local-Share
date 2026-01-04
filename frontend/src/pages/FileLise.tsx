@@ -37,13 +37,13 @@ export default function FileList() {
 
   useEffect(() => {
     setSelectedMultiFile?.([]);
+    setSelectedFile?.(null);
     loadFiles();
   }, [myDevice, deviceSelected, fileListWaitUpload]);
 
   useEffect(() => {
     setSelectedMultiFile?.([]);
     setSelectedFile?.(null);
-    // setFileSelected("");
   }, [isSelectMultiFile]);
 
   useEffect(() => {

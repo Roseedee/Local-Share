@@ -6,7 +6,7 @@ export default function permissionCodeToString(permCode: string | null | undefin
     }else if(permCode === 'r-x') {
         return 'Read and Execute';
     }else if(permCode === 'rwx') {
-        return 'Read, Write and Execute';
+        return 'Full';
     }
 
     return 'Unknown Permission';
