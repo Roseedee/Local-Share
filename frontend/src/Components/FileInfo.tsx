@@ -87,7 +87,7 @@ export default function FileInfo() {
             <div className="file-info-preview">
                 {
                     new FileCategory(selectedFile?.type)?.isImage() ? (
-                        <img className='image-icon' src={selectedFile?.new_name} alt={selectedFile?.name} />
+                        <img className='image-icon' src={selectedFile?.download_url} alt={selectedFile?.name} />
                     ) : (
                         <img className='other-file-icon' src={new FileCategory(selectedFile?.type)?.getIcon()} alt="Can't preview this file" />
                     )

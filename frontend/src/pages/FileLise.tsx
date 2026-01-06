@@ -87,7 +87,7 @@ export default function FileList() {
     const ownerId = id === undefined ? local_id : selected_id
     const viewerId = local_id;
     await rest.getFiles(viewerId, ownerId).then((data) => {
-      // console.log("Files:", data.results);
+      console.log("Files:", data.results);
       setFiles(data.results)
     }).finally(() => {
       setSumFileSize?.(files.reduce((acc, file) => acc + (file.size || 0), 0));
@@ -107,9 +107,9 @@ export default function FileList() {
         setSelectedMultiFile?.([...(selectedMultiFile ?? []), file.id || ""]);
       }
     } else {
-      const fileUrl = rest.fileUrl(file.new_name || "");
+      const fileUrl = rest.fileUrl(file.download_url || "");
       setIsSelectFile?.(true);
-      setSelectedFile?.({ id: file.id, new_name: fileUrl, type: file.type, name: file.name, size: file.size, create_at: file.create_at, access_scope: file.access_scope, permission_code: file.permission_code, client_id_source: file.client_id_source, client_id_target: file.client_id_target });
+      setSelectedFile?.({ id: file.id, download_url: fileUrl, type: file.type, name: file.name, size: file.size, create_at: file.create_at, access_scope: file.access_scope, permission_code: file.permission_code, client_id_source: file.client_id_source, client_id_target: file.client_id_target });
       setFileSelectForFileFullView({ fileId: file.id, filePath: fileUrl, fileType: file.type });
     }
   };
@@ -129,7 +129,7 @@ export default function FileList() {
     const currentIndex = files.findIndex(file => file.id === fileSelectForFileFullView.fileId);
     if (currentIndex > 0) {
       const prevFile = files[currentIndex - 1];
-      setFileSelectForFileFullView({ fileId: prevFile.id, filePath: rest.fileUrl(prevFile.new_name || ""), fileType: prevFile.type });
+      setFileSelectForFileFullView({ fileId: prevFile.id, filePath: rest.fileUrl(prevFile.download_url || ""), fileType: prevFile.type });
     }
   }
 
@@ -138,7 +138,7 @@ export default function FileList() {
     const currentIndex = files.findIndex(file => file.id === fileSelectForFileFullView.fileId);
     if (currentIndex < files.length - 1) {
       const nextFile = files[currentIndex + 1];
-      setFileSelectForFileFullView({ fileId: nextFile.id, filePath: rest.fileUrl(nextFile.new_name || ""), fileType: nextFile.type });
+      setFileSelectForFileFullView({ fileId: nextFile.id, filePath: rest.fileUrl(nextFile.download_url || ""), fileType: nextFile.type });
     }
   }
 

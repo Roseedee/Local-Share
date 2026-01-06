@@ -9,6 +9,7 @@ export default interface FileModel {
     permission_code?: string;
     client_id_source?: string;
     client_id_target?: string;
+    download_url?: string;
 }
 
 //--------------------------------------------//

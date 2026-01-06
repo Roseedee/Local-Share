@@ -2,6 +2,7 @@ const path = require('path');
 const db = require('../db/connect');
 const AdmZip = require('adm-zip');
 const fs = require('fs')
+const token = require('../utils/token');
 
 exports.uploadFiles = async (req, res) => {
     const uploadByID = req.body.uploadByID || "";
@@ -45,9 +46,18 @@ exports.uploadFiles = async (req, res) => {
     });
 }
 
-exports.files = async (req, res) => {
-    const filePath = path.join(__dirname, '../uploads', req.params.filename);
-    res.sendFile(filePath);
+exports.fileServe = async (req, res) => {
+    const fileToken = req.query.token || "";
+    const payload = token.verifyToken(fileToken);
+    if (!payload) {
+        return res.status(401).send("Invalid or expired token");
+    }
+    const filePath = path.join(__dirname, '../uploads', payload.file_path);
+    if (!fs.existsSync(filePath)) {
+        return res.status(404).send("File not found");
+    }
+
+    res.download(filePath);
 }
 
 exports.allFiles = async (req, res) => {
@@ -58,18 +68,26 @@ exports.allFiles = async (req, res) => {
     try {
         const result = await db.loadFiles(viewer_device_id, owner_device_id);
         // console.log("DB Result: ", result[0].file_id);
-        const files = result[0].map(file => ({
-            id: file.file_id,
-            new_name: file.file_new_name,
-            name: file.file_org_name,
-            size: file.file_size,
-            type: file.file_type,
-            access_scope: file.access_scope,
-            permission_code: file.permission_code,
-            client_id_source: file.uploader_device_id,
-            client_id_target: file.owner_device_id,
-            create_at: file.create_at
-        }));
+        const files = result[0].map(file => {
+            const file_token = token.signToken({
+                file_id: file.file_id,
+                file_path: file.file_new_name,
+                exp: Date.now() + 5 * 60 * 1000 // 5 minutes expiration
+            });
+
+            return {
+                id: file.file_id,
+                name: file.file_org_name,
+                size: file.file_size,
+                type: file.file_type,
+                access_scope: file.access_scope,
+                permission_code: file.permission_code,
+                client_id_source: file.uploader_device_id,
+                client_id_target: file.owner_device_id,
+                create_at: file.create_at,
+                download_url: file_token
+            }
+        });
         // console.log("Files Loaded: ", files)
         res.json({ results: files });
     } catch (error) {
@@ -183,7 +201,7 @@ exports.editFileAccessScope = async (req, res) => {
 
     try {
         const result = await db.editFileAccessScopeById(fileId, owner_device_id, access_scope);
-        if(result.affectedRows === 0){
+        if (result.affectedRows === 0) {
             return res.status(404).json({ message: "File not found or no changes made." });
         }
         res.json({ message: "File access scope updated successfully", result });

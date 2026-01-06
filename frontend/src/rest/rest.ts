@@ -141,7 +141,7 @@ export default class Rest {
     }
 
     static fileUrl(file: string): string {
-        return this.apiHost + "file/" + file;
+        return this.apiHost + "file/stream?token=" + file;
     }
 
     static async downloadFiles(fileIds: string[]) {
