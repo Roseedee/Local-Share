@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react"
 import { QRCodeSVG } from "qrcode.react"
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import { useShared } from "@/contexts/SharedContext"
 
 import rest from '@/rest/rest'
@@ -20,6 +20,7 @@ type Props = {
 export default function SideBar({ local_uuid }: Props) {
     const { id } = useParams<string>()
     const calledRef = useRef(false);
+    const navigate = useNavigate()
     const local_id = localStorage.getItem("device_id") || ""
 
     const [serverPath, setServerPath] = useState<string>("can't connect to server")
@@ -120,7 +121,7 @@ export default function SideBar({ local_uuid }: Props) {
                 }
             </div>
             <div className="sidebar-bottom">
-                <button className="sidebar-bottom-btn">Settings</button>
+                <button className="sidebar-bottom-btn" onClick={() => navigate('/settings')}>Settings</button>
                 {/* <button onClick={handleDeleteUUID}>Remove UUID</button> */}
                 <div className="footer">Local-Share&nbsp;<span className="tag">v1.0.100</span>&nbsp;@2025</div>
             </div>

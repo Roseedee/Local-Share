@@ -1,11 +1,19 @@
-.settings-content {
-    flex-grow: 1;
-  max-height: calc(100vh - 120px);
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  gap: 10px;
-  overflow: auto;
-  position: relative;
+.sidebar-setting-item {
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: 0.3s;
+  border-radius: 5px;
+  color: rgb(128, 128, 128);
 }
+
+.sidebar-setting-item:hover {
+  background-color: #fef2ff;
+  color: black;
+}
+
+.sidebar-setting-item.active {
+  background-color: #FDE9FF;
+  color: black;
+}
+
+

@@ -21,6 +21,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route path="/init/" element={<Init />} />
           <Route path="/error/network" element={<NetworkError />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/settings/:section" element={<Settings />} />
         </Routes>
       </BrowserRouter>
     </SharedProvider>

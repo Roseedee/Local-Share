@@ -1,0 +1,12 @@
+.settings-content {
+  flex-grow: 1;
+  /* max-height: calc(100vh - 120px); */
+  /* max-height: calc(100vh - 10px); */
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 10px;
+  overflow: auto;
+  position: relative;
+}
