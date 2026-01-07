@@ -1,12 +1,50 @@
+@import url('./input.css');
+
 .settings-content {
-  flex-grow: 1;
-  /* max-height: calc(100vh - 120px); */
-  /* max-height: calc(100vh - 10px); */
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  gap: 10px;
-  overflow: auto;
-  position: relative;
+    flex-grow: 1;
+    height: calc(100vh - 60px);
+    max-height: calc(100vh - 60px);
+    display: flex;
+    justify-content: center;
+    overflow: auto;
+    position: relative;
+}
+
+.settings-content-section {
+    /* background-color: antiquewhite; */
+    width: 50%;
+    min-width: 450px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 18px;
+}
+
+.settings-content-section h2 {
+    /* flex-grow: 1; */
+    width: 100%;
+    text-align: center;
+    padding: 12px 0;
+    border-radius: 8px;
+    background-color: #fef2ff;
+}
+
+.setting-item {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.setting-item .setting-item-header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.setting-item-body {
+    width: 100%;
+    display: flex;
+    gap: 15px;
 }

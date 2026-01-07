@@ -1,0 +1,51 @@
+.input-group {
+    flex-grow: 1;
+    position: relative;
+    width: 280px;
+    font-family: "Noto Sans Thai", "Noto Sans", sans-serif;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    background: transparent;
+}
+
+.input-group label {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 14px;
+    pointer-events: none;
+    background: white;
+    padding: 0 6px;
+    transition: 0.2s ease;
+}
+
+/* ตอน focus หรือมีค่า */
+.input-group input:focus+label,
+.input-group input:not(:placeholder-shown)+label {
+    top: 0;
+    font-size: 11px;
+    color: #4ba2ca;
+}
+
+.setting-btn-save {
+    padding: 10px 20px;
+    background-color: #4ba2ca;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.setting-btn-save:hover {
+    background-color: #3a8bb5;
+}

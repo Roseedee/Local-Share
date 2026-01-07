@@ -1,8 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
 
 :root {
-  font-family: 'Inter', sans-serif;
-  font-family: 'Roboto', sans-serif; /* Clean, modern font for body text */
   padding: 0px;
   margin: 0px;
 }
@@ -12,14 +11,27 @@ html, body, #root {
   padding: 0px;
 }
 
+body {
+   font-family: "Anuphan", "Inter", sans-serif;
+  line-height: 1.2;
+}
+
 h1, h2, h3, h4, h5, h6, p {
-  font-family: 'Inter', sans-serif;
   margin: 0px;
   padding: 0px;
 }
 
 .tag {
-  color: rgb(155, 155, 155);
+  color: rgb(165, 165, 165);
+}
+
+.tag-warning {
+  color: #fc0015;
+}
+
+.tag-warning-bold {
+  color: #fc0015;
+  font-weight: bold;
 }
 
 .water-mark {
