@@ -16,10 +16,10 @@ export default function Device({item, active = false}: Props) {
     const handleClick = () => {
         const uuid = localStorage.getItem("device_uuid")
         if (item.id === uuid) {
-            navigate(`/`)
+            navigate(`/file`)
             return
         }
-        navigate(`/${item.id}`)
+        navigate(`/file/${item.id}`)
     }
 
     return (

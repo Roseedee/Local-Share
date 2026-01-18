@@ -1,16 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useShared } from '@/contexts/SharedContext'
 
 import '@/style/App.css'
 
-import Layout from '@/layout/Layout'
-import FileList from '@pages/FileLise'
-import PopUpFilesWaitUpload from '@pages/PopUpFilesWaitUpload'
-
 import rest from '@/rest/rest'
 import DeviceModel from '@/model/DeviceModel'
-import FileInfo from '@/Components/FileInfo'
 
 function App() {
   const { id } = useParams<string>()
@@ -18,7 +13,7 @@ function App() {
   const calledRef = useRef(false);
 
   const { setMyDevice, setDeviceSelected} = useShared();
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
 
   const local_uuid = localStorage.getItem("device_uuid") || ""
   // const [myDevice, setMyDevice] = useState<DeviceModel>()
@@ -61,20 +56,12 @@ function App() {
         return;
       }
     }).finally(() => {
-      setIsLoading(false);
+      // setIsLoading(false);
+      navigator('/file/me')
     })
   }
 
-  return (
-    <Layout>
-      {
-        isLoading ? <div>Loading...</div> : null
-      }
-      <FileList />
-      <FileInfo />
-      <PopUpFilesWaitUpload />
-    </Layout>
-  )
+  return (<></>);
 }
 
 export default App

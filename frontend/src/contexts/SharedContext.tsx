@@ -103,8 +103,17 @@ export function SharedProvider({ children }: SharedProviderProds) {
     }
 
     useEffect(() => {
-        if(isSelectMultiFile) setIsSelectFile(false);
+        if (isSelectMultiFile) setIsSelectFile(false);
     }, [isSelectMultiFile, isSelectFile]);
+
+    useEffect(() => {
+        setMyDevice(prev => ({
+            ...prev,
+            client_id: localStorage.getItem("device_id") || '',
+            id: localStorage.getItem("device_uuid") || "",
+            name: localStorage.getItem("device_name") || "",
+        }));
+    }, []);
 
     return (
         <SharedContext.Provider value={{
@@ -120,7 +129,7 @@ export function SharedProvider({ children }: SharedProviderProds) {
             selectedFile, setSelectedFile,
             isLargeView, setIsLargeView,
             fileDeleting, setFileDeleting,
-            fileSearch, setFileSearch, 
+            fileSearch, setFileSearch,
             isEditFileName, setIsEditFileName,
             isShowFileInfo, setIsShowFileInfo,
             sumFileSize, setSumFileSize

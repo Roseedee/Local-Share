@@ -7,7 +7,8 @@ import App from '@pages/App'
 import Init from '@pages/Init'
 import NetworkError from '@pages/NetworkError'
 
-import Settings from '@pages/settings/SettingsPage'
+import File from '@pages/File/FilePage'
+import Settings from '@pages/Settings/SettingsPage'
 
 import "@/style/index.css"
 
@@ -18,6 +19,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Routes>
           <Route path="/" element={<App />} />
           <Route path="/:id" element={<App />} />
+          <Route path='/file/:device_name' element={<File />}/>
           <Route path="/init/" element={<Init />} />
           <Route path="/error/network" element={<NetworkError />} />
           <Route path="/settings" element={<Settings />} />

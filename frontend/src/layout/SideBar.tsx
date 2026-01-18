@@ -18,7 +18,7 @@ type Props = {
 }
 
 export default function SideBar({ local_uuid }: Props) {
-    const { id } = useParams<string>()
+    const { device_name } = useParams<string>()
     const calledRef = useRef(false);
     const navigate = useNavigate()
     const local_id = localStorage.getItem("device_id") || ""
@@ -64,14 +64,14 @@ export default function SideBar({ local_uuid }: Props) {
     useEffect(() => {
         // console.log("ID:", id);
         if (myDevice && devicesList) {
-            if (id === "" || id === undefined) {
+            if (device_name === "" || device_name === undefined || device_name === 'me') {
                 setDeviceSelected(myDevice)
                 setNowIsYou(true)
                 localStorage.setItem("device_selected_client_id", myDevice.client_id)
                 localStorage.setItem("device_selected_uuid", myDevice.id)
                 localStorage.setItem("device_selected_name", myDevice.name)
             } else {
-                const device = devicesList.find((d) => d.id === id)
+                const device = devicesList.find((d) => d.id === device_name)
                 if (device) {
                     setDeviceSelected(device)
                     setNowIsYou(false)
@@ -81,7 +81,7 @@ export default function SideBar({ local_uuid }: Props) {
                 }
             }
         }
-    }, [id]);
+    }, [device_name]);
 
 
 
@@ -110,13 +110,13 @@ export default function SideBar({ local_uuid }: Props) {
             <div className="sidebar-item-list">
                 {
                     myDevice && (
-                        <Device item={myDevice} active={id === undefined ? true : false} />
+                        <Device item={myDevice} active={device_name === 'me' ? true : false} />
                     )
                 }
                 <hr />
                 {
                     devicesList && devicesList.map((device, i) => (
-                        <Device key={i} item={device} active={device.id === id ? true : false} />
+                        <Device key={i} item={device} active={device.id === device_name ? true : false} />
                     ))
                 }
             </div>

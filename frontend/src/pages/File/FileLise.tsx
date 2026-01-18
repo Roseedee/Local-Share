@@ -10,7 +10,7 @@ import OverlayEditFileName from '@/Components/OverlayEditFileName';
 
 export default function FileList() {
   // const calledRef = useRef(false);
-  const { id } = useParams<string>() || "";
+  const { device_name } = useParams<string>() || "";
   const { myDevice, deviceSelected,
     fileListWaitUpload, isSelectMultiFile,
     setIsSelectMultiFile, selectedMultiFile,
@@ -31,9 +31,9 @@ export default function FileList() {
   const [fileSelectForFileFullView, setFileSelectForFileFullView] = useState<OverlayFileFullViewModel>()
   const [fileFiltered, setFileFilterd] = useState<FileModel[]>([]);
 
-  useEffect(() => {
-    loadFiles();
-  }, [isFileListLoading]);
+  // useEffect(() => {
+  //   loadFiles();
+  // }, [isFileListLoading]);
 
   useEffect(() => {
     setSelectedMultiFile?.([]);
@@ -52,7 +52,7 @@ export default function FileList() {
 
   useEffect(() => {
     setIsSelectMultiFile?.(false);
-  }, [id]);
+  }, [device_name]);
 
   useEffect(() => {
     if (!isEditFileName) return;
@@ -84,7 +84,7 @@ export default function FileList() {
   }, [fileSearch, files]);
 
   const loadFiles = async () => {
-    const ownerId = id === undefined ? local_id : selected_id
+    const ownerId = device_name === undefined ? local_id : selected_id
     const viewerId = local_id;
     await rest.getFiles(viewerId, ownerId).then((data) => {
       console.log("Files:", data.results);
