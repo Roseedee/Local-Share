@@ -31,9 +31,9 @@ export default function FileList() {
   const [fileSelectForFileFullView, setFileSelectForFileFullView] = useState<OverlayFileFullViewModel>()
   const [fileFiltered, setFileFilterd] = useState<FileModel[]>([]);
 
-  // useEffect(() => {
-  //   loadFiles();
-  // }, [isFileListLoading]);
+  useEffect(() => {
+    loadFiles();
+  }, [isFileListLoading]);
 
   useEffect(() => {
     setSelectedMultiFile?.([]);
@@ -52,6 +52,7 @@ export default function FileList() {
 
   useEffect(() => {
     setIsSelectMultiFile?.(false);
+    setIsSelectFile?.(false)
   }, [device_name]);
 
   useEffect(() => {

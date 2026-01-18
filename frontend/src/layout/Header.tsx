@@ -18,7 +18,7 @@ import noticeIcon from '@/assets/attention.png'
 
 export default function Header() {
 
-    const { id } = useParams<string>()
+    const { device_name } = useParams<string>()
     const { myDevice, setMyDevice } = useShared();
     const [loading, setLoading] = useState<boolean>(false);
     const [isMe, setIsMe] = useState<boolean>(false);
@@ -46,12 +46,12 @@ export default function Header() {
     useEffect(() => {
         setFileListWaitUpload(null)
         setIsEditName(false);
-        if (id === undefined) {
+        if (device_name === "me") {
             setIsMe(true);
         } else {
             setIsMe(false);
         }
-    }, [id]);
+    }, [device_name]);
 
     useEffect(() => {
         if (isEditName) {
@@ -217,7 +217,7 @@ export default function Header() {
                 </div>
                 <div className="header-child-content search-container">
                     <div className="input-search-container">
-                        <input type="text" className='search-input' name="" id="" placeholder='ค้นหา, สามารถใช้ wildcard ได้' onChange={(e) => setFileSearch?.(e.target.value)} value={fileSearch}/>
+                        <input type="text" className='search-input' name="" id="" placeholder='ค้นหา, สามารถใช้ wildcard ได้' onChange={(e) => setFileSearch?.(e.target.value)} value={fileSearch} />
                         <img src={closeIcon} alt="" className='input-search-clear' onClick={() => setFileSearch?.("")} />
                     </div>
                     {/* <div className="input-search-icon-container">
@@ -226,7 +226,7 @@ export default function Header() {
                 </div>
                 <div className='header-child-content tools-group'>
                     {
-                        (isSelectMultiFile && selectedMultiFile.length !== 0) || (isSelectFile && selectedFile !== null) ? (
+                        isSelectMultiFile && selectedMultiFile.length !== 0 ? (
                             <>
                                 <div className={`tool-icon ${loading ? ' loading' : ''}`} onClick={handleDownloadSelected}>
                                     <img src={downloadIcon} alt="" className='content-header-icon' />
@@ -242,7 +242,20 @@ export default function Header() {
                     }
                     {
                         isSelectFile ? (
+                            <div className={`tool-icon ${loading ? ' loading' : ''}`} onClick={handleDownloadSelected}>
+                                <img src={downloadIcon} alt="" className='content-header-icon' />
+                            </div>
+                        ) : (<></>)
+                    }
+                    {
+                        isSelectFile && (selectedFile?.permission_code !== 'r--') ? (
                             <>
+                                <div className="tool-icon">
+                                    <img src={shareIcon} alt="" className='content-header-icon' />
+                                </div>
+                                <div className={`tool-icon ${fileDeleting ? ' loading' : ''}`} onClick={handleDeleteFiles}>
+                                    <img src={binIcon} alt="" className='content-header-icon' />
+                                </div>
                                 <div className="tool-icon" onClick={() => setIsEditFileName?.(true)}>
                                     <img src={renameIcon} alt="" className='content-header-icon' />
                                 </div>
