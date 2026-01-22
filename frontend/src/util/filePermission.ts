@@ -10,4 +10,19 @@ export default function permissionCodeToString(permCode: string | null | undefin
     }
 
     return 'Unknown Permission';
-}   
+}
+
+export function permissionCodeToNumber(permCode: string | null | undefined): number {
+    let permissionNumber = 0
+    if(permCode?.includes('r')) {
+        permissionNumber += 1;
+    }
+    if(permCode?.includes('w')) {
+        permissionNumber += 2;
+    }
+    if(permCode?.includes('x')) {
+        permissionNumber += 4;
+    }
+
+    return permissionNumber;
+}

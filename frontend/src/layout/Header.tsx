@@ -15,13 +15,13 @@ import renameIcon from '@/assets/rename.png'
 import shareIcon from '@/assets/share.png'
 import closeIcon from '@/assets/close.png'
 import noticeIcon from '@/assets/attention.png'
+import {permissionCodeToNumber} from '@/util/filePermission'
 
 export default function Header() {
 
     const { device_name } = useParams<string>()
     const { myDevice, setMyDevice } = useShared();
     const [loading, setLoading] = useState<boolean>(false);
-    const [isMe, setIsMe] = useState<boolean>(false);
     const [isEditName, setIsEditName] = useState<boolean>(false);
     const [newName, setNewName] = useState<string>(myDevice.name);
     const inputNameRef = useRef<HTMLInputElement | null>(null);
@@ -38,7 +38,8 @@ export default function Header() {
         setFileDeleting, fileDeleting,
         setFileSearch, fileSearch,
         setIsEditFileName,
-        isShowFileInfo, setIsShowFileInfo
+        isShowFileInfo, setIsShowFileInfo,
+        nowIsYou
     } = useShared();
 
     const fileUploadRef = useRef<HTMLInputElement | null>(null)
@@ -46,11 +47,6 @@ export default function Header() {
     useEffect(() => {
         setFileListWaitUpload(null)
         setIsEditName(false);
-        if (device_name === "me") {
-            setIsMe(true);
-        } else {
-            setIsMe(false);
-        }
     }, [device_name]);
 
     useEffect(() => {
@@ -178,6 +174,13 @@ export default function Header() {
         });
     }
 
+    useEffect(() => {
+        if(selectedFile) {
+            console.log(permissionCodeToNumber(selectedFile.permission_code));
+        }
+
+    }, [selectedFile])
+
     return (
         <>
 
@@ -189,10 +192,10 @@ export default function Header() {
                                 <h4>เลือก {selectedMultiFile?.length}</h4> :
                                 <>
                                     {
-                                        !isEditName && <h4>{deviceSelected?.id === "" ? myDevice.name : deviceSelected?.name}{isMe ? '(You)' : ''}</h4>
+                                        !isEditName && <h4>{deviceSelected?.id === "" ? myDevice.name : deviceSelected?.name}{nowIsYou ? '(You)' : ''}</h4>
                                     }
                                     {
-                                        isMe && !isEditName && <img src={editIcon} alt="" className='content-header-icon' onClick={() => { setIsEditName(true) }} />
+                                        nowIsYou && !isEditName && <img src={editIcon} alt="" className='content-header-icon' onClick={() => { setIsEditName(true) }} />
                                     }
                                     {
                                         isEditName && (

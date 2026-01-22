@@ -85,7 +85,7 @@ export default function FileList() {
   }, [fileSearch, files]);
 
   const loadFiles = async () => {
-    const ownerId = device_name === undefined ? local_id : selected_id
+    const ownerId = device_name === "me" ? local_id : selected_id
     const viewerId = local_id;
     await rest.getFiles(viewerId, ownerId).then((data) => {
       console.log("Files:", data.results);
