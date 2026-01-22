@@ -1,11 +1,11 @@
 export default function permissionCodeToString(permCode: string | null | undefined): string {
-    if(permCode === 'r--') {
+    if (permCode === 'r--') {
         return 'Read Only';
-    }else if(permCode === 'rw-') {
+    } else if (permCode === 'rw-') {
         return 'Read and Write';
-    }else if(permCode === 'r-x') {
+    } else if (permCode === 'r-x') {
         return 'Read and Execute';
-    }else if(permCode === 'rwx') {
+    } else if (permCode === 'rwx') {
         return 'Full';
     }
 
@@ -13,16 +13,12 @@ export default function permissionCodeToString(permCode: string | null | undefin
 }
 
 export function permissionCodeToNumber(permCode: string | null | undefined): number {
-    let permissionNumber = 0
-    if(permCode?.includes('r')) {
-        permissionNumber += 1;
-    }
-    if(permCode?.includes('w')) {
-        permissionNumber += 2;
-    }
-    if(permCode?.includes('x')) {
-        permissionNumber += 4;
-    }
+    if (!permCode || permCode.length !== 3) return 0;
 
-    return permissionNumber;
+    let p = 0;
+    if (permCode[0] === 'r') p |= 1;
+    if (permCode[1] === 'w') p |= 2;
+    if (permCode[2] === 'x') p |= 4;
+
+    return p;
 }
