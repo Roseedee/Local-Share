@@ -30,6 +30,10 @@ export default function FileInfo() {
     // const [isEditingFilePermission, setIsEditingFilePermission] = useState(false);
     // const [filePermissionInput, setFilePermissionInput] = useState<string>("");
 
+
+    const [countdown, setCountdown] = useState(0);
+    const [loading, setLoading] = useState(false);
+
     const colorTag = (tag?: string) => {
         switch (tag) {
             case 'PUBLIC':
@@ -78,6 +82,37 @@ export default function FileInfo() {
     //     }
     // }
 
+    // const handleAddFilePermission = async () => {
+
+    // }
+
+    useEffect(() => {
+        if (!selectedFile) return;
+
+        setLoading(true);
+        setCountdown(3);
+
+        const interval = setInterval(() => {
+            setCountdown(prev => {
+                if (prev === 1) {
+                    clearInterval(interval);
+                    setLoading(false);
+                    loadDevicePermissionList();
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+
+        return () => {
+            clearInterval(interval);
+        };
+    }, [selectedFile]);
+
+    const loadDevicePermissionList = async () => {
+        console.log("load permission")
+    }
+
 
     return isSelectFile && isShowFileInfo && selectedFile ? (
         <div className="file-info-container">
@@ -118,9 +153,9 @@ export default function FileInfo() {
                             isEditingAccessScope ? (
                                 <>
                                     <select name="" id="" className='file-info-selector' value={accessScopeInput} onChange={(e) => setAccessScopeInput(e.target.value)}>
-                                        <option value="PUBLIC">PUBLIC</option>
                                         <option value="PRIVATE">PRIVATE</option>
                                         <option value="PROTECTED">PROTECTED</option>
+                                        <option value="PUBLIC">PUBLIC</option>
                                     </select>
                                     <input type="button" value="Save" className='file-info-btn-save' onClick={handleConfirmAccessScopeChange} />
                                 </>
@@ -139,12 +174,48 @@ export default function FileInfo() {
                     </div>
                 </div>
                 {
-                    !nowIsYou ? (
+                    nowIsYou ? (
+                        (selectedFile?.access_scope === "PUBLIC" || selectedFile?.access_scope === "PROTECTED") && (
+                            <>
+                                <div className="meta-data-item list">
+                                    <div className="meta-data-item-header">
+                                        <p>Permission List</p>
+                                        <input type='button' value="ADD" className='file-info-btn-add-permission' />
+                                    </div>
+                                    <div className="meta-data-item-list">
+                                        {loading ? (
+                                                <div className='file-info-loading'>{countdown}</div>
+                                        ) : (
+                                            <>
+                                                <div className="device-permission-item">
+                                                    <p>{"Edge(Full)"}</p>
+                                                    <input type="button" value="ลบ" className='file-info-btn-del-permission' />
+                                                </div>
+                                                <div className="device-permission-item">
+                                                    <p>{"Roseedee(Read only)"}</p>
+                                                    <input type="button" value="ลบ" className='file-info-btn-del-permission' />
+                                                </div>
+                                                <div className="device-permission-item">
+                                                    <p>{"Muhammad(Read Write)"}</p>
+                                                    <input type="button" value="ลบ" className='file-info-btn-del-permission' />
+                                                </div>
+                                                <div className="device-permission-item">
+                                                    <p>{"Edge(Full)"}</p>
+                                                    <input type="button" value="ลบ" className='file-info-btn-del-permission' />
+                                                </div>
+                                            </>
+                                        )}
+
+                                    </div>
+                                </div>
+                            </>
+                        )
+                    ) : (<>
                         <div className="meta-data-item">
-                            <p>File Permission</p>
+                            <p>Your Permission</p>
                             <p>{filePermissionCodeToString(selectedFile?.permission_code)}</p>
                         </div>
-                    ) : (<></>)
+                    </>)
                 }
             </div>
         </div>

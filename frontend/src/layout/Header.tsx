@@ -174,12 +174,12 @@ export default function Header() {
         });
     }
 
-    useEffect(() => {
-        if(selectedFile) {
-            console.log(permissionCodeToNumber(selectedFile.permission_code));
-        }
+    // useEffect(() => {
+    //     if(selectedFile) {
+    //         console.log(permissionCodeToNumber(selectedFile.permission_code));
+    //     }
 
-    }, [selectedFile])
+    // }, [selectedFile])
 
     return (
         <>
@@ -237,9 +237,9 @@ export default function Header() {
                                 <div className="tool-icon">
                                     <img src={shareIcon} alt="" className='content-header-icon' />
                                 </div>
-                                <div className={`tool-icon ${fileDeleting ? ' loading' : ''}`} onClick={handleDeleteFiles}>
+                                {/* <div className={`tool-icon ${fileDeleting ? ' loading' : ''}`} onClick={handleDeleteFiles}>
                                     <img src={binIcon} alt="" className='content-header-icon' />
-                                </div>
+                                </div> */}
                             </>
                         ) : (<></>)
                     }
@@ -251,7 +251,7 @@ export default function Header() {
                         ) : (<></>)
                     }
                     {
-                        isSelectFile && (selectedFile?.permission_code !== 'r--') ? (
+                        isSelectFile && (permissionCodeToNumber(selectedFile?.permission_code) === 7) ? (
                             <>
                                 <div className="tool-icon">
                                     <img src={shareIcon} alt="" className='content-header-icon' />

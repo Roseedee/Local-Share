@@ -70,7 +70,7 @@
     color: #000;
     font-size: 0.6rem;
     border-radius: 3px;
-    
+
 }
 
 .file-info-preview .image-icon {
@@ -86,11 +86,33 @@
     font-size: 0.9rem;
 }
 
-.file-info-meta-data .meta-data-item {
+.meta-data-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 10px;
+}
+
+.meta-data-item.list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.meta-data-item-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.meta-data-item-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
 }
 
 .file-info-selector {
@@ -112,4 +134,78 @@
     background-color: #649b4a;
     color: white;
     cursor: pointer;
+}
+
+.file-info-btn-add-permission {
+    font-size: 0.6rem;
+    padding: 3px 5px;
+    border-radius: 3px;
+    border: none;
+    background-color: rgb(141, 141, 236);
+    opacity: 0.8;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+
+    &:hover {
+        opacity: 1;
+    }
+}
+
+.file-info-btn-del-permission {
+    font-size: 0.7rem;
+    padding: 2px 3px 4px 3px;
+    border-radius: 3px;
+    border: none;
+    background-color: rgb(243, 89, 62);
+    opacity: 0.8;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+
+    &:hover {
+        opacity: 1;
+    }
+}
+
+.device-permission-item {
+    width: 100%;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    border-radius: 5px;
+}
+
+.file-info-loading {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.file-info-loading::after {
+    content: '';
+    box-sizing: border-box;
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 3px solid;
+    border-color: #9dc776 transparent;
+    animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
