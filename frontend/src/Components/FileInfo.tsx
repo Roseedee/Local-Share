@@ -27,6 +27,7 @@ export default function FileInfo() {
     const [isEditingAccessScope, setIsEditingAccessScope] = useState(false);
     const [accessScopeInput, setAccessScopeInput] = useState<string>("");
 
+    const [filePermissionList, setFilePermissionList] = useState<Array<any>>([]);
     // const [isEditingFilePermission, setIsEditingFilePermission] = useState(false);
     // const [filePermissionInput, setFilePermissionInput] = useState<string>("");
 
@@ -50,9 +51,9 @@ export default function FileInfo() {
         setIsEditingAccessScope(false);
     }, [selectedFile]);
 
-    useEffect(() => {
-        console.log("Access Scope Input Changed: ", accessScopeInput);
-    }, [accessScopeInput]);
+    // useEffect(() => {
+    //     console.log("Access Scope Input Changed: ", accessScopeInput);
+    // }, [accessScopeInput]);
 
     const handleConfirmAccessScopeChange = async () => {
         // console.log("Confirm Change Access Scope");
@@ -96,7 +97,7 @@ export default function FileInfo() {
             setCountdown(prev => {
                 if (prev === 1) {
                     clearInterval(interval);
-                    setLoading(false);
+                    // setLoading(false);
                     loadDevicePermissionList();
                     return 0;
                 }
@@ -110,7 +111,13 @@ export default function FileInfo() {
     }, [selectedFile]);
 
     const loadDevicePermissionList = async () => {
-        console.log("load permission")
+        await rest.getFilePermissionList(selectedFile?.id || "").then((data) => {
+            //    console.log("Permission List: ", data.result);
+            setFilePermissionList(data.result);
+        }).catch((err) => {
+            console.error("Failed to get file permission list:", err);
+        });
+        setLoading(false);
     }
 
 
@@ -175,36 +182,42 @@ export default function FileInfo() {
                 </div>
                 {
                     nowIsYou ? (
-                        (selectedFile?.access_scope === "PUBLIC" || selectedFile?.access_scope === "PROTECTED") && (
+                        (selectedFile?.access_scope === "PROTECTED" || selectedFile?.access_scope === "PUBLIC") && (
                             <>
                                 <div className="meta-data-item list">
                                     <div className="meta-data-item-header">
                                         <p>Permission List</p>
-                                        <input type='button' value="ADD" className='file-info-btn-add-permission' />
+                                        {
+                                            selectedFile?.access_scope === "PUBLIC" ? (
+                                                <>
+                                                    <p className='no-permission-text tag'>ทุกคนสามารถเข้าถึงไฟล์นี้ได้</p>
+                                                </>
+                                            ) : (
+                                                <input type='button' value="ADD" className='file-info-btn-add-permission' />
+                                            )
+                                        }
                                     </div>
                                     <div className="meta-data-item-list">
-                                        {loading ? (
+
+                                        {
+                                            selectedFile?.access_scope === "PROTECTED" && (loading ? (
                                                 <div className='file-info-loading'>{countdown}</div>
-                                        ) : (
-                                            <>
-                                                <div className="device-permission-item">
-                                                    <p>{"Edge(Full)"}</p>
-                                                    <input type="button" value="ลบ" className='file-info-btn-del-permission' />
-                                                </div>
-                                                <div className="device-permission-item">
-                                                    <p>{"Roseedee(Read only)"}</p>
-                                                    <input type="button" value="ลบ" className='file-info-btn-del-permission' />
-                                                </div>
-                                                <div className="device-permission-item">
-                                                    <p>{"Muhammad(Read Write)"}</p>
-                                                    <input type="button" value="ลบ" className='file-info-btn-del-permission' />
-                                                </div>
-                                                <div className="device-permission-item">
-                                                    <p>{"Edge(Full)"}</p>
-                                                    <input type="button" value="ลบ" className='file-info-btn-del-permission' />
-                                                </div>
-                                            </>
-                                        )}
+                                            ) : (
+                                                filePermissionList.length === 0 ? (
+                                                    <p className='no-permission-text tag'>No device has been granted permission to access this file.</p>
+                                                ) : (
+                                                    filePermissionList.map((item, index) => {
+                                                        return (
+                                                            <div className="device-permission-item" key={index}>
+                                                                <p>{`${item.client_name} (${filePermissionCodeToString(item.permission_code)})`}</p>
+                                                                <input type="button" value="ลบ" className='file-info-btn-del-permission' />
+                                                            </div>
+                                                        )
+                                                    })
+                                                )
+                                            )
+                                            )
+                                        }
 
                                     </div>
                                 </div>

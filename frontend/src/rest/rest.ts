@@ -251,4 +251,20 @@ export default class Rest {
             throw err;
         }
     }
+
+    static async getFilePermissionList(file_id: string) {
+        this.log("Get File Permission List")
+        console.log("Fetching permission list for file ID:", file_id);
+        try {
+            const response = await fetch(this.apiHost + `file/${file_id}/permission`, {
+                method: "GET",
+            });
+            if (!response.ok) throw new Error("Can't get file permission list");
+            // console.log(response);
+            return response.json();
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
+    }
 }
