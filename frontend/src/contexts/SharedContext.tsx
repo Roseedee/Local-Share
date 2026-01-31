@@ -124,6 +124,17 @@ export function SharedProvider({ children }: SharedProviderProds) {
         }
     }, []);
 
+    useEffect(() => {
+        const device_selected_client_id = localStorage.getItem("device_selected_client_id") || "";
+        const device_selected_uuid = localStorage.getItem("device_selected_uuid") || "";
+        const device_selected_name = localStorage.getItem("device_selected_name") || "";
+        setDeviceSelected({
+            client_id: device_selected_client_id,
+            id: device_selected_uuid,
+            name: device_selected_name
+        });
+    }, []);
+
     return (
         <SharedContext.Provider value={{
             myDevice, setMyDevice,
