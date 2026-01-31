@@ -98,11 +98,22 @@ exports.loadFiles = async (viewer_device_id, owner_device_id) => {
     });
 }
 
-exports.getFileByIds = async (files) => {
+exports.getFileByIds = (fileIds = []) => {
     connectToDatabase();
-    const query = `SELECT file_org_name, file_new_name FROM files WHERE file_id IN (${files.map(() => '?').join(',')})`;
+    if (!Array.isArray(fileIds) || fileIds.length === 0) {
+        console.log("No file IDs provided");
+        return Promise.resolve([]);
+    }
+
+    const placeholders = fileIds.map(() => '?').join(',');
+    const query = `
+        SELECT file_org_name, file_new_name
+        FROM files
+        WHERE file_id IN (${placeholders})
+    `;
+
     return new Promise((resolve, reject) => {
-        db.execute(query, files, (err, results) => {
+        db.execute(query, fileIds, (err, results) => {
             if (err) {
                 console.error('Error fetching files by IDs:', err);
                 return reject(err);
@@ -110,7 +121,8 @@ exports.getFileByIds = async (files) => {
             resolve(results);
         });
     });
-}
+};
+
 
 exports.renameComputer = async (userId, newName) => {
     connectToDatabase();
@@ -204,6 +216,20 @@ exports.editFileAccessScopeById = async (fileId, owner_device_id, accessScope) =
         db.execute(query, [accessScope, fileId, owner_device_id], (err, results) => {
             if (err) {
                 console.error('Error editing file access scope by ID:', err);
+                return reject(err);
+            }
+            resolve(results);
+        });
+    });
+}
+
+exports.getFilePermissionList = async (fileId) => {
+    connectToDatabase();
+    const query = 'CALL get_file_permission_list(' + db.escape(fileId) + ')';
+    return new Promise((resolve, reject) => {
+        db.execute(query, (err, results) => {
+            if (err) {
+                console.error('Error fetching file permission list:', err);
                 return reject(err);
             }
             resolve(results);

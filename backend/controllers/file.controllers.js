@@ -61,7 +61,7 @@ exports.fileServe = async (req, res) => {
 }
 
 exports.allFiles = async (req, res) => {
-    const { viewer_device_id, owner_device_id } = req.body;
+    const { viewer_device_id, owner_device_id } = req.query;
 
     console.log("Viewer : " + viewer_device_id + ", Onwer : " + owner_device_id);
 
@@ -97,8 +97,8 @@ exports.allFiles = async (req, res) => {
 }
 
 exports.downloadFiles = async (req, res) => {
-    const files = req.body.files;
-
+    const filesTemp = req.query.files;
+    const files = Array.isArray(filesTemp) ? filesTemp : [filesTemp];
     if (!files || files.length === 0) {
         return res.status(400).send("No files specified");
     }
@@ -108,7 +108,7 @@ exports.downloadFiles = async (req, res) => {
     try {
         const result = await db.getFileByIds(files);
 
-        if (files.length === 1) {
+        if (result.length === 1) {
             const fileRecord = result[0];
             const filePath = path.join(__dirname, "../uploads", fileRecord.file_new_name);
 
@@ -211,3 +211,15 @@ exports.editFileAccessScope = async (req, res) => {
         res.status(500).send("Failed to edit file access scope");
     }
 }
+
+exports.getFilePermissionList = async (req, res) => {
+    const fileId = req.params.id;
+    try {
+        const result = await db.getFilePermissionList(fileId);
+        // console.log("File Permission List: ", result[0]);
+        res.json({ result: result[0] });
+    } catch (err) {
+        console.error("❌ Error:", err);
+        res.status(500).send("Failed to get file permission list");
+    }   
+} 

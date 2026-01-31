@@ -60,7 +60,7 @@ interface SharedProviderProds {
 }
 
 export function SharedProvider({ children }: SharedProviderProds) {
-
+    
     const devMode = true;
 
     const [myDevice, setMyDevice] = useState<DeviceModel>({ client_id: "", id: "", name: "" })
@@ -113,6 +113,15 @@ export function SharedProvider({ children }: SharedProviderProds) {
             id: localStorage.getItem("device_uuid") || "",
             name: localStorage.getItem("device_name") || "",
         }));
+    }, []);
+
+    useEffect(() => {
+        const isMe = localStorage.getItem("device_selected_is_me");
+        if (isMe === "true") {
+            setNowIsYou(true);
+        } else {
+            setNowIsYou(false);
+        }
     }, []);
 
     return (

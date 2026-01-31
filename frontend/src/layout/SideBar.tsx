@@ -70,6 +70,7 @@ export default function SideBar({ local_uuid }: Props) {
                 localStorage.setItem("device_selected_client_id", myDevice.client_id)
                 localStorage.setItem("device_selected_uuid", myDevice.id)
                 localStorage.setItem("device_selected_name", myDevice.name)
+                localStorage.setItem("device_selected_is_me", "true")
             } else {
                 const device = devicesList.find((d) => d.id === device_name)
                 if (device) {
@@ -78,6 +79,7 @@ export default function SideBar({ local_uuid }: Props) {
                     localStorage.setItem("device_selected_client_id", device.client_id)
                     localStorage.setItem("device_selected_uuid", device.id)
                     localStorage.setItem("device_selected_name", device.name)
+                    localStorage.setItem("device_selected_is_me", "false")
                 }
             }
         }

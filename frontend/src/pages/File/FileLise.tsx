@@ -88,7 +88,7 @@ export default function FileList() {
     const ownerId = device_name === "me" ? local_id : selected_id
     const viewerId = local_id;
     await rest.getFiles(viewerId, ownerId).then((data) => {
-      console.log("Files:", data.results);
+      // console.log("Files:", data.results);
       setFiles(data.results)
     }).finally(() => {
       setSumFileSize?.(files.reduce((acc, file) => acc + (file.size || 0), 0));

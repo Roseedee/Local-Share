@@ -237,9 +237,9 @@ export default function Header() {
                                 <div className="tool-icon">
                                     <img src={shareIcon} alt="" className='content-header-icon' />
                                 </div>
-                                {/* <div className={`tool-icon ${fileDeleting ? ' loading' : ''}`} onClick={handleDeleteFiles}>
+                                <div className={`tool-icon ${fileDeleting ? ' loading' : ''}`} onClick={handleDeleteFiles}>
                                     <img src={binIcon} alt="" className='content-header-icon' />
-                                </div> */}
+                                </div>
                             </>
                         ) : (<></>)
                     }

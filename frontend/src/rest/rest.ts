@@ -124,12 +124,10 @@ export default class Rest {
 
     static async getFiles(viewer_device_id: string, owner_device_id: string) {
         this.log("Get File")
-
+        const param = new URLSearchParams({ viewer_device_id, owner_device_id });
         try {
-            const response = await fetch(this.apiHost + "file/all", {
-                method: "POST",
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ viewer_device_id, owner_device_id })
+            const response = await fetch(this.apiHost + "file/all?" + param.toString(), {
+                method: "GET",
             })
             if (!response.ok) throw new Error("Failed to fetch files");
 
@@ -147,15 +145,14 @@ export default class Rest {
     static async downloadFiles(fileIds: string[]) {
         this.log("Download Files")
 
-        console.log(fileIds)
-
         if (fileIds.length === 0) throw new Error("ไม่สามารถดาวน์ไฟล์นี้ได้ กรุณาลองใหม่อีกครั้ง")
 
+        const params = new URLSearchParams();
+        fileIds.forEach(id => params.append('files', id));
+
         try {
-            const response = await fetch(this.apiHost + "file/download", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ files: fileIds })
+            const response = await fetch(this.apiHost + "file/download?" + params.toString(), {
+                method: "GET",
             });
 
             if (!response.ok) throw new Error("Download failed");
@@ -192,8 +189,8 @@ export default class Rest {
     static async deleteFiles(fileId: string[]) {
         this.log("Delete File")
         try {
-            const response = await fetch(this.apiHost + "file/delete", {
-                method: "POST",
+            const response = await fetch(this.apiHost + "file", {
+                method: "DELETE",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ fileId })
             });
@@ -210,7 +207,7 @@ export default class Rest {
         this.log("Rename File")
         try {
             const response = await fetch(this.apiHost + "file/rename", {
-                method: "POST",
+                method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ fileId, newName, fileExt })
             });

@@ -5,10 +5,11 @@ const upload = require('../middlewares/file.middlewares');
 
 router.get('/stream', controller.fileServe);
 router.post('/upload', upload.array("files", 10), controller.uploadFiles);
-router.post('/all', controller.allFiles);
-router.post('/download', controller.downloadFiles);
-router.post('/delete', controller.deleteFiles);
-router.post('/rename', controller.renameFile);
+router.get('/all', controller.allFiles);
+router.get('/download', controller.downloadFiles);
+router.delete('/', controller.deleteFiles);
+router.patch('/rename', controller.renameFile);
 router.patch('/:id/access-scope', controller.editFileAccessScope);
+router.get('/:id/permission', controller.getFilePermissionList);
 
 module.exports = router;
