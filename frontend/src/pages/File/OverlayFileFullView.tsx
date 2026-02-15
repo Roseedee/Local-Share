@@ -26,7 +26,7 @@ export default function OverlayFileFullView({ file, onClick, onPrev, onNext }: P
 
   return (
     <div className="overlay-fixed">
-      <div className="overlay-content">
+      <div className="overlay-content-file-full-view">
         <div className="btn-overlay btn-prev" onClick={onPrev}><img src={leftArrowIcon} alt="" /></div>
         <div className="overlay-img-index-content" onClick={(e) => {
           e.stopPropagation();

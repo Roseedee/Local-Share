@@ -1,6 +1,6 @@
 import Layout from '@/layout/Layout'
 import FileList from './FileLise'
-import FileInfo from '@/Components/FileInfo'
+import FileInfo from '@/pages/File/FileInfo'
 import PopUpFilesWaitUpload from '../PopUpFilesWaitUpload'
 
 export default function FilePage() {

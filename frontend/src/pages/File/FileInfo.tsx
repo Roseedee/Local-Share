@@ -20,7 +20,8 @@ export default function FileInfo() {
         isSelectFile,
         isShowFileInfo,
         setIsFileListLoading,
-        nowIsYou
+        nowIsYou,
+        setIsManageUserPermission
     } = useShared();
     const local_id = localStorage.getItem("device_id") || ""
 
@@ -193,7 +194,7 @@ export default function FileInfo() {
                                                     <p className='no-permission-text tag'>ทุกคนสามารถเข้าถึงไฟล์นี้ได้</p>
                                                 </>
                                             ) : (
-                                                <input type='button' value="ADD" className='file-info-btn-add-permission' />
+                                                <input type='button' value="จัดการสิทธิ์" className='file-info-btn-add-permission' onClick={() => setIsManageUserPermission?.(true)} />
                                             )
                                         }
                                     </div>
@@ -209,8 +210,9 @@ export default function FileInfo() {
                                                     filePermissionList.map((item, index) => {
                                                         return (
                                                             <div className="device-permission-item" key={index}>
-                                                                <p>{`${item.client_name} (${filePermissionCodeToString(item.permission_code)})`}</p>
-                                                                <input type="button" value="ลบ" className='file-info-btn-del-permission' />
+                                                                <p>{`${item.client_name}`}</p>
+                                                                <span className='tag'>{filePermissionCodeToString(item.permission_code)}</span>
+                                                                {/* <input type="button" value="ลบ" className='file-info-btn-del-permission' /> */}
                                                             </div>
                                                         )
                                                     })

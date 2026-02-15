@@ -79,3 +79,7 @@ div.column {
   display: flex;
   flex-direction: column;
 }
+
+button {
+  transition: 0.3s;
+}

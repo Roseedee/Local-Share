@@ -4,9 +4,10 @@ import { useShared } from '@/contexts/SharedContext'
 import rest from '@/rest/rest'
 
 import File from '@/Components/File'
-import OverlayFileFullView, { OverlayFileFullViewModel } from '@/Components/OverlayFileFullView';
+import OverlayFileFullView, { OverlayFileFullViewModel } from '@/pages/File/OverlayFileFullView';
 import FileModel from '@/model/FileModel';
-import OverlayEditFileName from '@/Components/OverlayEditFileName';
+import OverlayEditFileName from '@/pages/File/OverlayEditFileName';
+import OverlayUserPermissionManage from '@/pages/File/OverlayUserPermissionManage'
 
 export default function FileList() {
   // const calledRef = useRef(false);
@@ -20,7 +21,8 @@ export default function FileList() {
     fileSearch,
     isEditFileName, setIsEditFileName,
     setSumFileSize,
-    isFileListLoading, setIsFileListLoading
+    isFileListLoading, setIsFileListLoading,
+    isManageUserPermission,
   } = useShared();
 
   const local_id = localStorage.getItem("device_id") || ""
@@ -30,6 +32,7 @@ export default function FileList() {
   const [overlayFileFullView, setOverlayFileFullView] = useState<boolean>(false)
   const [fileSelectForFileFullView, setFileSelectForFileFullView] = useState<OverlayFileFullViewModel>()
   const [fileFiltered, setFileFilterd] = useState<FileModel[]>([]);
+  // const [isManageUserPermission, setIsManageUserPermission] = useState<boolean>(false);
 
   useEffect(() => {
     loadFiles();
@@ -97,6 +100,14 @@ export default function FileList() {
     });
   };
 
+  const handleGapeClick = () => {
+    if(isManageUserPermission) return;
+    setIsSelectFile?.(false);
+    setSelectedFile?.(null);
+    setSelectedMultiFile?.([]);
+    setIsEditFileName?.(false);
+  }
+
   const handleFileSelect = (file: FileModel) => {
     setIsEditFileName?.(false);
     // console.log("File selected:", fileId);
@@ -144,7 +155,7 @@ export default function FileList() {
   }
 
   return (
-    <div className="files-content" onClick={() => { setIsSelectFile?.(false); setSelectedFile?.(null); setSelectedMultiFile?.([]); setIsEditFileName?.(false); }}>
+    <div className="files-content" onClick={handleGapeClick}>
       {fileFiltered && fileFiltered.length !== 0 ? (
         fileFiltered.map((file, i) => (
           <File
@@ -176,6 +187,12 @@ export default function FileList() {
       {
         isEditFileName && (
           <OverlayEditFileName />
+        )
+      }
+
+      {
+        isManageUserPermission && (
+          <OverlayUserPermissionManage/>
         )
       }
     </div>

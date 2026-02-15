@@ -49,6 +49,9 @@ interface SharedContextType {
     isShowFileInfo?: boolean;
     setIsShowFileInfo?: (value: boolean) => void;
 
+    isManageUserPermission?: boolean;
+    setIsManageUserPermission?: (value: boolean) => void;
+
     sumFileSize?: number;
     setSumFileSize?: (value: number) => void;
 }
@@ -87,6 +90,8 @@ export function SharedProvider({ children }: SharedProviderProds) {
     const [isEditFileName, setIsEditFileName] = useState<boolean>(false);
 
     const [isShowFileInfo, setIsShowFileInfo] = useState<boolean>(false);
+
+    const [isManageUserPermission, setIsManageUserPermission] = useState<boolean>(false);
 
     const [sumFileSize, setSumFileSize] = useState<number>(0);
 
@@ -152,6 +157,7 @@ export function SharedProvider({ children }: SharedProviderProds) {
             fileSearch, setFileSearch,
             isEditFileName, setIsEditFileName,
             isShowFileInfo, setIsShowFileInfo,
+            isManageUserPermission, setIsManageUserPermission,
             sumFileSize, setSumFileSize
         }}>
             {children}
