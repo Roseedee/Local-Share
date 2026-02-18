@@ -10,7 +10,7 @@ exports.getDevices = async (req, res) => {
             id: client.client_uuid,
             name: client.client_name
         }));
-        res.json({ clients: clients });
+        res.json({ result: clients });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Failed to load clients" });

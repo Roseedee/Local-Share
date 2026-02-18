@@ -203,13 +203,13 @@ export default class Rest {
         }
     }
 
-    static async renameFile(fileId: string, newName: string, fileExt: string) {
+    static async renameFile(fileId: string, newName: string) {
         this.log("Rename File")
         try {
             const response = await fetch(this.apiHost + "file/rename", {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ fileId, newName, fileExt })
+                body: JSON.stringify({ fileId, newName })
             });
             if (!response.ok) throw new Error("Can't rename the file");
             return response;
@@ -254,7 +254,7 @@ export default class Rest {
 
     static async getFilePermissionList(file_id: string) {
         this.log("Get File Permission List")
-        console.log("Fetching permission list for file ID:", file_id);
+        // console.log("Fetching permission list for file ID:", file_id);
         try {
             const response = await fetch(this.apiHost + `file/${file_id}/permission`, {
                 method: "GET",

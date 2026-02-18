@@ -46,7 +46,7 @@ export default function SideBar({ local_uuid }: Props) {
                     setServerPath(data.url)
                 })
                 rest.getAllClient(local_id).then((data) => {
-                    setDevicesList(data.clients)
+                    setDevicesList(data.result)
                 })
             }
         })

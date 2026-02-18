@@ -176,15 +176,14 @@ exports.deleteFiles = async (req, res) => {
 exports.renameFile = async (req, res) => {
     const fileId = req.body.fileId || "";
     const newName = req.body.newName || "";
-    const fileExt = req.body.fileExt || "";
-    console.log(`Rename File ID: ${fileId} to New Name: ${newName}.${fileExt}`);
+    console.log(`Rename File ID: ${fileId} to New Name: ${newName}`);
 
-    if (fileId === "" || newName === "" || fileExt === "") {
-        return res.status(400).json({ message: "File ID, New Name, and File Extension are required." });
+    if (fileId === "" || newName === "") {
+        return res.status(400).json({ message: "File ID and New Name are required." });
     }
 
     try {
-        const result = await db.renameFileById(fileId, newName, fileExt);
+        const result = await db.renameFileById(fileId, newName);
         res.json({ result });
     } catch (err) {
         console.error("❌ Error:", err);
@@ -222,4 +221,20 @@ exports.getFilePermissionList = async (req, res) => {
         console.error("❌ Error:", err);
         res.status(500).send("Failed to get file permission list");
     }   
-} 
+}
+
+exports.updateFile = async (req, res) => {
+    const id = req.params.id;
+    const patch = req.body;
+
+    const allowedFields = ['name', 'access_scope'];
+
+    const updates = {};
+    for (const field in patch) {
+        if (!allowedFields.includes(field)) {
+            return res.status(400).json({ message: `Field '${field}' is not allowed to be updated.` });
+        }
+        updates[field] = patch[field];
+    }
+    console.log(`Updating file ID: ${id} with data:`, updates);
+}

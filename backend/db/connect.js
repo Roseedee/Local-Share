@@ -174,7 +174,7 @@ exports.renameFileById = async (fileId, newName, fileExt) => {
     connectToDatabase();
     const query = `UPDATE files SET file_org_name = ? WHERE file_id = ?`;
     return new Promise((resolve, reject) => {
-        db.execute(query, [newName + "." + fileExt, fileId], (err, results) => {
+        db.execute(query, [newName, fileId], (err, results) => {
             if (err) {
                 console.error('Error renaming file by ID:', err);
                 return reject(err);

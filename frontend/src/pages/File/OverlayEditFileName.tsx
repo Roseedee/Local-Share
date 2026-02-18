@@ -16,7 +16,7 @@ export default function OverlayEditFileName() {
     const handleRename = async () => {
         if (!selectedFile) return;
         try {
-            await rest.renameFile(selectedFile.id || "", newFileName, selectedFile.name?.split(".")[1] || "");
+            await rest.renameFile(selectedFile.id || "", newFileName + "." + selectedFile.name?.split(".")[1] || "");
             setIsEditFileName?.(false);
         } catch (err) {
             console.error(err);
