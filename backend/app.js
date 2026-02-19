@@ -35,7 +35,7 @@ app.post('/connection', (req, res) => {
 
 app.use('/auth', authRoutes);
 app.use('/device', clientRoutes);
-app.use('/file', fileRoutes);
+app.use('/files', fileRoutes);
 app.use('/storage', storageInfoRoutes);
 app.use(uploadProgress);
 

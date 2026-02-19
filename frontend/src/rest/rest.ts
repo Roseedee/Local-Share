@@ -88,7 +88,7 @@ export default class Rest {
 
         try {
             const response = await axios.post(
-                this.apiHost + "file/upload",
+                this.apiHost + "files/upload",
                 form,
                 {
                     headers: {
@@ -126,7 +126,7 @@ export default class Rest {
         this.log("Get File")
         const param = new URLSearchParams({ viewer_device_id, owner_device_id });
         try {
-            const response = await fetch(this.apiHost + "file/all?" + param.toString(), {
+            const response = await fetch(this.apiHost + "files/all?" + param.toString(), {
                 method: "GET",
             })
             if (!response.ok) throw new Error("Failed to fetch files");
@@ -138,8 +138,8 @@ export default class Rest {
         }
     }
 
-    static fileUrl(file: string): string {
-        return this.apiHost + "file/stream?token=" + file;
+    static fileUrl(token: string): string {
+        return this.apiHost + "files/" + token + "/stream";
     }
 
     static async downloadFiles(fileIds: string[]) {
@@ -151,7 +151,7 @@ export default class Rest {
         fileIds.forEach(id => params.append('files', id));
 
         try {
-            const response = await fetch(this.apiHost + "file/download?" + params.toString(), {
+            const response = await fetch(this.apiHost + "files/download?" + params.toString(), {
                 method: "GET",
             });
 
@@ -189,7 +189,7 @@ export default class Rest {
     static async deleteFiles(fileId: string[]) {
         this.log("Delete File")
         try {
-            const response = await fetch(this.apiHost + "file", {
+            const response = await fetch(this.apiHost + "files", {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ fileId })
@@ -206,7 +206,7 @@ export default class Rest {
     static async renameFile(fileId: string, newName: string) {
         this.log("Rename File")
         try {
-            const response = await fetch(this.apiHost + "file/rename", {
+            const response = await fetch(this.apiHost + "files/rename", {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ fileId, newName })
@@ -239,7 +239,7 @@ export default class Rest {
     static async editFileAccessScope(file_id: string, owner_device_id: string, access_scope: string) {
         this.log("Edit File Access Scope")
         try {
-            const response = await fetch(this.apiHost + `file/${file_id}/access-scope`, {
+            const response = await fetch(this.apiHost + `files/${file_id}/access-scope`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ owner_device_id, access_scope })
@@ -256,7 +256,7 @@ export default class Rest {
         this.log("Get File Permission List")
         // console.log("Fetching permission list for file ID:", file_id);
         try {
-            const response = await fetch(this.apiHost + `file/${file_id}/permission`, {
+            const response = await fetch(this.apiHost + `files/${file_id}/permission`, {
                 method: "GET",
             });
             if (!response.ok) throw new Error("Can't get file permission list");
@@ -271,7 +271,7 @@ export default class Rest {
     static async addFilePermission(file_id: string, device_id: string, permission_code: string) {
         this.log("Add File Permission")
         try {
-            const response = await fetch(this.apiHost + `file/${file_id}/permission`, {
+            const response = await fetch(this.apiHost + `files/${file_id}/permission`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ device_id, permission_code })
@@ -287,7 +287,7 @@ export default class Rest {
     static async removeFilePermission(file_id: string, device_id: string) {
         this.log("Remove File Permission")
         try {
-            const response = await fetch(this.apiHost + `file/${file_id}/permission`, {
+            const response = await fetch(this.apiHost + `files/${file_id}/permission`, {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ device_id })

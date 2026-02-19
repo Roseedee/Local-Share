@@ -47,7 +47,7 @@ exports.uploadFiles = async (req, res) => {
 }
 
 exports.fileServe = async (req, res) => {
-    const fileToken = req.query.token || "";
+    const fileToken = req.params.token;
     const payload = token.verifyToken(fileToken);
     if (!payload) {
         return res.status(401).send("Invalid or expired token");
