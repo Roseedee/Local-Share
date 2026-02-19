@@ -238,3 +238,33 @@ exports.updateFile = async (req, res) => {
     }
     console.log(`Updating file ID: ${id} with data:`, updates);
 }
+
+exports.addFilePermission = async (req, res) => {
+    const file_id = req.params.id;
+    const { device_id, permission_code } = req.body;
+    if (!file_id || !device_id || !permission_code) {
+        return res.status(400).json({ message: "File ID, Target Device ID, and Permission Code are required." });
+    }
+    try {        
+        const result = await db.addFilePermission(file_id, device_id, permission_code);
+        res.json({ message: "Permission added successfully", result });
+    } catch (err) {
+        console.error("❌ Error:", err);
+        res.status(500).send("Failed to add file permission");
+    }   
+}
+
+exports.deleteFilePermission = async (req, res) => {
+    const file_id = req.params.id;
+    const { device_id } = req.body;
+    if (!file_id || !device_id) {
+        return res.status(400).json({ message: "File ID and Target Device ID are required." });
+    }
+    try {        
+        const result = await db.deleteFilePermission(file_id, device_id);
+        res.json({ message: "Permission deleted successfully", result });
+    } catch (err) {
+        console.error("❌ Error:", err);
+        res.status(500).send("Failed to delete file permission");
+    }   
+}

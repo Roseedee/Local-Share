@@ -236,3 +236,31 @@ exports.getFilePermissionList = async (fileId) => {
         });
     });
 }
+
+exports.addFilePermission = async (fileId, target_device_id, permission_code) => {
+    connectToDatabase();
+    const query = `INSERT INTO files_permissions (device_id, file_id, permissions_code) VALUES (?, ?, ?)`;
+    return new Promise((resolve, reject) => {
+        db.execute(query, [target_device_id, fileId, permission_code], (err, results) => {
+            if (err) {
+                console.error('Error adding file permission:', err);
+                return reject(err);
+            }
+            resolve(results);
+        });
+    });
+}
+
+exports.deleteFilePermission = async (file_id, device_id) => {
+    connectToDatabase();
+    const query = `DELETE FROM files_permissions WHERE file_id = ? AND device_id = ?`;
+    return new Promise((resolve, reject) => {
+        db.execute(query, [file_id, device_id], (err, results) => {
+            if (err) {
+                console.error('Error deleting file permission:', err);
+                return reject(err);
+            }   
+            resolve(results);
+        });
+    });
+}

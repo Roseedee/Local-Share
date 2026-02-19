@@ -54,9 +54,25 @@ export default function OverlayUserPermissionManage() {
             return;
         }
 
-        console.log("device id: ", device?.id);
-        console.log("image id: ", selectedFile?.id);
-        console.log("permission: ", permission);
+        // console.log("device id: ", device?.id);
+        // console.log("image id: ", selectedFile?.id);
+        // console.log("permission: ", permission);
+
+        rest.addFilePermission(selectedFile.id || "", device.client_id, permission).then(() => {
+            loadUserPermissionList();
+            setUserName("");
+        }).catch((error) => {
+            console.error("Error adding file permission:", error);
+        });
+    }
+
+    const handleRemovePermission = (device_id: string) => {
+        if (!selectedFile) return;
+        rest.removeFilePermission(selectedFile.id || "", device_id).then(() => {
+            loadUserPermissionList();
+        }).catch((error) => {
+            console.error("Error removing file permission:", error);
+        });
     }
 
     return (
@@ -96,7 +112,7 @@ export default function OverlayUserPermissionManage() {
                                         <p className="tag">
                                             {permissionCodeToString(permission.permission_code || "")}
                                         </p>
-                                        <button className="remove-permission-btn" disabled={permission.permission_source === "SCOPE"}>ลบ</button>
+                                        <button className="remove-permission-btn" disabled={permission.permission_source === "SCOPE"} onClick={() => handleRemovePermission(permission.device_id || "")}>ลบ</button>
                                     </li>
                                 ))}
                             </ul>

@@ -267,4 +267,36 @@ export default class Rest {
             throw err;
         }
     }
+
+    static async addFilePermission(file_id: string, device_id: string, permission_code: string) {
+        this.log("Add File Permission")
+        try {
+            const response = await fetch(this.apiHost + `file/${file_id}/permission`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ device_id, permission_code })
+            });
+            if (!response.ok) throw new Error("Can't add file permission");
+            return response;
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
+    }
+
+    static async removeFilePermission(file_id: string, device_id: string) {
+        this.log("Remove File Permission")
+        try {
+            const response = await fetch(this.apiHost + `file/${file_id}/permission`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ device_id })
+            });
+            if (!response.ok) throw new Error("Can't remove file permission");
+            return response;
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }   
+    }
 }

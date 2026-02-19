@@ -13,5 +13,7 @@ router.patch('/rename', controller.renameFile);
 router.patch('/:id/access-scope', controller.editFileAccessScope);
 router.get('/:id/permission', controller.getFilePermissionList);
 router.get('/test', db.getTest);
+router.post('/:id/permission', controller.addFilePermission);
+router.delete('/:id/permission', controller.deleteFilePermission);
 
 module.exports = router;
