@@ -3,6 +3,7 @@ const db = require('../db/connect');
 const AdmZip = require('adm-zip');
 const fs = require('fs')
 const token = require('../utils/token');
+const mime = require('mime-types');
 
 exports.uploadFiles = async (req, res) => {
     const uploadByID = req.body.uploadByID || "";
@@ -46,18 +47,60 @@ exports.uploadFiles = async (req, res) => {
     });
 }
 
-exports.fileServe = async (req, res) => {
-    const fileToken = req.params.token;
-    const payload = token.verifyToken(fileToken);
-    if (!payload) {
-        return res.status(401).send("Invalid or expired token");
-    }
-    const filePath = path.join(__dirname, '../uploads', payload.file_path);
-    if (!fs.existsSync(filePath)) {
-        return res.status(404).send("File not found");
-    }
+exports.filePreview = async (req, res) => {
+    try {
+        const fileToken = req.params.token;
+        const payload = token.verifyToken(fileToken);
 
-    res.download(filePath);
+        if (!payload)
+            return res.status(401).send("Invalid or expired token");
+
+        const filePath = path.join(__dirname, '../uploads', payload.file_path);
+
+        if (!fs.existsSync(filePath))
+            return res.status(404).send("File not found");
+
+        const stat = fs.statSync(filePath);
+        const mimeType = mime.lookup(filePath) || 'application/octet-stream';
+
+        // 👇 สำคัญ: ให้ browser แสดงแทนโหลด
+        res.setHeader('Content-Type', mimeType);
+        res.setHeader('Content-Disposition', 'inline');
+        res.setHeader('Cache-Control', 'private, max-age=60');
+
+        // ===== รองรับ video/audio seek =====
+        const range = req.headers.range;
+
+        if (range) {
+            const parts = range.replace(/bytes=/, "").split("-");
+            const start = parseInt(parts[0], 10);
+            const end = parts[1] ? parseInt(parts[1], 10) : stat.size - 1;
+            const chunkSize = (end - start) + 1;
+
+            const stream = fs.createReadStream(filePath, { start, end });
+
+            res.writeHead(206, {
+                'Content-Range': `bytes ${start}-${end}/${stat.size}`,
+                'Accept-Ranges': 'bytes',
+                'Content-Length': chunkSize,
+                'Content-Type': mimeType
+            });
+
+            stream.pipe(res);
+        }
+        else {
+            res.writeHead(200, {
+                'Content-Length': stat.size,
+                'Content-Type': mimeType
+            });
+
+            fs.createReadStream(filePath).pipe(res);
+        }
+
+    } catch (err) {
+        console.error(err);
+        res.sendStatus(500);
+    }
 }
 
 exports.allFiles = async (req, res) => {
@@ -99,6 +142,7 @@ exports.allFiles = async (req, res) => {
 exports.downloadFiles = async (req, res) => {
     const filesTemp = req.query.files;
     const files = Array.isArray(filesTemp) ? filesTemp : [filesTemp];
+    // console.log("Requested files for download: ", files);
     if (!files || files.length === 0) {
         return res.status(400).send("No files specified");
     }

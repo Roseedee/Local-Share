@@ -5,12 +5,12 @@ const upload = require('../middlewares/file.middlewares');
 
 //optimize: split into multiple routes for better maintainability
 router.post('/', upload.array("files", 10), controller.uploadFiles);      //upload files
+router.get('/', controller.allFiles);
+router.get('/:token/preview', controller.filePreview);
 
 
 
 //wait for optimize: split into multiple routes for better maintainability
-router.get('/:token/stream', controller.fileServe);
-router.get('/all', controller.allFiles);
 router.get('/download', controller.downloadFiles);
 router.delete('/', controller.deleteFiles);
 router.patch('/rename', controller.renameFile);

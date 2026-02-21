@@ -88,7 +88,7 @@ export default class Rest {
 
         try {
             const response = await axios.post(
-                this.apiHost + "files/upload",
+                this.apiHost + "files",
                 form,
                 {
                     headers: {
@@ -126,7 +126,7 @@ export default class Rest {
         this.log("Get File")
         const param = new URLSearchParams({ viewer_device_id, owner_device_id });
         try {
-            const response = await fetch(this.apiHost + "files/all?" + param.toString(), {
+            const response = await fetch(this.apiHost + "files?" + param.toString(), {
                 method: "GET",
             })
             if (!response.ok) throw new Error("Failed to fetch files");
@@ -139,7 +139,7 @@ export default class Rest {
     }
 
     static fileUrl(token: string): string {
-        return this.apiHost + "files/" + token + "/stream";
+        return this.apiHost + "files/" + token + "/preview";
     }
 
     static async downloadFiles(fileIds: string[]) {
